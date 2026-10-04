@@ -28,18 +28,39 @@ export function calculate(a){
 }
 export function validateContact(c){if(typeof c?.name!=='string'||c.name.trim().length<3||c.name.length>120)return 'Introduce tu nombre completo.';if(typeof c.email!=='string'||c.email.length>254||!/^\S+@[^\s@]+\.[^\s@]+$/.test(c.email))return 'Introduce un email válido.';if(typeof c.phone!=='string'||!/^[+\d\s().-]+$/.test(c.phone)||c.phone.replace(/\D/g,'').length<9||c.phone.replace(/\D/g,'').length>15)return 'Introduce un teléfono válido, con prefijo si es internacional.';return '';}
 
-// Public identifiers supplied by the owner. No API key is required by Forms API.
-export function hubspotRequest(payload,env,origin){
- const portal=env.HUBSPOT_PORTAL_ID||'149430727';
- const form=env.HUBSPOT_FORM_ID||'97ba49d3-ce4d-4b1a-a503-6674f862e605';
- if(!/^\d+$/.test(portal)||!/^[a-f0-9-]{36}$/i.test(form))throw Error('Invalid form configuration');
- const fields=[['firstname',payload.name],['email',payload.email],['phone',payload.phone]].map(([name,value])=>({objectTypeId:'0-1',name,value}));
- // Enable only after adding this exact property to the published HubSpot form.
- if(env.HUBSPOT_SUMMARY_FIELD){
-  if(!/^[a-z][a-z0-9_]*$/.test(env.HUBSPOT_SUMMARY_FIELD)||['firstname','email','phone'].includes(env.HUBSPOT_SUMMARY_FIELD))throw Error('Invalid summary field');
-  fields.push({objectTypeId:'0-1',name:env.HUBSPOT_SUMMARY_FIELD,value:JSON.stringify({event:payload.event_type,submission_id:payload.submission_id,volume:payload.volume_range,volume_exact:payload.volume_exact,ticket:payload.ticket_range,ticket_exact:payload.ticket_exact,team:payload.has_team,zone:payload.zone,goal:payload.goal,projection:payload.projection,note:payload.note,marketing_requested:payload.marketing_consent})});
+// HubSpot CRM API: create or update the contact by email and save calculator properties.
+export function hubspotRequest(payload,env){
+ const token=env.HUBSPOT_SERVICE_KEY;
+ if(typeof token!=='string'||token.trim().length<20)throw Error('Missing HUBSPOT_SERVICE_KEY');
+ const properties={
+  firstname:payload.name,
+  email:payload.email,
+  phone:payload.phone
+ };
+ // Calculator fields are only included when a projection exists.
+ if(payload.projection){
+  Object.assign(properties,{
+   calc_current_patients:String(payload.projection.currentPatients),
+   calc_ticket:String(payload.projection.ticket),
+   calc_has_team:payload.has_team,
+   calc_zone:payload.zone,
+   calc_goal:payload.goal,
+   calc_target_patients:String(payload.projection.targetPatients),
+   calc_current_revenue:String(payload.projection.currentRevenue),
+   calc_target_revenue:String(payload.projection.targetRevenue),
+   calc_additional_revenue:String(payload.projection.additionalRevenue),
+   calc_additional_opportunities:String(payload.projection.additionalOpportunities)
+  });
  }
- return {url:`https://api.hsforms.com/submissions/v3/integration/submit/${portal}/${form}`,body:{fields,context:{pageUri:origin,pageName:payload.event_type==='analysis'?'Calculadora · Análisis':payload.event_type==='audit'?'Calculadora · Solicitud de auditoría':'Web · Contacto'}}};
+ // Remove empty optional values so we do not overwrite existing CRM data with blanks.
+ for(const [key,value] of Object.entries(properties)){
+  if(value===''||value==null)delete properties[key];
+ }
+ return {
+  url:'https://api.hubapi.com/crm/v3/objects/contacts/batch/upsert',
+  headers:{Authorization:`Bearer ${token.trim()}`,'Content-Type':'application/json'},
+  body:{inputs:[{id:payload.email,idProperty:'email',properties,objectWriteTraceId:payload.submission_id}]}
+ };
 }
 
 const requests=new Map();
@@ -68,8 +89,8 @@ export async function handleLead(request,{env=process.env,fetchImpl=fetch,ip='lo
  const meter=requests.get(ip)||{start:now,count:0};if(meter.count>=8)return response(429,{message:'Has realizado varios intentos. Espera un minuto y vuelve a intentarlo.'});meter.count++;requests.set(ip,meter);
  const a=body.answers||{};
  const payload={event_type:body.eventType,submission_id:body.submissionId,source:'folia-web',submitted_at:new Date(now).toISOString(),name:body.contact.name.trim(),email:body.contact.email.trim().toLowerCase(),phone:body.contact.phone.trim(),marketing_consent:body.contact.marketing,consent_version:'2026-09-25',note:body.note||'',volume_range:a.volume||'',volume_exact:a.volumeExact?Number(a.volumeExact):null,ticket_range:a.ticket||'',ticket_exact:a.ticketExact?Number(a.ticketExact):null,has_team:a.team||'',zone:typeof a.zone==='string'?a.zone.trim():'',goal:a.goal||'',projection:result};
- let outgoing;try{outgoing=provider==='hubspot'?hubspotRequest(payload,env,expected):{url:destination.href,body:payload};}catch{return response(503,{message:'La conexión con el CRM no está configurada correctamente.'});}
- try{const upstream=await fetchImpl(outgoing.url,{method:'POST',headers:{'Content-Type':'application/json','X-Idempotency-Key':body.submissionId},body:JSON.stringify(outgoing.body),signal:AbortSignal.timeout(10000),redirect:'error'});if(!upstream.ok)return response(502,{message:'No hemos podido enviar los datos. Tus respuestas siguen aquí; vuelve a intentarlo.'});return response(200,{ok:true,simulated:false,result});}catch{return response(502,{message:'No hemos podido conectar. Tus respuestas siguen aquí; inténtalo de nuevo.'});}
+ let outgoing;try{outgoing=provider==='hubspot'?hubspotRequest(payload,env):{url:destination.href,headers:{'Content-Type':'application/json','X-Idempotency-Key':body.submissionId},body:payload};}catch{return response(503,{message:'La conexión con el CRM no está configurada correctamente.'});}
+ try{const upstream=await fetchImpl(outgoing.url,{method:'POST',headers:outgoing.headers,body:JSON.stringify(outgoing.body),signal:AbortSignal.timeout(10000),redirect:'error'});if(!upstream.ok){let details='';try{details=await upstream.text();}catch{}console.error('CRM error',upstream.status,details.slice(0,1000));return response(502,{message:'No hemos podido guardar los datos en el CRM. Tus respuestas siguen aquí; vuelve a intentarlo.'});}return response(200,{ok:true,simulated:false,result});}catch(err){console.error('CRM connection error',err);return response(502,{message:'No hemos podido conectar. Tus respuestas siguen aquí; inténtalo de nuevo.'});}
 }
 
 export function publicConfig(env=process.env){
