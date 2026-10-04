@@ -71,6 +71,7 @@ export const ticketValues = {
 
 export function validateStep(index, a) {
   const q = questions[index];
+
   if (!q) return '';
 
   if (q.key === 'zone') {
@@ -124,7 +125,9 @@ export function calculate(a) {
   }
 
   const currentPatients =
-    a.volume === '25+' ? Number(a.volumeExact) : volumeValues[a.volume];
+    a.volume === '25+'
+      ? Number(a.volumeExact)
+      : volumeValues[a.volume];
 
   const ticket =
     a.ticket === 'under1000' || a.ticket === '7500+'
@@ -132,12 +135,18 @@ export function calculate(a) {
       : ticketValues[a.ticket];
 
   const targetPatients =
-    currentPatients === 0 ? 2 : Math.ceil(currentPatients * 1.25);
+    currentPatients === 0
+      ? 2
+      : Math.ceil(currentPatients * 1.25);
 
-  const extraPatients = targetPatients - currentPatients;
+  const extraPatients =
+    targetPatients - currentPatients;
 
-  const currentRevenue = currentPatients * ticket;
-  const targetRevenue = targetPatients * ticket;
+  const currentRevenue =
+    currentPatients * ticket;
+
+  const targetRevenue =
+    targetPatients * ticket;
 
   const assumedConversion = 0.2;
 
@@ -149,17 +158,22 @@ export function calculate(a) {
     extraPatients,
     currentRevenue,
     targetRevenue,
-    additionalRevenue: targetRevenue - currentRevenue,
+    additionalRevenue:
+      targetRevenue - currentRevenue,
     growthPercent: currentPatients
-      ? Math.round((extraPatients / currentPatients) * 100)
+      ? Math.round(
+          (extraPatients / currentPatients) * 100
+        )
       : null,
     additionalOpportunities: Math.ceil(
       extraPatients / assumedConversion
     ),
-    assumedValuations: currentPatients / assumedConversion,
+    assumedValuations:
+      currentPatients / assumedConversion,
     assumedConversion,
     conversionAlternative: currentPatients
-      ? targetPatients / (currentPatients / assumedConversion)
+      ? targetPatients /
+        (currentPatients / assumedConversion)
       : null,
     illustrative: true,
   };
@@ -204,38 +218,60 @@ const response = (status, data) =>
     },
   });
 
-async function hubspotFetch(path, options = {}, env = process.env) {
+async function hubspotFetch(
+  path,
+  options = {},
+  env = process.env
+) {
   const token = env.HUBSPOT_SERVICE_KEY;
 
   if (!token) {
-    console.error('HUBSPOT_SERVICE_KEY no existe en Netlify');
-    throw new Error('HubSpot no está configurado.');
+    console.error(
+      'HUBSPOT_SERVICE_KEY no existe en Netlify'
+    );
+
+    throw new Error(
+      'HubSpot no está configurado.'
+    );
   }
 
-  const res = await fetch(`https://api.hubapi.com${path}`, {
-    ...options,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      ...(options.headers || {}),
-    },
-    signal: AbortSignal.timeout(10000),
-  });
+  const res = await fetch(
+    `https://api.hubapi.com${path}`,
+    {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...(options.headers || {}),
+      },
+      signal: AbortSignal.timeout(10000),
+    }
+  );
 
   const text = await res.text();
 
   let data = null;
 
   try {
-    data = text ? JSON.parse(text) : null;
+    data = text
+      ? JSON.parse(text)
+      : null;
   } catch {
     data = text;
   }
 
-  console.log('HubSpot status:', res.status);
+  console.log(
+    'HubSpot status:',
+    res.status
+  );
 
   if (!res.ok) {
-    console.error('HubSpot error:', res.status, data);
+    console.error(
+      'HubSpot error:',
+      res.status,
+      data
+    );
+
     throw new Error(
       `HubSpot devolvió error ${res.status}`
     );
@@ -244,7 +280,10 @@ async function hubspotFetch(path, options = {}, env = process.env) {
   return data;
 }
 
-async function findContactByEmail(email, env) {
+async function findContactByEmail(
+  email,
+  env
+) {
   const data = await hubspotFetch(
     '/crm/v3/objects/contacts/search',
     {
@@ -271,7 +310,10 @@ async function findContactByEmail(email, env) {
   return data?.results?.[0] || null;
 }
 
-async function createOrUpdateHubSpotContact(payload, env) {
+async function createOrUpdateHubSpotContact(
+  payload,
+  env
+) {
   const properties = {
     firstname: payload.name,
     email: payload.email,
@@ -279,64 +321,81 @@ async function createOrUpdateHubSpotContact(payload, env) {
 
     calc_current_patients:
       payload.projection?.currentPatients != null
-        ? String(payload.projection.currentPatients)
+        ? String(
+            payload.projection.currentPatients
+          )
         : '',
 
     calc_ticket:
       payload.projection?.ticket != null
-        ? String(payload.projection.ticket)
+        ? String(
+            payload.projection.ticket
+          )
         : '',
 
-    calc_has_team: payload.has_team || '',
+    calc_has_team:
+      payload.has_team === 'yes'
+        ? 'Sí'
+        : payload.has_team === 'no'
+          ? 'No'
+          : '',
 
-    calc_zone: payload.zone || '',
+    calc_zone:
+      payload.zone || '',
 
-    calc_goal: payload.goal || '',
+    calc_goal:
+      payload.goal || '',
 
     calc_target_patients:
       payload.projection?.targetPatients != null
-        ? String(payload.projection.targetPatients)
+        ? String(
+            payload.projection.targetPatients
+          )
         : '',
 
     calc_current_revenue:
       payload.projection?.currentRevenue != null
-        ? String(payload.projection.currentRevenue)
+        ? String(
+            payload.projection.currentRevenue
+          )
         : '',
 
     calc_target_revenue:
       payload.projection?.targetRevenue != null
-        ? String(payload.projection.targetRevenue)
+        ? String(
+            payload.projection.targetRevenue
+          )
         : '',
 
     calc_additional_revenue:
       payload.projection?.additionalRevenue != null
-        ? String(payload.projection.additionalRevenue)
-        : '',
-
-    calc_additional_opportunities:
-      payload.projection?.additionalOpportunities != null
-        ? String(payload.projection.additionalOpportunities)
+        ? String(
+            payload.projection.additionalRevenue
+          )
         : '',
   };
 
-  Object.keys(properties).forEach((key) => {
-    if (
-      properties[key] === '' ||
-      properties[key] == null
-    ) {
-      delete properties[key];
+  Object.keys(properties).forEach(
+    (key) => {
+      if (
+        properties[key] === '' ||
+        properties[key] == null
+      ) {
+        delete properties[key];
+      }
     }
-  });
+  );
 
   console.log(
     'Buscando contacto HubSpot:',
     payload.email
   );
 
-  const existing = await findContactByEmail(
-    payload.email,
-    env
-  );
+  const existing =
+    await findContactByEmail(
+      payload.email,
+      env
+    );
 
   if (existing?.id) {
     console.log(
@@ -361,18 +420,21 @@ async function createOrUpdateHubSpotContact(payload, env) {
     };
   }
 
-  console.log('Creando nuevo contacto HubSpot');
-
-  const created = await hubspotFetch(
-    '/crm/v3/objects/contacts',
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        properties,
-      }),
-    },
-    env
+  console.log(
+    'Creando nuevo contacto HubSpot'
   );
+
+  const created =
+    await hubspotFetch(
+      '/crm/v3/objects/contacts',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          properties,
+        }),
+      },
+      env
+    );
 
   return {
     action: 'created',
@@ -394,11 +456,17 @@ export async function handleLead(
     });
   }
 
-  const origin = request.headers.get('Origin');
-  const expected =
-    env.SITE_URL || new URL(request.url).origin;
+  const origin =
+    request.headers.get('Origin');
 
-  if (origin && origin !== expected) {
+  const expected =
+    env.SITE_URL ||
+    new URL(request.url).origin;
+
+  if (
+    origin &&
+    origin !== expected
+  ) {
     return response(403, {
       message: 'Origen no permitido.',
     });
@@ -415,36 +483,46 @@ export async function handleLead(
   }
 
   const contentLength = Number(
-    request.headers.get('content-length') || 0
+    request.headers.get(
+      'content-length'
+    ) || 0
   );
 
   if (contentLength > 16000) {
     return response(413, {
-      message: 'Solicitud demasiado grande.',
+      message:
+        'Solicitud demasiado grande.',
     });
   }
 
   let body;
 
   try {
-    const text = await request.text();
+    const text =
+      await request.text();
 
     if (text.length > 16000) {
       return response(413, {
-        message: 'Solicitud demasiado grande.',
+        message:
+          'Solicitud demasiado grande.',
       });
     }
 
     body = JSON.parse(text);
   } catch {
     return response(400, {
-      message: 'Solicitud no válida.',
+      message:
+        'Solicitud no válida.',
     });
   }
 
-  if (!body || typeof body !== 'object') {
+  if (
+    !body ||
+    typeof body !== 'object'
+  ) {
     return response(400, {
-      message: 'Solicitud no válida.',
+      message:
+        'Solicitud no válida.',
     });
   }
 
@@ -456,20 +534,25 @@ export async function handleLead(
   }
 
   if (
-    !['analysis', 'audit', 'contact'].includes(
-      body.eventType
-    ) ||
-    typeof body.submissionId !== 'string' ||
+    ![
+      'analysis',
+      'audit',
+      'contact',
+    ].includes(body.eventType) ||
+    typeof body.submissionId !==
+      'string' ||
     !/^[a-zA-Z0-9-]{16,80}$/.test(
       body.submissionId
     )
   ) {
     return response(400, {
-      message: 'Solicitud no válida.',
+      message:
+        'Solicitud no válida.',
     });
   }
 
-  const error = validateContact(body.contact);
+  const error =
+    validateContact(body.contact);
 
   if (error) {
     return response(400, {
@@ -478,7 +561,8 @@ export async function handleLead(
   }
 
   if (
-    typeof body.contact.marketing !== 'boolean'
+    typeof body.contact.marketing !==
+    'boolean'
   ) {
     return response(400, {
       message:
@@ -488,19 +572,26 @@ export async function handleLead(
 
   if (
     body.note != null &&
-    (typeof body.note !== 'string' ||
-      body.note.length > 1000)
+    (
+      typeof body.note !== 'string' ||
+      body.note.length > 1000
+    )
   ) {
     return response(400, {
-      message: 'El mensaje es demasiado largo.',
+      message:
+        'El mensaje es demasiado largo.',
     });
   }
 
   let result = null;
 
   try {
-    if (body.eventType !== 'contact') {
-      result = calculate(body.answers ?? {});
+    if (
+      body.eventType !== 'contact'
+    ) {
+      result = calculate(
+        body.answers ?? {}
+      );
     }
   } catch (err) {
     return response(400, {
@@ -508,7 +599,10 @@ export async function handleLead(
     });
   }
 
-  if ((env.FOLIA_MODE || 'live') !== 'live') {
+  if (
+    (env.FOLIA_MODE || 'live') !==
+    'live'
+  ) {
     return response(200, {
       ok: true,
       simulated: true,
@@ -516,16 +610,21 @@ export async function handleLead(
     });
   }
 
-  for (const [key, value] of requests) {
-    if (now - value.start > 60000) {
+  for (
+    const [key, value] of requests
+  ) {
+    if (
+      now - value.start > 60000
+    ) {
       requests.delete(key);
     }
   }
 
-  const meter = requests.get(ip) || {
-    start: now,
-    count: 0,
-  };
+  const meter =
+    requests.get(ip) || {
+      start: now,
+      count: 0,
+    };
 
   if (meter.count >= 8) {
     return response(429, {
@@ -535,53 +634,77 @@ export async function handleLead(
   }
 
   meter.count++;
-  requests.set(ip, meter);
 
-  const a = body.answers || {};
+  requests.set(
+    ip,
+    meter
+  );
+
+  const a =
+    body.answers || {};
 
   const payload = {
-    event_type: body.eventType,
-    submission_id: body.submissionId,
-    source: 'folia-web',
-    submitted_at: new Date(now).toISOString(),
+    event_type:
+      body.eventType,
 
-    name: body.contact.name.trim(),
+    submission_id:
+      body.submissionId,
 
-    email: body.contact.email
-      .trim()
-      .toLowerCase(),
+    source:
+      'folia-web',
 
-    phone: body.contact.phone.trim(),
+    submitted_at:
+      new Date(now).toISOString(),
+
+    name:
+      body.contact.name.trim(),
+
+    email:
+      body.contact.email
+        .trim()
+        .toLowerCase(),
+
+    phone:
+      body.contact.phone.trim(),
 
     marketing_consent:
       body.contact.marketing,
 
-    consent_version: '2026-09-25',
+    consent_version:
+      '2026-09-25',
 
-    note: body.note || '',
+    note:
+      body.note || '',
 
-    volume_range: a.volume || '',
+    volume_range:
+      a.volume || '',
 
-    volume_exact: a.volumeExact
-      ? Number(a.volumeExact)
-      : null,
+    volume_exact:
+      a.volumeExact
+        ? Number(a.volumeExact)
+        : null,
 
-    ticket_range: a.ticket || '',
+    ticket_range:
+      a.ticket || '',
 
-    ticket_exact: a.ticketExact
-      ? Number(a.ticketExact)
-      : null,
+    ticket_exact:
+      a.ticketExact
+        ? Number(a.ticketExact)
+        : null,
 
-    has_team: a.team || '',
+    has_team:
+      a.team || '',
 
     zone:
       typeof a.zone === 'string'
         ? a.zone.trim()
         : '',
 
-    goal: a.goal || '',
+    goal:
+      a.goal || '',
 
-    projection: result,
+    projection:
+      result,
   };
 
   try {
@@ -621,7 +744,9 @@ export function publicConfig(
 ) {
   const validURL = (v) => {
     try {
-      const u = new URL(v);
+      const u =
+        new URL(v);
+
       return u.protocol === 'https:'
         ? u.href
         : '';
@@ -631,30 +756,36 @@ export function publicConfig(
   };
 
   const live =
-    (env.FOLIA_MODE || 'live') === 'live';
+    (env.FOLIA_MODE || 'live') ===
+    'live';
 
   return {
     demo: !live,
 
-    calendarUrl: validURL(
-      env.CALENDAR_URL ||
-        env.GHL_CALENDAR_URL ||
-        'https://calendly.com/josemartinez31k/30min'
-    ),
+    calendarUrl:
+      validURL(
+        env.CALENDAR_URL ||
+          env.GHL_CALENDAR_URL ||
+          'https://calendly.com/josemartinez31k/30min'
+      ),
 
-    marketingEnabled: false,
+    marketingEnabled:
+      false,
 
-    privacyUrl: validURL(
-      env.PRIVACY_URL
-    ),
+    privacyUrl:
+      validURL(
+        env.PRIVACY_URL
+      ),
 
-    legalUrl: validURL(
-      env.LEGAL_URL
-    ),
+    legalUrl:
+      validURL(
+        env.LEGAL_URL
+      ),
 
-    cookiesUrl: validURL(
-      env.COOKIES_URL
-    ),
+    cookiesUrl:
+      validURL(
+        env.COOKIES_URL
+      ),
   };
 }
 
@@ -662,38 +793,60 @@ export default async function api(
   request,
   context = {}
 ) {
-  const path = new URL(
-    request.url
-  ).pathname;
+  const path =
+    new URL(
+      request.url
+    ).pathname;
 
-  if (path === '/api/config') {
-    if (request.method !== 'GET') {
-      return new Response(null, {
-        status: 405,
-      });
+  if (
+    path === '/api/config'
+  ) {
+    if (
+      request.method !== 'GET'
+    ) {
+      return new Response(
+        null,
+        {
+          status: 405,
+        }
+      );
     }
 
     return Response.json(
       publicConfig(),
       {
         headers: {
-          'Cache-Control': 'no-store',
+          'Cache-Control':
+            'no-store',
         },
       }
     );
   }
 
-  if (path === '/api/lead') {
-    return handleLead(request, {
-      ip: context.ip || 'unknown',
-    });
+  if (
+    path === '/api/lead'
+  ) {
+    return handleLead(
+      request,
+      {
+        ip:
+          context.ip ||
+          'unknown',
+      }
+    );
   }
 
-  return new Response('Not found', {
-    status: 404,
-  });
+  return new Response(
+    'Not found',
+    {
+      status: 404,
+    }
+  );
 }
 
 export const config = {
-  path: ['/api/config', '/api/lead'],
+  path: [
+    '/api/config',
+    '/api/lead',
+  ],
 };
