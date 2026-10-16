@@ -442,6 +442,69 @@ async function createOrUpdateHubSpotContact(
   };
 }
 
+// Avisa a Make (escenario "Folia 01 - Entrada de leads") en cuanto
+// entra un lead. La URL del webhook se guarda en la variable de
+// entorno MAKE_WEBHOOK_URL de Netlify (no en el código, porque el
+// repositorio es público). Si falla, el lead se guarda igual en HubSpot.
+async function notifyMake(
+  payload,
+  hubspot,
+  env = process.env
+) {
+  const url = env.MAKE_WEBHOOK_URL;
+
+  if (!url) {
+    console.warn(
+      'MAKE_WEBHOOK_URL no configurada: no se avisa a Make.'
+    );
+    return;
+  }
+
+  const controller =
+    new AbortController();
+  const timer = setTimeout(
+    () => controller.abort(),
+    5000
+  );
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type':
+          'application/json',
+      },
+      body: JSON.stringify({
+        email: payload.email,
+        firstname: payload.name,
+        phone: payload.phone,
+        calc_ticket:
+          payload.projection?.ticket != null
+            ? String(payload.projection.ticket)
+            : '',
+        calc_zone: payload.zone || '',
+        hubspot_contact_id:
+          hubspot?.id || '',
+        submission_id:
+          payload.submission_id || '',
+      }),
+      signal: controller.signal,
+    });
+
+    console.log(
+      'Make webhook:',
+      res.status
+    );
+  } catch (err) {
+    console.error(
+      'Error avisando a Make:',
+      err
+    );
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export async function handleLead(
   request,
   {
@@ -718,6 +781,12 @@ export async function handleLead(
       'HubSpot OK:',
       hubspot.action,
       hubspot.id
+    );
+
+    await notifyMake(
+      payload,
+      hubspot,
+      env
     );
 
     return response(200, {
