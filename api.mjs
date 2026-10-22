@@ -838,6 +838,15 @@ export function publicConfig(
           'https://calendly.com/josemartinez31k/30min'
       ),
 
+    // ID del Pixel de Meta (solo dígitos). Se configura en Netlify
+    // con la variable de entorno META_PIXEL_ID.
+    metaPixelId:
+      /^\d{5,20}$/.test(
+        String(env.META_PIXEL_ID || '').trim()
+      )
+        ? String(env.META_PIXEL_ID).trim()
+        : '',
+
     marketingEnabled:
       false,
 

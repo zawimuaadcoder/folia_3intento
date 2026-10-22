@@ -1,0 +1,12 @@
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon/outline/grid" clip-path="url(#clip0_0_90)">
+<path id="Vector" d="M10.0001 1H7.54554C5.25442 1.00001 4.10885 1.00001 3.23375 1.44589C2.464 1.83811 1.83817 2.46394 1.44595 3.2337C1.00007 4.1088 1.00007 5.25437 1.00007 7.54551V12.4546C1.00007 14.7458 1.00007 15.8912 1.44595 16.7664C1.83817 17.5361 2.464 18.162 3.23376 18.5541C4.10885 19 5.25442 19 7.54555 19H10.0001M10.0001 1H12.4547C14.7457 1 15.8913 1 16.7664 1.44589C17.5362 1.83811 18.1621 2.46394 18.5542 3.2337C19.0001 4.1088 19.0001 5.25437 19.0001 7.5455V12.4546C19.0001 14.7456 19.0001 15.8912 18.5542 16.7664C18.1621 17.5361 17.5362 18.162 16.7664 18.5541C15.8913 19 14.7458 19 12.4547 19H10.0001M10.0001 1V19" stroke-width="1.49286" stroke-linecap="round" stroke-linejoin="round" stroke="#1D1F20"/>
+<path id="Vector_2" d="M10 11.9649H2.53571" stroke-width="1.49286" stroke-linecap="round" stroke-linejoin="round" stroke="#1D1F20"/>
+<path id="Vector_3" d="M17.4648 8.03608H10.0006" stroke-width="1.49286" stroke-linecap="round" stroke-linejoin="round" stroke="#1D1F20"/>
+</g>
+<defs>
+<clipPath id="clip0_0_90">
+<rect width="20" height="20" fill="white"/>
+</clipPath>
+</defs>
+</svg>
