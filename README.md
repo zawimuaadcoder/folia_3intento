@@ -30,6 +30,9 @@ Las credenciales de HubSpot siguen configurándose como hasta ahora.
 
 ## Eventos del Pixel de Meta
 
+El Pixel solo se carga si el visitante acepta las cookies en el banner (la elección se guarda en el navegador y se puede cambiar desde «Cookies» en el pie).
+
+
 - `PageView`: al cargar la página.
 - `Lead`: cuando se envía la calculadora con los datos de contacto (no en modo demostración).
 - `Schedule`: cuando se reserva la llamada en el calendario integrado (Calendly avisa a la página al confirmar la cita).

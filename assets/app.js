@@ -50,7 +50,22 @@ function loadPixel(id){
  f('init',String(id));f('track','PageView');
 }
 const track=(event,data,eventID)=>{window.fbq?.('track',event,data||{},eventID?{eventID}:undefined);};
-configReady.then(()=>loadPixel(config.metaPixelId));
+// Cookie consent: the pixel only loads after the visitor accepts.
+const CONSENT_KEY='mhfc-cookie-consent';
+const readConsent=()=>{try{return localStorage.getItem(CONSENT_KEY);}catch{return null;}};
+const saveConsent=v=>{try{localStorage.setItem(CONSENT_KEY,v);}catch{}};
+function showCookieBanner(){
+ if($('.cookie-banner'))return;
+ document.body.insertAdjacentHTML('beforeend','<div class="cookie-banner" role="region" aria-label="Preferencias de cookies"><p>Usamos cookies de Meta para medir nuestras campañas. Solo se activan si las aceptas. <button type="button" data-legal-cookies>Más información</button></p><div><button type="button" class="button button-secondary" data-consent="denied">Rechazar</button><button type="button" class="button button-dark" data-consent="granted">Aceptar</button></div></div>');
+ const banner=$('.cookie-banner');
+ $('[data-legal-cookies]',banner).addEventListener('click',()=>openLegal('cookies'));
+ $$('[data-consent]',banner).forEach(b=>b.addEventListener('click',()=>{saveConsent(b.dataset.consent);banner.remove();if(b.dataset.consent==='granted')loadPixel(config.metaPixelId);}));
+}
+configReady.then(()=>{
+ if(!/^\d{5,20}$/.test(String(config.metaPixelId||'')))return;
+ const consent=readConsent();
+ if(consent==='granted')loadPixel(config.metaPixelId);else if(consent!=='denied')showCookieBanner();
+});
 
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(!reduceMotion&&'IntersectionObserver'in window){document.documentElement.classList.add('js-motion');const reveal=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pending');reveal.unobserve(e.target);}}),{threshold:.08});$$('.reveal').forEach(e=>{e.classList.add('pending');reveal.observe(e);});}
@@ -118,6 +133,6 @@ function renderResults(){result=result||calculate(answers);const r=result;const 
  $('[data-edit]').addEventListener('click',()=>{step=0;render();});animateNumbers();}
 function animateNumbers(){if(reduceMotion)return;$$('[data-count]',content).forEach(el=>{const end=Number(el.dataset.count),start=performance.now();function tick(now){if(!el.isConnected)return;const t=Math.min(1,(now-start)/650),value=Math.round(end*(1-(1-t)**3));el.textContent=el.hasAttribute('data-money')?money(value):number(value);if(t<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);});}
 
-const legalTexts={privacy:['Privacidad','Al enviar el formulario, tu nombre, email y teléfono se envían a HubSpot para entregar el análisis y atender tu solicitud. En la vista previa de demostración no se envían datos. Las respuestas del diagnóstico solo se envían si se ha configurado una propiedad para guardarlas.','La información del responsable, los plazos de conservación y el contacto para ejercer tus derechos se incorporarán en la política definitiva antes de activar el envío.'],legal:['Aviso legal','Esta es la web de Marketing Health for Clinics (MHFC).','Los datos identificativos del titular se incorporarán antes de su publicación comercial. Las proyecciones de la calculadora son escenarios ilustrativos y no garantizan resultados.'],cookies:['Cookies','Las respuestas de la calculadora se conservan en la memoria de esta pestaña. El calendario de reserva se carga desde Calendly, que aplica su propia política de cookies.','Si está activado, el Pixel de Meta registra la visita, el envío de la calculadora y la reserva de la llamada para medir nuestras campañas.']};
-async function openLegal(kind){await configReady;const url=config[kind==='privacy'?'privacyUrl':kind==='legal'?'legalUrl':'cookiesUrl'];if(url){window.open(url,'_blank','noopener,noreferrer');return;}const [h,...ps]=legalTexts[kind];$('#legal-title').textContent=h;$('#legal-content').innerHTML=ps.map(p=>`<p>${p}</p>`).join('');legal.showModal();document.body.classList.add('modal-open');}
+const legalTexts={privacy:['Privacidad','Al enviar el formulario, tu nombre, email y teléfono se envían a HubSpot para entregar el análisis y atender tu solicitud. En la vista previa de demostración no se envían datos. Las respuestas del diagnóstico solo se envían si se ha configurado una propiedad para guardarlas.','La información del responsable, los plazos de conservación y el contacto para ejercer tus derechos se incorporarán en la política definitiva antes de activar el envío.'],legal:['Aviso legal','Esta es la web de Marketing Health for Clinics (MHFC).','Los datos identificativos del titular se incorporarán antes de su publicación comercial. Las proyecciones de la calculadora son escenarios ilustrativos y no garantizan resultados.'],cookies:['Cookies','Las respuestas de la calculadora se conservan en la memoria de esta pestaña. El calendario de reserva se carga desde Calendly, que aplica su propia política de cookies.','Si aceptas las cookies, el Pixel de Meta registra la visita, el envío de la calculadora y la reserva de la llamada para medir nuestras campañas. Si las rechazas, no se carga.']};
+async function openLegal(kind){await configReady;const url=config[kind==='privacy'?'privacyUrl':kind==='legal'?'legalUrl':'cookiesUrl'];if(url){window.open(url,'_blank','noopener,noreferrer');return;}const [h,...ps]=legalTexts[kind];$('#legal-title').textContent=h;$('#legal-content').innerHTML=ps.map(p=>`<p>${p}</p>`).join('');if(kind==='cookies'&&config.metaPixelId){$('#legal-content').insertAdjacentHTML('beforeend','<p><button type="button" class="button button-secondary" data-cookie-reset>Cambiar mis preferencias de cookies</button></p>');$('[data-cookie-reset]').addEventListener('click',()=>{try{localStorage.removeItem(CONSENT_KEY);}catch{}legal.close();showCookieBanner();});}legal.showModal();document.body.classList.add('modal-open');}
 $$('[data-legal]').forEach(b=>b.addEventListener('click',()=>openLegal(b.dataset.legal)));$('[data-legal-close]').addEventListener('click',()=>legal.close());legal.addEventListener('close',()=>{if(!modal.open)document.body.classList.remove('modal-open');});
