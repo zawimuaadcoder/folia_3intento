@@ -1,28 +1,38 @@
-# Folia — versión simplificada
+# Marketing Health for Clinics (MHFC) — landing
 
-## Publicar desde cero
-
-1. Descomprime el ZIP.
-2. Crea un repositorio vacío en GitHub llamado folia-simple.
-3. Usa Upload files y selecciona los cinco archivos sueltos de este ZIP. No subas el ZIP ni una carpeta contenedora.
-4. Guarda los cambios en main.
-5. En Netlify, crea un proyecto NUEVO e importa ese repositorio de GitHub.
-6. Deja Base directory y Package directory vacíos. La configuración de netlify.toml prepara la publicación automáticamente: no introduzcas npm run build.
-7. Publica.
-8. Rellena el formulario desde la URL publicada y comprueba el contacto en HubSpot. Comprueba también el botón de Calendly.
+Landing de captación para clínicas capilares, con calculadora de potencial, calendario de reserva integrado y Pixel de Meta.
 
 ## Archivos
 
-- index.html: página completa, diseño, imágenes, fuente y calculadora.
-- api.mjs: conexión de servidor con HubSpot y configuración.
-- netlify.toml: instrucciones para Netlify.
-- README.md: estas instrucciones.
-- INTER-LICENSE.txt: licencia de la fuente incluida.
+- `index.html`: estructura de la página.
+- `assets/styles.css`: estilos (diseño del Figma «Landing v2 · Marketing Health for Clinics»).
+- `assets/app.js`: calculadora, calendario integrado, acordeón de preguntas y Pixel de Meta.
+- `assets/`: imágenes, logos, iconos y la fuente Inter.
+- `api.mjs`: función de Netlify que envía los leads a HubSpot (y avisa a Make) y sirve la configuración pública.
+- `netlify.toml`: compilación y cabeceras de seguridad para Netlify.
+- `INTER-LICENSE.txt`: licencia de la fuente Inter.
 
-No hay paquetes npm ni carpetas que tengas que subir. Netlify crea las carpetas necesarias automáticamente. No reutilices un repositorio anterior con archivos mezclados.
+## Publicar en Netlify
 
-HubSpot: portal 149430727, formulario 97ba49d3-ce4d-4b1a-a503-6674f862e605.
-Calendly: https://calendly.com/josemartinez31k/30min (enlace directo).
-Los envíos están activos al publicar; la prueba local del código usa envíos simulados. No hemos comprobado un contacto real en tu cuenta.
+El proyecto ya está conectado a GitHub: al fusionar los cambios en `main`, Netlify publica solo. No hace falta `npm install` ni comando de build adicional; `netlify.toml` copia `index.html`, la carpeta `assets/` y la función.
 
-Para cambiar la página, actualiza también el hash CSP de netlify.toml si modificas su JavaScript incrustado.
+## Variables de entorno (Netlify → Site configuration → Environment variables)
+
+| Variable | Para qué sirve |
+| --- | --- |
+| `CALENDAR_URL` | URL del calendario de reservas que se muestra al terminar la calculadora. Si no existe, se usa `https://calendly.com/josemartinez31k/30min`. |
+| `META_PIXEL_ID` | ID del Pixel de Meta (solo números). Sin esta variable el Pixel no se carga. |
+| `MAKE_WEBHOOK_URL` | Webhook de Make que recibe cada lead. |
+| `FOLIA_MODE` | `live` (por defecto) envía los leads de verdad; cualquier otro valor activa el modo demostración. |
+| `PRIVACY_URL`, `LEGAL_URL`, `COOKIES_URL` | Opcionales: enlaces a las páginas legales definitivas. |
+
+Las credenciales de HubSpot siguen configurándose como hasta ahora.
+
+## Eventos del Pixel de Meta
+
+El Pixel solo se carga si el visitante acepta las cookies en el banner (la elección se guarda en el navegador y se puede cambiar desde «Cookies» en el pie).
+
+
+- `PageView`: al cargar la página.
+- `Lead`: cuando se envía la calculadora con los datos de contacto (no en modo demostración).
+- `Schedule`: cuando se reserva la llamada en el calendario integrado (Calendly avisa a la página al confirmar la cita).
