@@ -775,7 +775,7 @@ export async function handleLead(
   };
 
   // Sin clave de HubSpot, el lead entra solo por Make.
-  if (!env.HUBSPOT_SERVICE_KEY) {
+  if (!String(env.HUBSPOT_SERVICE_KEY || '').trim()) {
     const sent = await notifyMake(
       payload,
       null,
@@ -826,6 +826,15 @@ export async function handleLead(
       'Error final HubSpot:',
       err
     );
+
+    // Si HubSpot falla, el lead no se pierde: se envía igualmente a Make.
+    if (await notifyMake(payload, null, env)) {
+      return response(200, {
+        ok: true,
+        simulated: false,
+        result,
+      });
+    }
 
     return response(502, {
       message:
