@@ -30,8 +30,8 @@ function validateContact(c){if(typeof c?.name!=='string'||c.name.trim().length<3
 
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
-const number=n=>new Intl.NumberFormat('es-ES',{maximumFractionDigits:0}).format(n);
+const money=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0,useGrouping:'always'}).format(n);
+const number=n=>new Intl.NumberFormat('es-ES',{maximumFractionDigits:0,useGrouping:'always'}).format(n);
 const modal=$('#calculator-modal'),content=$('#modal-content'),legal=$('#legal-modal');
 let opener=null,step=0,answers={},contact={name:'',email:'',phone:'',marketing:false},result=null,leadSaved=false,busy=false,booked=false;
 let config={demo:true,calendarUrl:'',metaPixelId:'',privacyUrl:'',legalUrl:'',cookiesUrl:''};

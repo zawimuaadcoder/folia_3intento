@@ -353,6 +353,7 @@ dialog::backdrop{background:rgba(20,24,32,.5);backdrop-filter:blur(5px)}dialog[o
 .stage-panel.is-active{opacity:1;visibility:visible;transform:none;transition:opacity .5s .12s,transform .7s var(--ease) .12s,visibility 0s}
 .stage-panel[hidden]{display:none}
 .stage-panel>div{display:flex;align-items:center;justify-content:center;gap:28px;width:100%}
+.stage-atraer{gap:92px!important}
 .ui-card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px -12px rgba(28,31,33,.16)}
 /* Atraer */
 .ad-card{width:270px;flex-shrink:0;padding:14px;font-size:13px;line-height:18px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px -12px rgba(28,31,33,.16)}
@@ -366,20 +367,28 @@ dialog::backdrop{background:rgba(20,24,32,.5);backdrop-filter:blur(5px)}dialog[o
 .is-active .ad-glow{animation:shine 2.8s ease-in-out .8s infinite}
 .ad-card footer{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--faint);font-size:11px}
 .ad-card footer b{padding:6px 12px;border-radius:8px;background:var(--blue);color:#fff;font-size:12px;font-weight:600}
-.radar{position:relative;width:290px;height:290px;flex-shrink:0}
-.radar .ring{position:absolute;left:50%;top:50%;border:1px dashed #c9d3e4;border-radius:50%;transform:translate(-50%,-50%)}
-.radar .r1{width:100%;height:100%}.radar .r2{width:66%;height:66%}.radar .r3{width:33%;height:33%;background:rgba(38,109,240,.05)}
-.radar .sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(38,109,240,.22),rgba(38,109,240,0) 70deg,transparent);mask:radial-gradient(circle,#000 70%,transparent 71%);-webkit-mask:radial-gradient(circle,#000 70%,transparent 71%)}
-.is-active .radar .sweep{animation:spin 5s linear infinite}
-.radar .pin{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 6px 18px rgba(28,31,33,.16)}
-.radar i{position:absolute;left:var(--x);top:var(--y);width:9px;height:9px;margin:-4.5px;border-radius:50%;background:var(--blue);transform:scale(0)}
-.radar i:after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1.5px solid rgba(38,109,240,.5);opacity:0}
-.is-active .radar i{animation:dot-in .5s var(--ease) forwards;animation-delay:var(--d)}
-.is-active .radar i:after{animation:ping 2.2s ease-out infinite;animation-delay:calc(var(--d) + .4s)}
-.radar .chip{position:absolute;padding:5px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);box-shadow:0 4px 12px rgba(28,31,33,.08);font-size:11px;font-weight:500;white-space:nowrap;opacity:0}
-.radar .c1{left:-34px;top:16px}.radar .c2{right:-24px;top:118px}.radar .c3{left:-6px;bottom:14px}
-.is-active .radar .chip{animation:chip-pop .5s var(--ease) forwards,bob 5s ease-in-out infinite}
-.is-active .radar .c1{animation-delay:.5s,1s}.is-active .radar .c2{animation-delay:.9s,1.6s}.is-active .radar .c3{animation-delay:1.3s,2.2s}
+.radar{--R:150px;position:relative;width:calc(var(--R) * 2);height:calc(var(--R) * 2);flex-shrink:0}
+.radar .ring{position:absolute;left:50%;top:50%;border-radius:50%;transform:translate(-50%,-50%);border:1px solid rgba(28,31,33,.08)}
+.radar .r1{width:100%;height:100%;background:radial-gradient(closest-side,rgba(38,109,240,0) 70%,rgba(38,109,240,.05))}.radar .r2{width:66%;height:66%}.radar .r3{width:33%;height:33%;background:#fff;box-shadow:0 0 0 10px rgba(38,109,240,.04)}
+.radar .sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(38,109,240,.14),rgba(38,109,240,0) 60deg,transparent);-webkit-mask:radial-gradient(circle,#000 69%,transparent 70%);mask:radial-gradient(circle,#000 69%,transparent 70%)}
+.is-active .radar .sweep{animation:spin 6s linear infinite}
+.orbit{position:absolute;inset:0;border-radius:50%}
+.orbit.o2{inset:17%}
+.is-active .orbit.o1{animation:spin 48s linear infinite}.is-active .orbit.o2{animation:spin 36s linear infinite reverse}
+.sat{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--a)) translateY(calc(-1 * var(--R)))}
+.o2 .sat{transform:rotate(var(--a)) translateY(calc(-.66 * var(--R)))}
+.is-active .o1 .sat>em{animation:counter 48s linear infinite,pop-in .5s var(--ease) forwards}
+.is-active .o2 .sat>em{animation:counter 36s linear infinite reverse,pop-in .5s var(--ease) forwards}
+.sat>em{position:absolute;left:0;top:0;translate:-50% -50%;font-style:normal;rotate:calc(-1 * var(--a))}
+.radar .chip{display:block;padding:5px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);box-shadow:0 6px 16px -6px rgba(28,31,33,.18);font-size:11px;font-weight:500;white-space:nowrap;opacity:0;scale:.7}
+.person{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--c);border:2px solid #fff;box-shadow:0 4px 12px -4px rgba(28,31,33,.3);font-size:10px;font-weight:600;color:#3a3f45;opacity:0;scale:.6}
+.is-active .o1 .sat:nth-child(1) .chip{animation-delay:0s,.4s}.is-active .o1 .sat:nth-child(2) .chip{animation-delay:0s,.7s}.is-active .o1 .sat:nth-child(3) .chip{animation-delay:0s,1s}
+.is-active .o2 .sat:nth-child(1) .person{animation-delay:0s,1.3s}.is-active .o2 .sat:nth-child(2) .person{animation-delay:0s,1.6s}.is-active .o2 .sat:nth-child(3) .person{animation-delay:0s,1.9s}
+.radar .pin{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 8px 22px -6px rgba(28,31,33,.25)}
+.radar .pin:before{content:'';position:absolute;inset:-8px;border-radius:50%;border:1.5px solid rgba(38,109,240,.35);opacity:0}
+.is-active .radar .pin:before{animation:ping 2.6s ease-out .6s infinite}
+@keyframes counter{from{rotate:calc(-1 * var(--a))}to{rotate:calc(-1 * var(--a) - 360deg)}}
+@keyframes pop-in{to{opacity:1;scale:1}}
 .stage-kpis{display:flex;flex-direction:column;gap:12px;width:180px;flex-shrink:0}
 .stage-kpis>div,.kpi{padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px -14px rgba(28,31,33,.2)}
 .stage-kpis small,.kpi small{display:block;color:var(--soft);font-size:12px}
@@ -518,16 +527,21 @@ dialog::backdrop{background:rgba(20,24,32,.5);backdrop-filter:blur(5px)}dialog[o
   h1{font-size:60px;letter-spacing:-2.8px}
   h2,.calculator-copy h2{font-size:44px;line-height:50px}
   .rail-section{grid-template-columns:54px minmax(0,1fr);gap:20px}.rail-icon{width:48px;height:48px}.rail-icon img{max-width:40px}
-  .pain-card{padding:28px 22px 32px}.bars,.bars-x{gap:8px}
+  .pain-card{padding:28px 22px 32px}.bars,.bars-x{gap:8px}.pain-card h3{font-size:18px;line-height:26px}
   .method-panel{height:auto}.method-inner{padding:30px 24px 0;gap:40px}.method-grid{gap:20px}.method-dashboard{height:360px;flex:none}
   .method-stage{height:380px;flex:none}
   .stage-kpis,.kpi-stack{display:none}
+  .stage-atraer{gap:110px!important}
+  .ai-note{display:none}.lead-table{width:100%;max-width:640px}
   .team{gap:40px;padding-right:40px}.team-photo{width:320px;height:360px}.team-copy h2{font-size:38px;line-height:44px}.team-stats{gap:32px}.team-stats>div+div{padding-left:32px}
   .calculator-grid{grid-template-columns:1fr 1fr;gap:40px}
   .calc-intro h2{font-size:52px;line-height:58px;letter-spacing:-1.4px}
   .footer-top{gap:40px}.footer-top>p{width:auto;flex:1}.footer-bottom>p{width:auto;flex:1}
 }
 @media(max-width:1000px){
+  .desktop-break{display:none}
+  .stage-atraer .ad-card{display:none}
+  .lead-feed{display:none}
   .header{gap:24px}.nav-link{padding:8px 12px}
   .float-card{display:none}
   .pain-grid{grid-template-columns:1fr}.pain-card+.pain-card{border-left:0;border-top:1px solid var(--grid)}.pain-card{padding:28px 4px 32px}.pain-art{max-width:420px}
@@ -579,7 +593,7 @@ dialog::backdrop{background:rgba(20,24,32,.5);backdrop-filter:blur(5px)}dialog[o
   .method-stage{height:400px;border-radius:12px 12px 0 0}
   .stage-panel{padding:16px}
   .stage-panel>div{flex-direction:column;gap:14px}
-  .stage-atraer .ad-card{display:none}.radar{width:240px;height:240px}.radar .c1{left:-14px}.radar .c2{right:-10px}
+  .stage-atraer .ad-card{display:none}.radar{--R:92px}.radar .chip{font-size:9.5px;padding:3px 8px}.person{width:26px;height:26px;font-size:9px}
   .lead-feed{display:none}.lead-form{width:100%;max-width:300px}
   .lt-head,.lt-row{grid-template-columns:1.5fr 1fr;padding:10px 8px;gap:8px}.lt-head span:nth-child(2),.lt-row>span:nth-child(2),.lt-head span:nth-child(4),.lt-row>span:nth-child(4){display:none}.lead-table{font-size:12px}
   .score:before{max-width:60px}.score em{max-width:60px}
