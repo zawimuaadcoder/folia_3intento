@@ -746,3 +746,17 @@ h2,.calculator-copy h2{font-size:44px;line-height:48px;font-weight:500;letter-sp
 .hero-guarantee{display:flex;align-items:center;gap:7px;margin-top:-10px;font-size:13px;line-height:18px;font-weight:500;color:var(--soft)}.hero-guarantee img{opacity:.8}
 .js-motion .hero-guarantee{opacity:0;animation:fade-up .9s var(--ease) .95s forwards}
 @media(max-width:700px){.hero-guarantee{margin-top:-6px;font-size:12px;text-align:left;align-items:flex-start}.hero-guarantee img{margin-top:2px}}
+
+/* Fit / qualifier */
+.fit{padding:96px 0 104px}
+.fit-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--grid);border-bottom:1px solid var(--grid)}
+.fit-col{padding:36px 40px 40px}.fit-col+.fit-col{border-left:1px solid var(--grid)}
+.fit-col h3{font-size:20px;line-height:26px;font-weight:500;letter-spacing:-.015em;margin-bottom:18px}
+.fit-col ul{display:grid;gap:14px}
+.fit-col li{position:relative;padding-left:32px;font-size:16px;line-height:23px;font-weight:500;letter-spacing:-.01em;color:var(--body)}
+.fit-col li:before{content:'';position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;background:#e8f7ee url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%231b7a45' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 10.5 2.5 2.5L14 7.5'/%3E%3C/svg%3E") center/20px no-repeat}
+.fit-col.no li{color:var(--soft)}
+.fit-col.no li:before{background:#f3f4f6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%239aa3b0' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M7 7l6 6M13 7l-6 6'/%3E%3C/svg%3E") center/20px no-repeat}
+.hero-description strong{font-weight:600;color:var(--ink)}
+@media(max-width:1000px){.fit{padding:72px 0 80px}.fit-col{padding:28px 24px 32px}}
+@media(max-width:700px){.fit{padding:56px 0 56px}.fit-grid{grid-template-columns:1fr;margin:0 -20px}.fit-col{padding:28px 20px}.fit-col+.fit-col{border-left:0;border-top:1px solid var(--grid)}.fit-col h3{font-size:18px}.fit-col li{font-size:15px;line-height:22px}}
