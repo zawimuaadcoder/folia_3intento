@@ -1,4 +1,4 @@
-@font-face{font-family:Inter;src:url('inter.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
+@font-face{font-family:Inter;src:url('inter-var.woff2') format('woff2-variations'),url('inter-var.woff2') format('woff2');font-style:normal;font-weight:400 700;font-display:swap}
 :root{--ink:#1d1f20;--body:#31373d;--muted:#555e67;--soft:#5b636b;--faint:#9aa1a9;--blue:#266df0;--night:#18191b;--night-card:#1f2023;--night-line:#2c2e33;--night-muted:#bdc4ce;--night-dim:#8b9098;--line:#edeef0;--grid:#e5e7ec;--panel:#f4f5f6;--rail:72px;--gutter:94px;--ease:cubic-bezier(.22,1,.36,1)}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;color:var(--ink);background:#fff;font-family:Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}body.modal-open{overflow:hidden}
 button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;color:inherit}a{color:inherit;text-decoration:none}img{display:block;max-width:100%}h1,h2,h3,h4,p,figure,blockquote,dl,dd,ul,ol{margin:0}ul,ol{padding:0;list-style:none}
@@ -481,7 +481,7 @@ dialog::backdrop{background:rgba(20,24,32,.5);backdrop-filter:blur(5px)}dialog[o
 .calc-intro .section-description{max-width:620px}
 .calc-intro .calc-cta{margin-top:6px}
 .planet-wrap{--rise:0;position:relative;display:flex;justify-content:center;margin-top:48px;padding-top:200px}
-.planet{--rim:-64deg;position:absolute;left:50%;top:40px;width:1800px;height:1800px;margin-left:-900px;border-radius:50%;pointer-events:none;transform:translateY(calc((1 - var(--rise)) * 170px));-webkit-mask:linear-gradient(90deg,transparent 17%,#000 33%,#000 67%,transparent 83%);mask:linear-gradient(90deg,transparent 17%,#000 33%,#000 67%,transparent 83%);animation:rim-drift 9s ease-in-out infinite alternate}
+.planet{--rim:-64deg;position:absolute;left:50%;top:40px;width:1800px;height:1800px;margin-left:-900px;border-radius:50%;pointer-events:none;transform:translateY(calc((1 - var(--rise)) * 170px));-webkit-mask:linear-gradient(90deg,transparent 21%,#000 36%,#000 64%,transparent 79%),linear-gradient(#000 0 22%,transparent 34%);-webkit-mask-composite:source-in;mask:linear-gradient(90deg,transparent 21%,#000 36%,#000 64%,transparent 79%),linear-gradient(#000 0 22%,transparent 34%);mask-composite:intersect;animation:rim-drift 9s ease-in-out infinite alternate}
 .planet>span{position:absolute;border-radius:50%}
 .planet-rim{inset:0;padding:1.5px;background:conic-gradient(from var(--rim),transparent 12deg,#ff6b35 28deg,#ffc94a 42deg,#7be3a5 58deg,#4f8cff 76deg,#a678ff 94deg,#ff5fa2 106deg,transparent 120deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
 .planet-glow{inset:-40px;filter:saturate(1.2);background:conic-gradient(from var(--rim),transparent 12deg,#ff6b35 28deg,#ffc94a 42deg,#7be3a5 58deg,#4f8cff 76deg,#a678ff 94deg,#ff5fa2 106deg,transparent 120deg);opacity:.42;-webkit-mask:radial-gradient(closest-side,transparent calc(100% - 90px),#000 calc(100% - 41px),transparent 100%);mask:radial-gradient(closest-side,transparent calc(100% - 90px),#000 calc(100% - 41px),transparent 100%)}
@@ -623,3 +623,122 @@ dialog::backdrop{background:rgba(20,24,32,.5);backdrop-filter:blur(5px)}dialog[o
   .booking-frame{height:760px;margin-inline:-8px;border-radius:10px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.js-motion .reveal.pending{opacity:1;transform:none}}
+
+
+/* ===== v4 · typography & mobile system (Attio-inspired) ===== */
+:root{--ink:#1c1d1f;--body:#4d5561;--soft:#6f7988;--faint:#9aa3b0;--muted:#6f7988;--tone:#8f99a8;--night:#101011;--night-card:#18181a;--night-line:#232428;--night-muted:#8f99a8;--night-dim:#8f99a8}
+body{font-optical-sizing:auto;text-rendering:optimizeLegibility;letter-spacing:-.01em}
+h1,h2,h3,h4{font-optical-sizing:auto}
+h1{font-size:64px;line-height:1;font-weight:600;letter-spacing:-.02em}
+h2,.calculator-copy h2{font-size:44px;line-height:48px;font-weight:500;letter-spacing:-.015em}
+.tone-muted{color:var(--tone)}
+.label{display:inline-flex;align-self:flex-start;align-items:center;margin-bottom:18px;padding:2px 9px;border-radius:7px;background:#eef3ff;color:var(--blue);font-size:13px;line-height:20px;font-weight:500;letter-spacing:0}
+.calc-intro .label,.faq .label{align-self:center}
+.label-dark{background:rgba(79,140,255,.14);color:#8fb3ff}
+.section-heading{margin-bottom:56px}
+.section-heading>p,.hero-description,.team-copy>p,.section-description{font-weight:500;letter-spacing:-.01em;color:var(--soft)}
+.section-heading>p{font-size:18px;line-height:26px;max-width:600px}
+.hero-description{font-size:20px;line-height:28px;max-width:640px}
+.eyebrow-orbit{font-weight:500;letter-spacing:-.01em}
+.nav-link,.button{font-size:15px;font-weight:500;letter-spacing:-.01em}
+.announcement{font-weight:500;font-size:13px}
+.pain-card h3,.method-grid h3,.benefits h3,.diagnosis-card h4{font-weight:500;letter-spacing:-.01em}
+.pain-card h3{font-size:18px;line-height:24px}
+.pain-card>p:last-child,.method-grid p,.benefits p,.diagnosis-card li p,.faq-list details p,.testimonial figcaption span,.team-stats dd{font-weight:500;letter-spacing:-.01em}
+.pain-card>p:last-child{color:var(--soft);font-size:16px;line-height:22px}
+.method-grid p{color:var(--ink);font-size:15px;line-height:22px}
+.method-tab:not(.is-active) p{color:var(--soft)}
+.testimonial blockquote{font-weight:500;letter-spacing:-.015em;font-size:24px;line-height:32px}
+.team-copy h2{font-size:40px;line-height:44px}
+.team-copy>p{font-size:18px;line-height:27px}
+.team-stats dt{font-weight:500;letter-spacing:-.02em}
+.calc-intro h2{font-size:56px;line-height:58px;font-weight:500;letter-spacing:-.02em}
+.section-description{color:var(--night-muted);font-size:18px;line-height:26px}
+.diagnosis-card h3{font-weight:500;letter-spacing:-.015em;font-size:28px;line-height:34px}
+.benefits h3{font-size:18px;line-height:24px}.benefits p{color:var(--night-muted)}
+.faq h2{letter-spacing:-.015em}
+.faq-list summary{font-size:20px;font-weight:500;letter-spacing:-.015em}
+.faq-list details p{color:var(--night-muted);font-size:17px;line-height:26px}
+.footer-top>p{font-weight:500;letter-spacing:-.01em}
+.small-note{font-weight:500}
+
+@media(max-width:1280px){
+  h1{font-size:56px}
+  h2,.calculator-copy h2{font-size:40px;line-height:44px}
+  .calc-intro h2{font-size:48px;line-height:52px}
+}
+@media(max-width:700px){
+  /* Top: full-bleed bar and a light header like Attio's mobile */
+  .announcement{width:100%;margin:0;border-radius:0;padding:10px 16px;font-size:12px;line-height:17px}
+  .header{padding:12px 16px;border-bottom:1px solid var(--line)}
+  .brand img{width:36px;height:36px}
+  .menu-toggle{background:none!important;width:40px;height:40px}
+  .header.is-dark .menu-toggle{background:none!important}
+  /* Hero */
+  .hero{padding:48px 20px 56px;gap:20px}
+  h1{font-size:40px;line-height:1.02;letter-spacing:-.025em}
+  .hero-description{font-size:16px;line-height:23px}
+  .hero-cta{width:100%;min-height:48px}
+  /* Grid lines give way to full-bleed horizontal rules */
+  .band:before,.band:after{display:none}
+  :root{--gutter:20px}
+  .band>section:before{content:'';position:absolute;top:0;left:50%;width:100vw;height:1px;margin-left:-50vw;background:var(--grid)}
+  .band-dark>section:before{background:var(--night-line)}
+  .band>section:first-child:before,.trust:before,.band-team .team:before,.faq:before{display:none}
+  /* Logos: two-column grid */
+  .logos{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--grid)}
+  .logos li{height:76px;padding:12px;border-left:0;border-bottom:1px solid var(--grid)}
+  .logos li:nth-child(even){border-left:1px solid var(--grid)}
+  .logos li:last-child{grid-column:1/-1;border-bottom:0}
+  .logos img{max-height:24px}
+  .trust>p{font-size:15px;line-height:22px;padding:18px 16px;color:var(--soft);font-weight:500}
+  /* Section rhythm */
+  .pains{padding-top:56px}.method{padding-top:56px;padding-bottom:48px}
+  .label{margin-bottom:14px;font-size:12px;line-height:18px}
+  h2,.calculator-copy h2,.team-copy h2{font-size:32px;line-height:36px;letter-spacing:-.02em}
+  .section-heading{margin-bottom:32px}
+  .section-heading>p{font-size:16px;line-height:23px}
+  /* Pains: edge-to-edge stacked rows */
+  .pain-grid{margin:0 -20px;border-bottom:0}
+  .pain-card{padding:28px 20px 32px}
+  .pain-card+.pain-card{border-top:1px solid var(--grid)}
+  .pain-art{height:120px;margin-bottom:20px;max-width:none}
+  /* Method: scrolling tab bar, full-bleed stage */
+  .method-panel{margin:0 -20px;padding:0;border:0;border-radius:0;background:none}
+  .method-inner{padding:0;gap:0;border:0;border-radius:0;background:none}
+  .method-grid{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;padding:0 12px;border-top:1px solid var(--grid);border-bottom:1px solid var(--grid);scroll-snap-type:x proximity}
+  .method-grid::-webkit-scrollbar{display:none}
+  .method-tab{flex:0 0 auto;height:auto;padding:13px 10px 14px;scroll-snap-align:start}
+  .method-tab h3{font-size:14px;line-height:20px;color:var(--ink);gap:6px}.method-tab h3 img{width:16px;height:16px}
+  .method-tab .tab-progress{left:10px;right:10px;background:transparent}
+  .method-caption{margin:0;padding:18px 20px 20px;min-height:0;font-size:16px;line-height:23px;color:var(--soft);font-weight:500}
+  .method-stage{width:100%;height:380px;border-radius:0;border-left:0;border-right:0;box-shadow:none;border-top:1px solid var(--grid)}
+  .testimonial{margin-top:48px;padding:0 4px}
+  .testimonial blockquote{font-size:20px;line-height:28px}
+  /* Team */
+  .band-team{padding:0 0 56px}
+  .team{margin:0 -20px;border-radius:0;border-left:0;border-right:0;padding:20px 20px 28px;background:#fafbfc}
+  .team-photo{border-radius:12px}
+  .team-copy{padding:0}
+  .team-copy>p{font-size:16px;line-height:23px}
+  .team-stats{display:grid;grid-template-columns:1fr 1fr;gap:0;padding-top:8px;border-top:1px solid var(--grid)}
+  .team-stats>div{padding:16px 0 0}.team-stats>div+div{padding:16px 0 0 16px;border-top:0;border-left:1px solid var(--grid);align-self:auto}
+  .team-stats dt{font-size:21px;line-height:28px;white-space:nowrap}.team-stats dd{font-size:13px;line-height:18px}
+  /* Dark: centred, Attio-style */
+  .calculator-section{padding:64px 0 0}
+  .calc-intro h2{font-size:34px;line-height:38px;letter-spacing:-.02em}
+  .section-description{font-size:16px;line-height:23px}
+  .calc-intro .calc-cta{width:100%}
+  .planet-wrap{margin-top:16px}
+  .calculator-section .benefits{margin:48px -20px 0;padding:0;gap:0;border-top:1px solid var(--night-line)}
+  .benefits article{padding:28px 20px;text-align:center;border-bottom:1px solid var(--night-line)}
+  .benefits p{max-width:none}
+  .faq{padding:64px 0}
+  .faq .section-heading{text-align:center}
+  .faq .section-heading>p{margin-inline:auto}
+  .faq-list summary{font-size:17px;line-height:23px}
+  .faq-list details p{font-size:15px;line-height:22px}
+  /* Footer */
+  .footer-inner{padding:48px 0 40px}
+  .footer-top nav{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+}
