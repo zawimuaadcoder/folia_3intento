@@ -13,11 +13,8 @@
 </head>
 <body>
 <a href="#contenido" class="skip-link">Saltar al contenido</a>
-<main id="contenido">
-<div class="hero-shell" id="inicio">
-  <div class="hero-bg" aria-hidden="true"></div>
   <div class="announcement">Sistemas de captación para clínicas capilares en España.</div>
-  <header class="header">
+  <header class="header" id="site-header">
     <a class="brand" href="#inicio" aria-label="Marketing Health for Clinics, inicio"><img src="assets/logo-mark.svg" width="45" height="45" alt=""><span>Marketing<br>Health for<br>Clinics</span></a>
     <nav class="navigation" id="navigation" aria-label="Navegación principal">
       <a href="#metodo" class="nav-link">El método</a><a href="#calculadora" class="nav-link">Calculadora</a>
@@ -25,6 +22,9 @@
     <button class="button button-dark header-cta" data-calculator>Hablemos de tu clínica <span class="arrow" aria-hidden="true"><span><img src="assets/arrow-up-right.svg" width="12" height="12" alt=""></span><span><img src="assets/arrow-up-right.svg" width="12" height="12" alt=""></span></span></button>
     <button class="menu-toggle" aria-label="Abrir menú" aria-controls="navigation" aria-expanded="false"><span></span><span></span></button>
   </header>
+<main id="contenido">
+<div class="hero-shell" id="inicio">
+  <div class="hero-bg" aria-hidden="true"></div>
   <section class="hero" aria-labelledby="hero-title">
     <a href="#metodo" class="eyebrow-orbit"><span>Adquisición para clínicas capilares <img src="assets/arrow-outline.svg" width="16" height="16" alt=""></span></a>
     <h1 id="hero-title">Tu próximo paciente no debería<br class="desktop-break"> llegar por casualidad.</h1>
@@ -95,14 +95,82 @@
     <div class="rail-body">
       <div class="section-heading reveal"><h2 id="method-title">Tú cuidas de tus pacientes.<br>Nosotros, de tu crecimiento.</h2><p>Conecta tu inversión en captación con lo que de verdad importa: las oportunidades que llegan a tu clínica.</p></div>
       <div class="method-panel reveal">
-        <div class="method-inner">
-          <div class="method-grid">
-            <article><h3><img src="assets/ic-copy.svg" width="20" height="20" alt="">Atraer</h3><p>Campañas dirigidas a personas con interés real en una valoración capilar dentro de tu zona de atención.</p></article>
-            <article><h3><img src="assets/ic-users.svg" width="22" height="22" alt="">Captar</h3><p>Convertimos ese interés en contactos cualificados mediante una experiencia sencilla y enfocada a generar consultas.</p></article>
-            <article><h3><img src="assets/ic-shiny.svg" width="20" height="20" alt="">Gestionar con IA</h3><p>Organizamos los nuevos contactos para facilitar el seguimiento y priorizar las mejores oportunidades.</p></article>
-            <article><h3><img src="assets/ic-chart.svg" width="20" height="20" alt="">Optimizar</h3><p>Medimos resultados para optimizar la captación y mejorar la rentabilidad.</p></article>
+        <div class="method-inner" data-method>
+          <div class="method-grid" role="tablist" aria-label="Las cuatro fases del método">
+            <button class="method-tab is-active" role="tab" id="tab-atraer" aria-controls="stage-atraer" aria-selected="true"><h3><img src="assets/ic-copy.svg" width="20" height="20" alt="">Atraer</h3><p>Campañas dirigidas a personas con interés real en una valoración capilar dentro de tu zona de atención.</p><span class="tab-progress" aria-hidden="true"><i></i></span></button>
+            <button class="method-tab" role="tab" id="tab-captar" aria-controls="stage-captar" aria-selected="false" tabindex="-1"><h3><img src="assets/ic-users.svg" width="22" height="22" alt="">Captar</h3><p>Convertimos ese interés en contactos cualificados mediante una experiencia sencilla y enfocada a generar consultas.</p><span class="tab-progress" aria-hidden="true"><i></i></span></button>
+            <button class="method-tab" role="tab" id="tab-gestionar" aria-controls="stage-gestionar" aria-selected="false" tabindex="-1"><h3><img src="assets/ic-shiny.svg" width="20" height="20" alt="">Gestionar con IA</h3><p>Organizamos los nuevos contactos para facilitar el seguimiento y priorizar las mejores oportunidades.</p><span class="tab-progress" aria-hidden="true"><i></i></span></button>
+            <button class="method-tab" role="tab" id="tab-optimizar" aria-controls="stage-optimizar" aria-selected="false" tabindex="-1"><h3><img src="assets/ic-chart.svg" width="20" height="20" alt="">Optimizar</h3><p>Medimos resultados para optimizar la captación y mejorar la rentabilidad.</p><span class="tab-progress" aria-hidden="true"><i></i></span></button>
           </div>
-          <div class="method-dashboard"><img src="assets/dashboard.webp" width="1693" height="929" alt="Detalle de la agenda y el seguimiento de oportunidades" loading="lazy"></div>
+          <p class="method-caption" aria-hidden="true"></p>
+          <div class="method-stage">
+            <div class="stage-panel is-active" id="stage-atraer" role="tabpanel" aria-labelledby="tab-atraer">
+              <div class="stage-atraer">
+                <article class="ad-card">
+                  <header><span class="ad-avatar"><img src="assets/logo-mark-white.svg" width="20" height="20" alt=""></span><div><strong>Clínica Capilar Madrid</strong><small>Publicidad · Madrid</small></div></header>
+                  <p>¿Notas menos densidad en las entradas? Pide tu valoración capilar gratuita con un especialista.</p>
+                  <div class="ad-media"><span class="ad-badge">Valoración gratuita</span><span class="ad-glow"></span></div>
+                  <footer><span>Clínica Capilar · Madrid</span><b>Pedir cita</b></footer>
+                </article>
+                <div class="radar" aria-hidden="true">
+                  <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span><span class="sweep"></span>
+                  <span class="pin"><img src="assets/logo-mark.svg" width="28" height="28" alt=""></span>
+                  <i style="--x:28%;--y:34%;--d:.2s"></i><i style="--x:66%;--y:24%;--d:.6s"></i><i style="--x:74%;--y:62%;--d:1s"></i><i style="--x:38%;--y:72%;--d:1.4s"></i><i style="--x:54%;--y:84%;--d:1.8s"></i><i style="--x:18%;--y:56%;--d:2.2s"></i><i style="--x:82%;--y:42%;--d:2.6s"></i>
+                  <span class="chip c1">Interés: injerto capilar</span><span class="chip c2">25 – 55 años</span><span class="chip c3">Radio 25 km</span>
+                </div>
+                <div class="stage-kpis"><div><small>Alcance semanal</small><strong data-count-to="48200">48.200</strong></div><div><small>Clics a valoración</small><strong data-count-to="1496">1.496</strong></div></div>
+              </div>
+            </div>
+            <div class="stage-panel" id="stage-captar" role="tabpanel" aria-labelledby="tab-captar" hidden>
+              <div class="stage-captar">
+                <div class="lead-form">
+                  <p class="lf-title">Valoración capilar gratuita</p>
+                  <div class="lf-steps"><span class="done"></span><span class="done"></span><span class="now"></span></div>
+                  <label><small>Nombre</small><span class="typed" data-text="Laura Martínez"></span></label>
+                  <label><small>Teléfono</small><span class="typed" data-text="+34 612 345 678"></span></label>
+                  <label><small>¿Qué te preocupa?</small><span class="typed" data-text="Entradas y coronilla"></span></label>
+                  <span class="lf-button">Quiero mi valoración</span>
+                </div>
+                <div class="lead-feed">
+                  <p class="feed-title">Solicitudes de hoy <b class="feed-count">7</b></p>
+                  <div class="feed-item new"><span class="avatar-dot" style="--c:#f1d4c4">LM</span><div><strong>Laura Martínez</strong><small>Entradas y coronilla · ahora</small></div><em>Nueva</em></div>
+                  <div class="feed-item"><span class="avatar-dot" style="--c:#d6e4fb">CG</span><div><strong>Carlos Gómez</strong><small>Valoración FUE · hace 42 min</small></div><em class="ok">Contactado</em></div>
+                  <div class="feed-item"><span class="avatar-dot" style="--c:#e6dcfb">AT</span><div><strong>Ana Torres</strong><small>Tratamiento PRP · hace 2 h</small></div><em class="ok">Cita</em></div>
+                </div>
+              </div>
+            </div>
+            <div class="stage-panel" id="stage-gestionar" role="tabpanel" aria-labelledby="tab-gestionar" hidden>
+              <div class="stage-gestionar">
+                <div class="lead-table">
+                  <div class="lt-head"><span>Contacto</span><span>Interés</span><span>Puntuación IA</span><span>Siguiente paso</span></div>
+                  <div class="lt-row"><span><b class="avatar-dot" style="--c:#f1d4c4">LM</b>Laura Martínez</span><span>Injerto FUE</span><span><i class="score" data-score="94"><em style="--w:94%"></em>94</i></span><span><mark class="hot">Llamar hoy</mark></span></div>
+                  <div class="lt-row"><span><b class="avatar-dot" style="--c:#d6e4fb">CG</b>Carlos Gómez</span><span>Valoración</span><span><i class="score" data-score="81"><em style="--w:81%"></em>81</i></span><span><mark class="warm">Enviar vídeo</mark></span></div>
+                  <div class="lt-row"><span><b class="avatar-dot" style="--c:#e6dcfb">AT</b>Ana Torres</span><span>PRP</span><span><i class="score" data-score="67"><em style="--w:67%"></em>67</i></span><span><mark>Seguimiento</mark></span></div>
+                  <div class="lt-row"><span><b class="avatar-dot" style="--c:#dff3e6">DP</b>David Pérez</span><span>Precio</span><span><i class="score" data-score="38"><em style="--w:38%"></em>38</i></span><span><mark class="cold">Nutrir</mark></span></div>
+                </div>
+                <aside class="ai-note"><p class="ai-title"><img src="assets/ic-shiny.svg" width="16" height="16" alt="">Resumen de la IA</p><p class="ai-text" data-text="Laura quiere un injerto FUE, tiene presupuesto y puede venir por las tardes. Prioridad alta: llámala antes de las 18:00."></p></aside>
+              </div>
+            </div>
+            <div class="stage-panel" id="stage-optimizar" role="tabpanel" aria-labelledby="tab-optimizar" hidden>
+              <div class="stage-optimizar">
+                <div class="chart-card">
+                  <p class="chart-title">Pacientes nuevos al mes <span><i class="lg-a"></i>Pacientes <i class="lg-b"></i>Coste por paciente</span></p>
+                  <svg viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true">
+                    <g class="grid-lines"><line x1="0" y1="55" x2="600" y2="55"/><line x1="0" y1="110" x2="600" y2="110"/><line x1="0" y1="165" x2="600" y2="165"/></g>
+                    <path class="area" d="M0,180 C80,170 120,160 180,150 C250,138 300,110 360,95 C430,78 500,52 600,30 L600,220 L0,220 Z"/>
+                    <path class="line-a" pathLength="1" d="M0,180 C80,170 120,160 180,150 C250,138 300,110 360,95 C430,78 500,52 600,30"/>
+                    <path class="line-b" pathLength="1" d="M0,60 C90,66 150,80 220,96 C300,112 380,128 460,140 C520,148 560,152 600,156"/>
+                  </svg>
+                  <div class="chart-x"><span>Mes 1</span><span>Mes 2</span><span>Mes 3</span><span>Mes 4</span><span>Mes 5</span><span>Mes 6</span></div>
+                </div>
+                <div class="kpi-stack">
+                  <div class="kpi"><small>Coste por contacto</small><strong class="down">−32 %</strong></div>
+                  <div class="kpi"><small>Valoraciones al mes</small><strong class="up">+41 %</strong></div>
+                  <div class="kpi"><small>Pacientes al mes</small><strong>8 → 12</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <figure class="testimonial reveal">
@@ -121,7 +189,7 @@
       <h2 id="team-title">Detrás de cada campaña,<br class="desktop-break"> hay personas.</h2>
       <p>Somos Marketing Health for Clinics, una agencia con más de 6 años de experiencia en marketing. Hoy nos dedicamos a una sola cosa: crear sistemas de captación para clínicas capilares que quieren llenar su agenda cada mes, sin depender del boca a boca.</p>
       <dl class="team-stats">
-        <div><dt>+6 años</dt><dd>de experiencia en marketing</dd></div>
+        <div><dt>+<span data-count-to="6">6</span> años</dt><dd>de experiencia en marketing</dd></div>
         <div><dt>1 especialidad</dt><dd>captación para clínicas capilares</dd></div>
       </dl>
     </div>
@@ -129,10 +197,11 @@
 </div>
 
 <div class="band band-dark">
+  <div class="horizon" aria-hidden="true"></div>
   <section class="calculator-section" id="calculadora" aria-labelledby="calculator-title">
     <div class="calculator-grid">
       <div class="calculator-copy reveal"><h2 id="calculator-title"><span class="tone-muted">Tu clínica tiene potencial.</span><br>Pongámosle números.</h2><p class="section-description">Descubre cuántas oportunidades podrías generar con nuestro sistema y qué supondrían para tu clínica, a partir de tus propios datos.</p><button class="button button-blue calc-cta" data-calculator>Calcula tu potencial <span class="arrow" aria-hidden="true"><span><img src="assets/arrow-up-right.svg" width="12" height="12" alt=""></span><span><img src="assets/arrow-up-right.svg" width="12" height="12" alt=""></span></span></button><p class="small-note">5 pasos breves · Sin coste</p></div>
-      <div class="diagnosis-card reveal"><h3>De la inversión<br>a nuevos pacientes.</h3><ol><li><h4><span>01</span>Tu punto de partida</h4><p>Volumen, ticket y equipo de seguimiento</p></li><li><h4><span>02</span>Tu escenario de captación</h4><p>Contactos → valoraciones → pacientes</p></li><li><h4><span>03</span>Tu siguiente paso</h4><p>Una auditoría para validar el potencial</p></li></ol><p class="small-note">Una estimación orientativa, con los supuestos a la vista.</p></div>
+      <div class="diagnosis-card reveal" data-spotlight><h3>De la inversión<br>a nuevos pacientes.</h3><ol><li><h4><span>01</span>Tu punto de partida</h4><p>Volumen, ticket y equipo de seguimiento</p></li><li><h4><span>02</span>Tu escenario de captación</h4><p>Contactos → valoraciones → pacientes</p></li><li><h4><span>03</span>Tu siguiente paso</h4><p>Una auditoría para validar el potencial</p></li></ol><p class="small-note">Una estimación orientativa, con los supuestos a la vista.</p></div>
     </div>
     <div class="benefits reveal"><article><h3>Oportunidades reales</h3><p>Las oportunidades necesarias para tu escenario.</p></article><article><h3>Impacto en tu clínica</h3><p>Pacientes e ingresos brutos potenciales.</p></article><article><h3>Un plan para avanzar</h3><p>Qué revisar para convertir potencial en crecimiento.</p></article></div>
   </section>

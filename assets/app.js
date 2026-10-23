@@ -136,3 +136,59 @@ function animateNumbers(){if(reduceMotion)return;$$('[data-count]',content).forE
 const legalTexts={privacy:['Privacidad','Al enviar el formulario, tu nombre, email y teléfono se envían a HubSpot para entregar el análisis y atender tu solicitud. En la vista previa de demostración no se envían datos. Las respuestas del diagnóstico solo se envían si se ha configurado una propiedad para guardarlas.','La información del responsable, los plazos de conservación y el contacto para ejercer tus derechos se incorporarán en la política definitiva antes de activar el envío.'],legal:['Aviso legal','Esta es la web de Marketing Health for Clinics (MHFC).','Los datos identificativos del titular se incorporarán antes de su publicación comercial. Las proyecciones de la calculadora son escenarios ilustrativos y no garantizan resultados.'],cookies:['Cookies','Las respuestas de la calculadora se conservan en la memoria de esta pestaña. El calendario de reserva se carga desde Calendly, que aplica su propia política de cookies.','Si aceptas las cookies, el Pixel de Meta registra la visita, el envío de la calculadora y la reserva de la llamada para medir nuestras campañas. Si las rechazas, no se carga.']};
 async function openLegal(kind){await configReady;const url=config[kind==='privacy'?'privacyUrl':kind==='legal'?'legalUrl':'cookiesUrl'];if(url){window.open(url,'_blank','noopener,noreferrer');return;}const [h,...ps]=legalTexts[kind];$('#legal-title').textContent=h;$('#legal-content').innerHTML=ps.map(p=>`<p>${p}</p>`).join('');if(kind==='cookies'&&config.metaPixelId){$('#legal-content').insertAdjacentHTML('beforeend','<p><button type="button" class="button button-secondary" data-cookie-reset>Cambiar mis preferencias de cookies</button></p>');$('[data-cookie-reset]').addEventListener('click',()=>{try{localStorage.removeItem(CONSENT_KEY);}catch{}legal.close();showCookieBanner();});}legal.showModal();document.body.classList.add('modal-open');}
 $$('[data-legal]').forEach(b=>b.addEventListener('click',()=>openLegal(b.dataset.legal)));$('[data-legal-close]').addEventListener('click',()=>legal.close());legal.addEventListener('close',()=>{if(!modal.open)document.body.classList.remove('modal-open');});
+
+/* ===== v3 · motion layer ===== */
+const motion=document.documentElement.classList.contains('js-motion');
+const header=$('#site-header');
+const darkZones=$$('.band-dark');
+const onScroll=()=>{header.classList.toggle('is-stuck',scrollY>40);const y=header.offsetHeight/2;header.classList.toggle('is-dark',darkZones.some(z=>{const r=z.getBoundingClientRect();return r.top<=y&&r.bottom>y;}));};
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+// Hero headline: split into words for a staggered blur-in.
+if(motion){let i=0;const h1=$('#hero-title');[...h1.childNodes].forEach(n=>{if(n.nodeType!==3)return;const frag=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(w=>{if(!w)return;if(/^\s+$/.test(w)){frag.append(w);return;}const s=document.createElement('span');s.className='word';s.style.setProperty('--i',i++);s.textContent=w;frag.append(s);});n.replaceWith(frag);});}
+
+// Hero dashboard flattens as it scrolls into view; floating cards follow the pointer.
+const heroArt=$('.hero-art'),hero=$('.hero');
+if(motion&&heroArt){
+ let ticking=false;const update=()=>{ticking=false;const r=heroArt.getBoundingClientRect();const p=Math.min(1,Math.max(0,(innerHeight-r.top)/(innerHeight*.9)));heroArt.style.setProperty('--p',p.toFixed(3));};
+ addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(update);}},{passive:true});update();
+ if(matchMedia('(pointer:fine)').matches)hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();heroArt.style.setProperty('--mx',((e.clientX-r.left)/r.width*2-1).toFixed(3));heroArt.style.setProperty('--my',((e.clientY-r.top)/r.height*2-1).toFixed(3));});
+}
+
+// Count-up numbers.
+function countUp(el,duration=1200){const end=Number(el.dataset.countTo);if(!motion||!Number.isFinite(end)){el.textContent=number(end);return;}const start=performance.now();const tick=now=>{const t=Math.min(1,(now-start)/duration);el.textContent=number(Math.round(end*(1-(1-t)**3)));if(t<1)requestAnimationFrame(tick);};requestAnimationFrame(tick);}
+
+// In-view triggers.
+$$('.agenda-grid i').forEach((el,i)=>el.style.setProperty('--i',i));
+$$('.logos,.benefits').forEach(el=>{el.classList.add('stagger');[...el.children].forEach((c,i)=>c.style.setProperty('--i',i));});
+const inView=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;el.classList.add('in-view');$$('[data-count-to]',el).forEach(n=>{if(!n.closest('.stage-panel'))countUp(n);});if(el.matches('.diagnosis-card'))startCycle(el);inView.unobserve(el);}),{rootMargin:'0px 0px -18% 0px'});
+$$('.pain-card,.logos,.benefits,.horizon,.team,.diagnosis-card').forEach(el=>inView.observe(el));
+
+// Diagnosis card: pointer spotlight and a slow highlight cycle through the three steps.
+function startCycle(card){if(!motion)return;const items=$$('li',card);let n=0;card.classList.add('cycling');const step=()=>{items.forEach((li,i)=>li.classList.toggle('is-lit',i===n%items.length));n++;};step();setInterval(step,2400);}
+$$('[data-spotlight]').forEach(card=>card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--sx',e.clientX-r.left+'px');card.style.setProperty('--sy',e.clientY-r.top+'px');}));
+
+// FAQ: animate open/close instead of the native jump.
+$$('.faq-list details').forEach(d=>{const sum=$('summary',d),body=$('p',d);sum.addEventListener('click',e=>{if(!motion||!body.animate)return;e.preventDefault();if(d.dataset.busy)return;d.dataset.busy='1';
+ if(d.open){const h=body.offsetHeight;d.classList.add('closing');const a=body.animate([{height:h+'px',opacity:1},{height:'0px',opacity:0}],{duration:320,easing:'cubic-bezier(.22,1,.36,1)'});a.onfinish=()=>{d.open=false;delete d.dataset.busy;};}
+ else{d.open=true;const h=body.offsetHeight;const a=body.animate([{height:'0px',opacity:0},{height:h+'px',opacity:1}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});a.onfinish=()=>{delete d.dataset.busy;};}});});
+
+// Method: tabs with auto-advance and an animated scene per step.
+const method=$('[data-method]');
+if(method){
+ const tabs=$$('.method-tab',method),panels=$$('.stage-panel',method);let current=0,run=0,visible=false;
+ panels.forEach(p=>p.removeAttribute('hidden'));
+ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+ async function type(el,text,speed,id){el.textContent='';el.classList.add('typing');for(const ch of text){if(id!==run)return false;el.textContent+=ch;await sleep(speed);}el.classList.remove('typing');return true;}
+ const scenes={
+  async captar(panel,id){const stage=$('.stage-captar',panel);stage.classList.remove('submitted');const count=$('.feed-count',panel);count.textContent='7';$$('.typed',panel).forEach(t=>{t.textContent='';t.classList.remove('typing');});if(!motion){$$('.typed',panel).forEach(t=>t.textContent=t.dataset.text);stage.classList.add('submitted');count.textContent='8';return;}
+   await sleep(500);for(const t of $$('.typed',panel)){if(!await type(t,t.dataset.text,55,id))return;await sleep(180);}if(id!==run)return;await sleep(250);stage.classList.add('submitted');await sleep(350);count.textContent='8';count.classList.remove('bump');void count.offsetWidth;count.classList.add('bump');},
+  async gestionar(panel,id){const t=$('.ai-text',panel);t.textContent='';if(!motion){t.textContent=t.dataset.text;return;}await sleep(900);await type(t,t.dataset.text,22,id);},
+  async atraer(panel){$$('[data-count-to]',panel).forEach(n=>countUp(n,1400));}
+ };
+ function select(i,focus=false){current=(i+tabs.length)%tabs.length;run++;tabs.forEach((t,k)=>{const on=k===current;t.classList.toggle('is-active',on);t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;});panels.forEach((p,k)=>{const on=k===current;p.classList.toggle('is-active',on);p.inert=!on;p.setAttribute('aria-hidden',String(!on));});if(focus)tabs[current].focus();const cap=$('.method-caption',method);if(cap)cap.textContent=$('p',tabs[current]).textContent;const key=panels[current].id.replace('stage-','');scenes[key]?.(panels[current],run);}
+ tabs.forEach((t,i)=>{t.addEventListener('click',()=>select(i));t.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();select(current+1,true);}if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();select(current-1,true);}});$('.tab-progress i',t).addEventListener('animationend',()=>{if(t.classList.contains('is-active'))select(current+1);});});
+ method.addEventListener('pointerenter',()=>method.classList.add('is-paused'));method.addEventListener('pointerleave',()=>{if(visible)method.classList.remove('is-paused');});
+ new IntersectionObserver(([e])=>{visible=e.isIntersecting;method.classList.toggle('is-paused',!visible);if(visible&&!method.dataset.started){method.dataset.started='1';select(0);}},{threshold:.35}).observe(method);
+ method.classList.add('is-paused');select(0);
+}
