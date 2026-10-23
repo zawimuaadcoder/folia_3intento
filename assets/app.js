@@ -147,7 +147,7 @@ const onScroll=()=>{header.classList.toggle('is-stuck',scrollY>40);const y=heade
 addEventListener('scroll',onScroll,{passive:true});onScroll();
 
 // Hero headline: split into words for a staggered blur-in.
-if(motion){let i=0;const h1=$('#hero-title');[...h1.childNodes].forEach(n=>{if(n.nodeType!==3)return;const frag=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(w=>{if(!w)return;if(/^\s+$/.test(w)){frag.append(w);return;}const s=document.createElement('span');s.className='word';s.style.setProperty('--i',i++);s.textContent=w;frag.append(s);});n.replaceWith(frag);});}
+if(motion){let i=0;const h1=$('#hero-title');const tw=document.createTreeWalker(h1,NodeFilter.SHOW_TEXT);const nodes=[];while(tw.nextNode())nodes.push(tw.currentNode);nodes.forEach(n=>{const frag=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(w=>{if(!w)return;if(/^\s+$/.test(w)){frag.append(w);return;}const s=document.createElement('span');s.className='word';s.style.setProperty('--i',i++);s.textContent=w;frag.append(s);});n.replaceWith(frag);});}
 
 // Hero dashboard flattens as it scrolls into view; floating cards follow the pointer.
 const heroArt=$('.hero-art'),hero=$('.hero');

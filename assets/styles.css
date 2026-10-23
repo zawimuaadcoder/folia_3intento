@@ -742,3 +742,7 @@ h2,.calculator-copy h2{font-size:44px;line-height:48px;font-weight:500;letter-sp
   .footer-inner{padding:48px 0 40px}
   .footer-top nav{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 }
+
+.hero-guarantee{display:flex;align-items:center;gap:7px;margin-top:-10px;font-size:13px;line-height:18px;font-weight:500;color:var(--soft)}.hero-guarantee img{opacity:.8}
+.js-motion .hero-guarantee{opacity:0;animation:fade-up .9s var(--ease) .95s forwards}
+@media(max-width:700px){.hero-guarantee{margin-top:-6px;font-size:12px;text-align:left;align-items:flex-start}.hero-guarantee img{margin-top:2px}}
