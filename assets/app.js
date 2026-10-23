@@ -155,14 +155,18 @@ if(motion&&heroArt){
  if(matchMedia('(pointer:fine)').matches)hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();heroArt.style.setProperty('--mx',((e.clientX-r.left)/r.width*2-1).toFixed(3));heroArt.style.setProperty('--my',((e.clientY-r.top)/r.height*2-1).toFixed(3));});
 }
 
+// Hero product UI is laid out at 671 px and scaled to its frame.
+$$('[data-app-scale]').forEach(vp=>{const app=vp.firstElementChild;const fit=()=>app.style.setProperty('--s',(vp.clientWidth/671).toFixed(4));fit();new ResizeObserver(fit).observe(vp);});
+
 // Count-up numbers.
 function countUp(el,duration=1200){const end=Number(el.dataset.countTo);if(!motion||!Number.isFinite(end)){el.textContent=number(end);return;}const start=performance.now();const tick=now=>{const t=Math.min(1,(now-start)/duration);el.textContent=number(Math.round(end*(1-(1-t)**3)));if(t<1)requestAnimationFrame(tick);};requestAnimationFrame(tick);}
 
 // In-view triggers.
 $$('.agenda-grid i').forEach((el,i)=>el.style.setProperty('--i',i));
+$$('.bars i').forEach((el,i)=>el.style.setProperty('--i',i));
 $$('.logos,.benefits').forEach(el=>{el.classList.add('stagger');[...el.children].forEach((c,i)=>c.style.setProperty('--i',i));});
-const inView=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;el.classList.add('in-view');$$('[data-count-to]',el).forEach(n=>{if(!n.closest('.stage-panel'))countUp(n);});if(el.matches('.diagnosis-card'))startCycle(el);inView.unobserve(el);}),{rootMargin:'0px 0px -18% 0px'});
-$$('.pain-card,.logos,.benefits,.horizon,.team,.diagnosis-card').forEach(el=>inView.observe(el));
+const inView=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;el.classList.add('in-view');$$('[data-count-to]',el).forEach(n=>{if(!n.closest('.stage-panel'))countUp(n);});if(el.matches('.diagnosis-card'))startCycle(el);const fly=$('animateMotion',el);if(fly&&motion){setTimeout(()=>fly.beginElement(),700);setTimeout(()=>el.classList.add('landed'),3700);}inView.unobserve(el);}),{rootMargin:'0px 0px -18% 0px'});
+$$('.pain-card,.logos,.benefits,.team,.diagnosis-card,.float-citas').forEach(el=>inView.observe(el));
 
 // Diagnosis card: pointer spotlight and a slow highlight cycle through the three steps.
 function startCycle(card){if(!motion)return;const items=$$('li',card);let n=0;card.classList.add('cycling');const step=()=>{items.forEach((li,i)=>li.classList.toggle('is-lit',i===n%items.length));n++;};step();setInterval(step,2400);}
@@ -198,7 +202,9 @@ if(motion){
  const rails=$$('.rail-section');
  const quote=$('.testimonial blockquote');let words=[];
  if(quote){const text=quote.textContent;quote.textContent='';text.split(/(\s+)/).forEach(w=>{if(/^\s+$/.test(w)||!w){quote.append(w);return;}const s=document.createElement('span');s.className='w';s.textContent=w;quote.append(s);words.push(s);});}
+ const planet=$('[data-planet]');
  let raf=false;const tick=()=>{raf=false;const vh=innerHeight;
+  if(planet){const r=planet.getBoundingClientRect();planet.style.setProperty('--rise',Math.min(1,Math.max(0,(vh-r.top)/(vh*.75))).toFixed(3));}
   rails.forEach(sec=>{const line=$('.rail-line',sec);if(!line)return;const r=line.getBoundingClientRect();const f=Math.min(1,Math.max(0,(vh*.6-r.top)/r.height));line.style.setProperty('--fill',f.toFixed(3));});
   if(quote){const r=quote.getBoundingClientRect();const f=Math.min(1,Math.max(0,(vh*.85-r.top)/(vh*.45)));const n=Math.round(f*words.length);words.forEach((w,i)=>w.classList.toggle('lit',i<n));}
  };

@@ -7,7 +7,6 @@
   <meta name="theme-color" content="#18191b">
   <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
   <link rel="preload" href="assets/inter.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/dashboard.webp" as="image">
   <link rel="stylesheet" href="assets/styles.css">
   <script type="module" src="assets/app.js"></script>
 </head>
@@ -30,9 +29,64 @@
     <h1 id="hero-title">Tu próximo paciente no debería<br class="desktop-break"> llegar por casualidad.</h1>
     <p class="hero-description">Un sistema de captación pensado para clínicas capilares que quieren crecer más allá de las recomendaciones.</p>
     <div class="hero-art">
-      <div class="dashboard-frame"><img class="dashboard" src="assets/dashboard.webp" width="671" height="368" alt="Agenda de una clínica con citas organizadas por día"></div>
-      <img class="float-card float-citas" src="assets/card-citas.webp" width="432" height="93" alt="12 citas confirmadas esta semana, un 20 % más">
-      <img class="float-card float-solicitudes" src="assets/card-solicitudes.webp" width="353" height="290" alt="3 nuevas solicitudes en las últimas 24 horas">
+      <div class="dashboard-frame">
+        <div class="app-viewport" data-app-scale>
+          <div class="app" role="img" aria-label="Agenda semanal de una clínica capilar con las citas de valoración, injerto y tratamientos">
+            <aside class="app-side" aria-hidden="true">
+              <div class="app-ws"><span class="app-ws-logo"><img src="assets/logo-mark-white.svg" width="12" height="12" alt=""></span>Clínica Capilar<svg viewBox="0 0 12 12"><path d="M3.5 4.5 6 7l2.5-2.5"/></svg></div>
+              <nav>
+                <span><svg viewBox="0 0 16 16"><path d="M2.5 7 8 2.5 13.5 7v6.5h-4v-4h-3v4h-4z"/></svg>Inicio</span>
+                <span><svg viewBox="0 0 16 16"><path d="M2.5 4.5h11v8h-11zM2.5 5l5.5 4 5.5-4"/></svg>Solicitudes<b>3</b></span>
+                <span class="on"><svg viewBox="0 0 16 16"><path d="M2.5 3.5h11v10h-11zM2.5 6.5h11M5.5 2v3M10.5 2v3"/></svg>Agenda</span>
+                <span><svg viewBox="0 0 16 16"><circle cx="8" cy="5.5" r="2.5"/><path d="M3 13.5c.6-2.6 2.6-4 5-4s4.4 1.4 5 4"/></svg>Pacientes</span>
+                <span><svg viewBox="0 0 16 16"><path d="M2.5 9.5v-3l7-3.5v10l-7-3.5zM9.5 5.5h2a2 2 0 0 1 0 4h-2"/></svg>Campañas</span>
+                <span><svg viewBox="0 0 16 16"><path d="M3 13.5V8M6.5 13.5V4M10 13.5V9.5M13.5 13.5V6"/></svg>Informes</span>
+              </nav>
+              <div class="app-side-card"><small>Esta semana</small><strong>+20 %</strong><span>citas confirmadas</span></div>
+            </aside>
+            <div class="app-main">
+              <div class="app-top">
+                <div class="app-title"><b>Agenda</b><small>12 – 16 de mayo</small></div>
+                <div class="app-seg"><span>Día</span><span class="on">Semana</span><span>Mes</span></div>
+                <span class="app-btn">+ Nueva cita</span>
+              </div>
+              <div class="cal">
+                <div class="cal-head"><span></span><span>Lun <b>12</b></span><span>Mar <b>13</b></span><span class="today">Mié <b>14</b></span><span>Jue <b>15</b></span><span>Vie <b>16</b></span></div>
+                <div class="cal-body">
+                  <div class="cal-hours"><span>09:00</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span></div>
+                  <div class="cal-grid">
+                    <i class="ev val" style="--c:0;--s:0;--l:.75"><b>Laura Martínez</b>Valoración</i>
+                    <i class="ev fue" style="--c:0;--s:1.5;--l:3"><b>Carlos Gómez</b>Injerto FUE<em>10:30 – 13:30</em></i>
+                    <i class="ev prp" style="--c:1;--s:.5;--l:1"><b>Ana Torres</b>Sesión PRP</i>
+                    <i class="ev rev" style="--c:1;--s:2;--l:.75"><b>Javier López</b>Revisión</i>
+                    <i class="ev val" style="--c:1;--s:3.5;--l:.75"><b>Marta Ruiz</b>Valoración</i>
+                    <i class="ev fue" style="--c:2;--s:0;--l:3"><b>Sergio Díaz</b>Injerto FUE<em>09:00 – 12:00</em></i>
+                    <i class="ev val" style="--c:2;--s:3.5;--l:1"><b>Lucía Navarro</b>Valoración</i>
+                    <i class="ev new" style="--c:3;--s:0;--l:.75"><b>Nueva · Raquel P.</b>Valoración</i>
+                    <i class="ev prp" style="--c:3;--s:1;--l:1"><b>Elena Martín</b>Sesión PRP</i>
+                    <i class="ev val" style="--c:3;--s:2.5;--l:.75"><b>David Ortega</b>Valoración</i>
+                    <i class="ev rev" style="--c:3;--s:4;--l:.75"><b>Pablo Sanz</b>Revisión</i>
+                    <i class="ev val" style="--c:4;--s:.5;--l:.75"><b>Isabel Cruz</b>Valoración</i>
+                    <i class="ev fue" style="--c:4;--s:2;--l:3"><b>Raúl Gil</b>Injerto FUE<em>11:00 – 14:00</em></i>
+                    <span class="now" style="--c:2;--s:2.35"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="float-card float-citas" aria-hidden="true">
+        <span class="fc-icon"><svg viewBox="0 0 16 16"><path d="m4 8.5 2.5 2.5L12 5.5"/></svg></span>
+        <div><strong><span data-count-to="12">12</span> citas confirmadas</strong><small>esta semana</small></div>
+        <em>↑ +20 %</em>
+      </div>
+      <div class="float-card float-solicitudes" aria-hidden="true">
+        <div class="fs-head"><span class="fc-icon"><svg viewBox="0 0 16 16"><circle cx="7" cy="5.5" r="2.5"/><path d="M2.5 13.5c.5-2.4 2.3-3.8 4.5-3.8M12 9v4M10 11h4"/></svg></span><div><strong>3 nuevas solicitudes</strong><small>en las últimas 24 horas</small></div></div>
+        <div class="fs-row"><b style="--c:#f6dccd">LM</b><div><strong>Laura Martínez</strong><small>Consulta inicial</small></div><time>Hace 2 h</time></div>
+        <div class="fs-row"><b style="--c:#d8e5fb">CG</b><div><strong>Carlos Gómez</strong><small>Valoración capilar</small></div><time>Hace 5 h</time></div>
+        <div class="fs-row"><b style="--c:#e7defb">AT</b><div><strong>Ana Torres</strong><small>Tratamiento PRP</small></div><time>Hace 8 h</time></div>
+      </div>
     </div>
     <button class="button button-dark hero-cta" data-calculator>Calcula el potencial de tu clínica <span class="arrow" aria-hidden="true"><span><img src="assets/arrow-up-right.svg" width="12" height="12" alt=""></span><span><img src="assets/arrow-up-right.svg" width="12" height="12" alt=""></span></span></button>
   </section>
@@ -56,34 +110,33 @@
       <div class="section-heading reveal"><h2 id="pains-title">Lo que frena a la mayoría<br class="desktop-break"> de clínicas capilares.</h2><p>Si te reconoces en alguna, el problema no es tu clínica. Es la forma de captar pacientes.</p></div>
       <div class="pain-grid reveal">
         <article class="pain-card">
-          <div class="pain-art art-agenda" aria-hidden="true">
-            <p class="agenda-title">Próxima semana</p>
-            <span class="agenda-tag"><img src="assets/dot-orange.svg" width="7" height="7" alt="">2 de 15 huecos ocupados</span>
-            <div class="agenda-grid">
-              <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span>
-              <i></i><i class="busy"></i><i></i><i></i><i></i>
-              <i></i><i></i><i></i><i class="busy"></i><i></i>
-              <i></i><i></i><i></i><i></i><i></i>
-            </div>
+          <div class="pain-art art-bars" aria-hidden="true">
+            <div class="bars"><i style="--h:68%"></i><i style="--h:30%"></i><i style="--h:86%"></i><i style="--h:22%"></i><i style="--h:58%"></i><i style="--h:18%"></i></div>
+            <div class="bars-x"><span>Ene</span><span>Feb</span><span>Mar</span><span>Abr</span><span>May</span><span>Jun</span></div>
+            <span class="bars-avg"></span>
           </div>
-          <h3><img src="assets/ic-calendar.svg" width="20" height="20" alt="">Dependes del boca a boca</h3>
+          <p class="pain-num">01</p>
+          <h3>Dependes del boca a boca</h3>
           <p>Unos meses la agenda está llena y otros, a medias. Y nunca sabes cuál te toca.</p>
         </article>
         <article class="pain-card">
-          <div class="pain-art art-messages" aria-hidden="true">
-            <div class="message"><img src="assets/avatar-grey.svg" width="26" height="26" alt=""><div><strong>Hola, ¿precio del injerto?</strong><small>Visto · 09:14</small></div></div>
-            <div class="message"><img src="assets/avatar-grey.svg" width="26" height="26" alt=""><div><strong>¿Cuánto cuesta un FUE?</strong><small>Visto · 11:32</small></div></div>
-            <div class="message"><img src="assets/avatar-grey.svg" width="26" height="26" alt=""><div><strong>Buenas, ¿qué precio tiene?</strong><small>Visto · 16:48</small></div></div>
+          <div class="pain-art art-chat" aria-hidden="true">
+            <span class="bubble">Hola, ¿precio del injerto?<small>Visto</small></span>
+            <span class="bubble">¿Cuánto cuesta un FUE?<small>Visto</small></span>
+            <span class="bubble">Buenas, ¿qué precio tiene?<small>Visto</small></span>
           </div>
-          <h3><img src="assets/ic-chat.svg" width="20" height="20" alt="">Curiosos que solo piden precio</h3>
+          <p class="pain-num">02</p>
+          <h3>Curiosos que solo piden precio</h3>
           <p>Escriben, preguntan cuánto cuesta y desaparecen. Ni valoración ni cirugía.</p>
         </article>
         <article class="pain-card">
-          <div class="pain-art art-turkey" aria-hidden="true">
-            <div class="cancel-card"><strong><img src="assets/dot-red.svg" width="8" height="8" alt="">Valoración cancelada</strong><p>“Gracias, al final me opero en Estambul.”</p></div>
-            <span class="lost-chip"><img src="assets/ic-plane-small.svg" width="14" height="14" alt="">Paciente perdido</span>
+          <div class="pain-art art-route" aria-hidden="true">
+            <svg viewBox="0 0 300 140" preserveAspectRatio="xMidYMid meet"><path class="route" d="M40 104 C 110 20, 190 20, 260 70"/><circle class="city" cx="40" cy="104" r="5"/><circle class="city far" cx="260" cy="70" r="5"/><g class="plane-g"><path d="M9 0 L-6 -6.5 L-2.5 0 L-6 6.5 Z"/><animateMotion dur="2.8s" begin="indefinite" fill="freeze" rotate="auto" calcMode="spline" keyPoints="0;1" keyTimes="0;1" keySplines=".45 0 .25 1" path="M40 104 C 110 20, 190 20, 260 70"/></g></svg>
+            <span class="city-label l1">Tu clínica</span><span class="city-label l2">Estambul</span>
+            <span class="lost">−1 paciente</span>
           </div>
-          <h3><img src="assets/ic-plane.svg" width="20" height="20" alt="">Pacientes que se van a Turquía</h3>
+          <p class="pain-num">03</p>
+          <h3>Pacientes que se van a Turquía</h3>
           <p>Comparan solo por precio y acaban operándose fuera. Tu clínica ni entra en la conversación.</p>
         </article>
       </div>
@@ -197,11 +250,11 @@
 </div>
 
 <div class="band band-dark">
-  <div class="horizon" aria-hidden="true"></div>
   <section class="calculator-section" id="calculadora" aria-labelledby="calculator-title">
-    <div class="calculator-grid">
-      <div class="calculator-copy reveal"><h2 id="calculator-title"><span class="tone-muted">Tu clínica tiene potencial.</span><br>Pongámosle números.</h2><p class="section-description">Descubre cuántas oportunidades podrías generar con nuestro sistema y qué supondrían para tu clínica, a partir de tus propios datos.</p><button class="button button-blue calc-cta" data-calculator>Calcula tu potencial <span class="arrow" aria-hidden="true"><span><img src="assets/arrow-up-right.svg" width="12" height="12" alt=""></span><span><img src="assets/arrow-up-right.svg" width="12" height="12" alt=""></span></span></button><p class="small-note">5 pasos breves · Sin coste</p></div>
-      <div class="diagnosis-card reveal" data-spotlight><h3>De la inversión<br>a nuevos pacientes.</h3><ol><li><h4><span>01</span>Tu punto de partida</h4><p>Volumen, ticket y equipo de seguimiento</p></li><li><h4><span>02</span>Tu escenario de captación</h4><p>Contactos → valoraciones → pacientes</p></li><li><h4><span>03</span>Tu siguiente paso</h4><p>Una auditoría para validar el potencial</p></li></ol><p class="small-note">Una estimación orientativa, con los supuestos a la vista.</p></div>
+      <div class="calc-intro reveal"><p class="overline">Diagnóstico de captación</p><h2 id="calculator-title"><span class="tone-muted">Tu clínica tiene potencial.</span><br>Pongámosle números.</h2><p class="section-description">Descubre cuántas oportunidades podrías generar con nuestro sistema y qué supondrían para tu clínica, a partir de tus propios datos.</p><button class="button button-blue calc-cta" data-calculator>Calcula tu potencial <span class="arrow" aria-hidden="true"><span><img src="assets/arrow-up-right.svg" width="12" height="12" alt=""></span><span><img src="assets/arrow-up-right.svg" width="12" height="12" alt=""></span></span></button><p class="small-note">5 pasos breves · Sin coste</p></div>
+    <div class="planet-wrap" data-planet>
+      <div class="planet" aria-hidden="true"><span class="planet-rays"></span><span class="planet-rim"></span><span class="planet-glow"></span></div>
+        <div class="diagnosis-card reveal" data-spotlight><h3>De la inversión<br>a nuevos pacientes.</h3><ol><li><h4><span>01</span>Tu punto de partida</h4><p>Volumen, ticket y equipo de seguimiento</p></li><li><h4><span>02</span>Tu escenario de captación</h4><p>Contactos → valoraciones → pacientes</p></li><li><h4><span>03</span>Tu siguiente paso</h4><p>Una auditoría para validar el potencial</p></li></ol><p class="small-note">Una estimación orientativa, con los supuestos a la vista.</p></div>
     </div>
     <div class="benefits reveal"><article><h3>Oportunidades reales</h3><p>Las oportunidades necesarias para tu escenario.</p></article><article><h3>Impacto en tu clínica</h3><p>Pacientes e ingresos brutos potenciales.</p></article><article><h3>Un plan para avanzar</h3><p>Qué revisar para convertir potencial en crecimiento.</p></article></div>
   </section>
