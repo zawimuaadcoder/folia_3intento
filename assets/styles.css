@@ -760,3 +760,19 @@ h2,.calculator-copy h2{font-size:44px;line-height:48px;font-weight:500;letter-sp
 .hero-description strong{font-weight:600;color:var(--ink)}
 @media(max-width:1000px){.fit{padding:72px 0 80px}.fit-col{padding:28px 24px 32px}}
 @media(max-width:700px){.fit{padding:56px 0 56px}.fit-grid{grid-template-columns:1fr;margin:0 -20px}.fit-col{padding:28px 20px}.fit-col+.fit-col{border-left:0;border-top:1px solid var(--grid)}.fit-col h3{font-size:18px}.fit-col li{font-size:15px;line-height:22px}}
+
+/* VSL in the hero */
+.hero-art.hero-vsl{width:860px;aspect-ratio:16/9;perspective:none}
+.vsl{position:relative;width:100%;height:100%;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px rgba(28,29,31,.08),0 24px 60px -24px rgba(28,29,31,.28),0 8px 18px -8px rgba(28,29,31,.12)}
+.vsl video{display:block;width:100%;height:100%;object-fit:cover;background:#fff}
+.vsl-unmute{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:14px;border:0;background:rgba(255,255,255,.18);cursor:pointer;font:inherit;color:#1c1d1f}
+.vsl-unmute>span:last-child{display:flex;flex-direction:column;align-items:flex-start;background:#fff;padding:12px 18px 12px 14px;border-radius:14px;box-shadow:0 10px 30px -10px rgba(28,29,31,.35);text-align:left}
+.vsl-unmute strong{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.vsl-unmute small{font-size:13px;color:#6f7988}
+.vsl-play{width:64px;height:64px;border-radius:50%;background:#3B87F2;display:grid;place-items:center;box-shadow:0 0 0 0 rgba(59,135,242,.45);animation:vsl-pulse 2.2s infinite}
+.vsl-play svg{width:26px;height:26px;fill:#fff;margin-left:3px}
+.vsl-unmute:hover .vsl-play{transform:scale(1.06)}
+.vsl.is-playing .vsl-unmute{display:none}
+@keyframes vsl-pulse{0%{box-shadow:0 0 0 0 rgba(59,135,242,.45)}70%{box-shadow:0 0 0 18px rgba(59,135,242,0)}100%{box-shadow:0 0 0 0 rgba(59,135,242,0)}}
+@media (prefers-reduced-motion:reduce){.vsl-play{animation:none}}
+@media (max-width:640px){.vsl{border-radius:12px}.vsl-unmute{gap:10px}.vsl-play{width:52px;height:52px}.vsl-unmute>span:last-child{padding:9px 12px}.vsl-unmute strong{font-size:14px}.vsl-unmute small{font-size:12px}}

@@ -214,3 +214,10 @@ if(motion){
  // Primary buttons lean slightly towards the pointer.
  if(matchMedia('(pointer:fine)').matches)$$('.hero-cta,.calc-cta,.header-cta').forEach(b=>{b.classList.add('magnetic');b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.translate=`${((e.clientX-r.left-r.width/2)*.12).toFixed(1)}px ${((e.clientY-r.top-r.height/2)*.2).toFixed(1)}px`;});b.addEventListener('pointerleave',()=>{b.style.translate='';});});
 }
+
+// Hero VSL: silent autoplay preview; one click restarts it with sound and native controls.
+$$('[data-vsl]').forEach(box=>{const v=$('video',box),btn=$('.vsl-unmute',box);let marks={};
+ if(motion){v.play().catch(()=>{});}
+ btn.addEventListener('click',()=>{v.currentTime=0;v.muted=false;v.controls=true;box.classList.add('is-playing');v.play().catch(()=>{});if(window.fbq)fbq('trackCustom','VSLPlay');});
+ v.addEventListener('timeupdate',()=>{if(v.muted||!v.duration)return;const p=Math.floor(v.currentTime/v.duration*4)*25;if(p&&!marks[p]){marks[p]=1;if(window.fbq)fbq('trackCustom','VSLProgress',{percent:p});}});
+});
