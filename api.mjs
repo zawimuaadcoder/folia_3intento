@@ -495,11 +495,15 @@ async function notifyMake(
       'Make webhook:',
       res.status
     );
+
+    return res.ok;
   } catch (err) {
     console.error(
       'Error avisando a Make:',
       err
     );
+
+    return false;
   } finally {
     clearTimeout(timer);
   }
@@ -769,6 +773,28 @@ export async function handleLead(
     projection:
       result,
   };
+
+  // Sin clave de HubSpot, el lead entra solo por Make.
+  if (!env.HUBSPOT_SERVICE_KEY) {
+    const sent = await notifyMake(
+      payload,
+      null,
+      env
+    );
+
+    if (sent) {
+      return response(200, {
+        ok: true,
+        simulated: false,
+        result,
+      });
+    }
+
+    return response(502, {
+      message:
+        'No hemos podido guardar tus datos. Tus respuestas siguen aquí; vuelve a intentarlo.',
+    });
+  }
 
   try {
     const hubspot =
