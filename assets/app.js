@@ -192,3 +192,17 @@ if(method){
  new IntersectionObserver(([e])=>{visible=e.isIntersecting;method.classList.toggle('is-paused',!visible);if(visible&&!method.dataset.started){method.dataset.started='1';select(0);}},{threshold:.35}).observe(method);
  method.classList.add('is-paused');select(0);
 }
+
+// Scroll-linked: section rails fill, testimonial words light up as you read.
+if(motion){
+ const rails=$$('.rail-section');
+ const quote=$('.testimonial blockquote');let words=[];
+ if(quote){const text=quote.textContent;quote.textContent='';text.split(/(\s+)/).forEach(w=>{if(/^\s+$/.test(w)||!w){quote.append(w);return;}const s=document.createElement('span');s.className='w';s.textContent=w;quote.append(s);words.push(s);});}
+ let raf=false;const tick=()=>{raf=false;const vh=innerHeight;
+  rails.forEach(sec=>{const line=$('.rail-line',sec);if(!line)return;const r=line.getBoundingClientRect();const f=Math.min(1,Math.max(0,(vh*.6-r.top)/r.height));line.style.setProperty('--fill',f.toFixed(3));});
+  if(quote){const r=quote.getBoundingClientRect();const f=Math.min(1,Math.max(0,(vh*.85-r.top)/(vh*.45)));const n=Math.round(f*words.length);words.forEach((w,i)=>w.classList.toggle('lit',i<n));}
+ };
+ addEventListener('scroll',()=>{if(!raf){raf=true;requestAnimationFrame(tick);}},{passive:true});tick();
+ // Primary buttons lean slightly towards the pointer.
+ if(matchMedia('(pointer:fine)').matches)$$('.hero-cta,.calc-cta,.header-cta').forEach(b=>{b.classList.add('magnetic');b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.translate=`${((e.clientX-r.left-r.width/2)*.12).toFixed(1)}px ${((e.clientY-r.top-r.height/2)*.2).toFixed(1)}px`;});b.addEventListener('pointerleave',()=>{b.style.translate='';});});
+}

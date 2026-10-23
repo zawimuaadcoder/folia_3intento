@@ -90,6 +90,12 @@ h2{font-size:52px;line-height:58px;font-weight:600;letter-spacing:-1.2px}
 .avatar{margin:0 auto 24px;border-radius:50%}
 .testimonial blockquote{font-size:22px;line-height:32px;letter-spacing:-.3px;color:var(--body);margin-bottom:24px}
 .testimonial figcaption{font-size:14px;line-height:20px;letter-spacing:-.1px;color:var(--body)}.testimonial figcaption span{display:block;margin-top:2px;color:var(--muted)}
+.rail-line{position:relative;overflow:hidden}
+.rail-line:after{content:'';position:absolute;left:0;right:0;top:0;height:100%;background:linear-gradient(var(--ink),#5b636b);transform-origin:top;transform:scaleY(var(--fill,0))}
+.rail-fade:after{background:linear-gradient(var(--blue),#7aa6ff)}
+.js-motion .testimonial blockquote .w{color:#c6cbd2;transition:color .25s}
+.js-motion .testimonial blockquote .w.lit{color:var(--body)}
+.magnetic{transition:translate .35s var(--ease),background .25s,color .25s,border-color .25s}
 
 /* Team */
 .band-team{padding:40px 0 120px}
