@@ -30,12 +30,12 @@ function validateContact(c){if(typeof c?.name!=='string'||c.name.trim().length<3
 
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
-const number=n=>new Intl.NumberFormat('es-ES',{maximumFractionDigits:0}).format(n);
+const money=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0,useGrouping:'always'}).format(n);
+const number=n=>new Intl.NumberFormat('es-ES',{maximumFractionDigits:0,useGrouping:'always'}).format(n);
 const modal=$('#calculator-modal'),content=$('#modal-content'),legal=$('#legal-modal');
 let opener=null,step=0,answers={},contact={name:'',email:'',phone:'',marketing:false},result=null,leadSaved=false,busy=false,booked=false;
 let config={demo:true,calendarUrl:'',metaPixelId:'',privacyUrl:'',legalUrl:'',cookiesUrl:''};
-let configReady=fetch('/api/config').then(r=>{if(!r.ok)throw Error();return r.json();}).then(c=>{config={...config,...c};}).catch(()=>{config.demo=true;});
+let configReady=fetch('/api/config').then(r=>{if(!r.ok)throw Error();return r.json();}).then(c=>{config={...config,...c};}).catch(()=>{config.demo=true;config.offline=true;config.calendarUrl||='https://calendly.com/josemartinez31k/30min';});
 const submissionIds={};
 const newId=()=>crypto.randomUUID();
 function submissionKey(type){const signature=JSON.stringify({answers,contact,type});return submissionIds[signature]??(submissionIds[signature]=newId());}
@@ -103,7 +103,9 @@ function contactFields(){return field('Nombre completo *','name',contact.name,'t
 function demoNote(){return config.demo?'<p class="demo-note">Vista previa: puedes probar el recorrido con datos ficticios. No se enviará ni guardará ningún contacto.</p>':'';}
 function readContact(form){const d=new FormData(form);contact={name:String(d.get('name')??'').trim(),email:String(d.get('email')??'').trim(),phone:String(d.get('phone')??'').trim(),marketing:d.has('marketing')};return String(d.get('website')??'');}
 function bindContactDraft(form){form.addEventListener('input',e=>{if(['name','email','phone'].includes(e.target.name))contact[e.target.name]=e.target.value;if(e.target.name==='marketing')contact.marketing=e.target.checked;});$('[data-privacy]',form)?.addEventListener('click',()=>openLegal('privacy'));}
-async function submitData(eventType,website=''){const payload={eventType,submissionId:submissionKey(eventType),answers,contact,website,note:'',source:'mhfc-web',consentVersion:'2026-09-25'};const response=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});let data;try{data=await response.json();}catch{throw Error('No hemos podido conectar. Tus respuestas siguen aquí; inténtalo de nuevo.');}if(!response.ok)throw Error(data.message||'No hemos podido enviar los datos. Inténtalo de nuevo.');return {...data,submissionId:payload.submissionId};}
+async function submitData(eventType,website=''){const payload={eventType,submissionId:submissionKey(eventType),answers,contact,website,note:'',source:'mhfc-web',consentVersion:'2026-09-25'};
+ // Static hosting without the Netlify function: compute locally and send nothing.
+ if(config.offline)return {result:calculate(answers),submissionId:payload.submissionId};const response=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});let data;try{data=await response.json();}catch{throw Error('No hemos podido conectar. Tus respuestas siguen aquí; inténtalo de nuevo.');}if(!response.ok)throw Error(data.message||'No hemos podido enviar los datos. Inténtalo de nuevo.');return {...data,submissionId:payload.submissionId};}
 function setBusy(form,on,label='Preparando tu análisis…'){busy=on;$$('button,input,textarea',form).forEach(el=>el.disabled=on);const submit=$('button[type=submit]',form);if(on){submit.dataset.label=submit.innerHTML;submit.textContent=label;}else submit.innerHTML=submit.dataset.label||submit.innerHTML;form.setAttribute('aria-busy',String(on));}
 function renderGate(){setScreen(`<form id="lead-form">${title('Tu proyección está lista.','Desbloquea el análisis de tu clínica: tu punto de partida, un escenario de crecimiento y las oportunidades que necesitarías para alcanzarlo.')}${demoNote()}${contactFields()}${actions('Ver mi proyección','Revisar mis datos')}</form>`,'ANÁLISIS PREPARADO',100);const form=$('#lead-form');bindContactDraft(form);$('[data-back]').addEventListener('click',()=>{step=4;render();});form.addEventListener('submit',async e=>{e.preventDefault();if(busy)return;const trap=readContact(form);const msg=validateContact(contact);if(msg)return error(msg);setBusy(form,true);try{const d=await submitData('analysis',trap);result=d.result||calculate(answers);leadSaved=true;if(!config.demo&&!trap)track('Lead',{content_name:'Calculadora de potencial'},d.submissionId);step=6;render();}catch(err){error(err.message);}finally{if(form.isConnected)setBusy(form,false);busy=false;}});}
 const goalCopy={volume:'Tu palanca: generar más valoraciones',quality:'Tu palanca: atraer oportunidades con interés real',conversion:'Tu palanca: convertir más valoraciones en pacientes',cost:'Tu palanca: revisar el coste de captación',scale:'Tu palanca: crecer sin perder capacidad de atención'};
@@ -136,3 +138,86 @@ function animateNumbers(){if(reduceMotion)return;$$('[data-count]',content).forE
 const legalTexts={privacy:['Privacidad','Al enviar el formulario, tu nombre, email y teléfono se envían a HubSpot para entregar el análisis y atender tu solicitud. En la vista previa de demostración no se envían datos. Las respuestas del diagnóstico solo se envían si se ha configurado una propiedad para guardarlas.','La información del responsable, los plazos de conservación y el contacto para ejercer tus derechos se incorporarán en la política definitiva antes de activar el envío.'],legal:['Aviso legal','Esta es la web de Marketing Health for Clinics (MHFC).','Los datos identificativos del titular se incorporarán antes de su publicación comercial. Las proyecciones de la calculadora son escenarios ilustrativos y no garantizan resultados.'],cookies:['Cookies','Las respuestas de la calculadora se conservan en la memoria de esta pestaña. El calendario de reserva se carga desde Calendly, que aplica su propia política de cookies.','Si aceptas las cookies, el Pixel de Meta registra la visita, el envío de la calculadora y la reserva de la llamada para medir nuestras campañas. Si las rechazas, no se carga.']};
 async function openLegal(kind){await configReady;const url=config[kind==='privacy'?'privacyUrl':kind==='legal'?'legalUrl':'cookiesUrl'];if(url){window.open(url,'_blank','noopener,noreferrer');return;}const [h,...ps]=legalTexts[kind];$('#legal-title').textContent=h;$('#legal-content').innerHTML=ps.map(p=>`<p>${p}</p>`).join('');if(kind==='cookies'&&config.metaPixelId){$('#legal-content').insertAdjacentHTML('beforeend','<p><button type="button" class="button button-secondary" data-cookie-reset>Cambiar mis preferencias de cookies</button></p>');$('[data-cookie-reset]').addEventListener('click',()=>{try{localStorage.removeItem(CONSENT_KEY);}catch{}legal.close();showCookieBanner();});}legal.showModal();document.body.classList.add('modal-open');}
 $$('[data-legal]').forEach(b=>b.addEventListener('click',()=>openLegal(b.dataset.legal)));$('[data-legal-close]').addEventListener('click',()=>legal.close());legal.addEventListener('close',()=>{if(!modal.open)document.body.classList.remove('modal-open');});
+
+/* ===== v3 · motion layer ===== */
+const motion=document.documentElement.classList.contains('js-motion');
+const header=$('#site-header');
+const darkZones=$$('.band-dark');
+const onScroll=()=>{header.classList.toggle('is-stuck',scrollY>40);const y=header.offsetHeight/2;header.classList.toggle('is-dark',darkZones.some(z=>{const r=z.getBoundingClientRect();return r.top<=y&&r.bottom>y;}));};
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+// Hero headline: split into words for a staggered blur-in.
+if(motion){let i=0;const h1=$('#hero-title');const tw=document.createTreeWalker(h1,NodeFilter.SHOW_TEXT);const nodes=[];while(tw.nextNode())nodes.push(tw.currentNode);nodes.forEach(n=>{const frag=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(w=>{if(!w)return;if(/^\s+$/.test(w)){frag.append(w);return;}const s=document.createElement('span');s.className='word';s.style.setProperty('--i',i++);s.textContent=w;frag.append(s);});n.replaceWith(frag);});}
+
+// Hero dashboard flattens as it scrolls into view; floating cards follow the pointer.
+const heroArt=$('.hero-art'),hero=$('.hero');
+if(motion&&heroArt){
+ let ticking=false;const update=()=>{ticking=false;const r=heroArt.getBoundingClientRect();const p=Math.min(1,Math.max(0,(innerHeight-r.top)/(innerHeight*.9)));heroArt.style.setProperty('--p',p.toFixed(3));};
+ addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(update);}},{passive:true});update();
+ if(matchMedia('(pointer:fine)').matches)hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();heroArt.style.setProperty('--mx',((e.clientX-r.left)/r.width*2-1).toFixed(3));heroArt.style.setProperty('--my',((e.clientY-r.top)/r.height*2-1).toFixed(3));});
+}
+
+// Hero product UI is laid out at 671 px and scaled to its frame.
+$$('[data-app-scale]').forEach(vp=>{const app=vp.firstElementChild;const fit=()=>app.style.setProperty('--s',(vp.clientWidth/671).toFixed(4));fit();new ResizeObserver(fit).observe(vp);});
+
+// Count-up numbers.
+function countUp(el,duration=1200){const end=Number(el.dataset.countTo);if(!motion||!Number.isFinite(end)){el.textContent=number(end);return;}const start=performance.now();const tick=now=>{const t=Math.min(1,(now-start)/duration);el.textContent=number(Math.round(end*(1-(1-t)**3)));if(t<1)requestAnimationFrame(tick);};requestAnimationFrame(tick);}
+
+// In-view triggers.
+$$('.agenda-grid i').forEach((el,i)=>el.style.setProperty('--i',i));
+$$('.bars i').forEach((el,i)=>el.style.setProperty('--i',i));
+$$('.logos,.benefits').forEach(el=>{el.classList.add('stagger');[...el.children].forEach((c,i)=>c.style.setProperty('--i',i));});
+const inView=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;el.classList.add('in-view');$$('[data-count-to]',el).forEach(n=>{if(!n.closest('.stage-panel'))countUp(n);});if(el.matches('.diagnosis-card'))startCycle(el);const fly=$('animateMotion',el);if(fly&&motion){setTimeout(()=>fly.beginElement(),700);setTimeout(()=>el.classList.add('landed'),3700);}inView.unobserve(el);}),{rootMargin:'0px 0px -18% 0px'});
+$$('.pain-card,.logos,.benefits,.team,.diagnosis-card,.float-citas').forEach(el=>inView.observe(el));
+
+// Diagnosis card: pointer spotlight and a slow highlight cycle through the three steps.
+function startCycle(card){if(!motion)return;const items=$$('li',card);let n=0;card.classList.add('cycling');const step=()=>{items.forEach((li,i)=>li.classList.toggle('is-lit',i===n%items.length));n++;};step();setInterval(step,2400);}
+$$('[data-spotlight]').forEach(card=>card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--sx',e.clientX-r.left+'px');card.style.setProperty('--sy',e.clientY-r.top+'px');}));
+
+// FAQ: animate open/close instead of the native jump.
+$$('.faq-list details').forEach(d=>{const sum=$('summary',d),body=$('p',d);sum.addEventListener('click',e=>{if(!motion||!body.animate)return;e.preventDefault();if(d.dataset.busy)return;d.dataset.busy='1';
+ if(d.open){const h=body.offsetHeight;d.classList.add('closing');const a=body.animate([{height:h+'px',opacity:1},{height:'0px',opacity:0}],{duration:320,easing:'cubic-bezier(.22,1,.36,1)'});a.onfinish=()=>{d.open=false;delete d.dataset.busy;};}
+ else{d.open=true;const h=body.offsetHeight;const a=body.animate([{height:'0px',opacity:0},{height:h+'px',opacity:1}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});a.onfinish=()=>{delete d.dataset.busy;};}});});
+
+// Method: tabs with auto-advance and an animated scene per step.
+const method=$('[data-method]');
+if(method){
+ const tabs=$$('.method-tab',method),panels=$$('.stage-panel',method);let current=0,run=0,visible=false;
+ panels.forEach(p=>p.removeAttribute('hidden'));
+ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+ async function type(el,text,speed,id){el.textContent='';el.classList.add('typing');for(const ch of text){if(id!==run)return false;el.textContent+=ch;await sleep(speed);}el.classList.remove('typing');return true;}
+ const scenes={
+  async captar(panel,id){const stage=$('.stage-captar',panel);stage.classList.remove('submitted');const count=$('.feed-count',panel);count.textContent='7';$$('.typed',panel).forEach(t=>{t.textContent='';t.classList.remove('typing');});if(!motion){$$('.typed',panel).forEach(t=>t.textContent=t.dataset.text);stage.classList.add('submitted');count.textContent='8';return;}
+   await sleep(500);for(const t of $$('.typed',panel)){if(!await type(t,t.dataset.text,55,id))return;await sleep(180);}if(id!==run)return;await sleep(250);stage.classList.add('submitted');await sleep(350);count.textContent='8';count.classList.remove('bump');void count.offsetWidth;count.classList.add('bump');},
+  async gestionar(panel,id){const t=$('.ai-text',panel);t.textContent='';if(!motion){t.textContent=t.dataset.text;return;}await sleep(900);await type(t,t.dataset.text,22,id);},
+  async atraer(panel){$$('[data-count-to]',panel).forEach(n=>countUp(n,1400));}
+ };
+ function select(i,focus=false){current=(i+tabs.length)%tabs.length;run++;tabs.forEach((t,k)=>{const on=k===current;t.classList.toggle('is-active',on);t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;});panels.forEach((p,k)=>{const on=k===current;p.classList.toggle('is-active',on);p.inert=!on;p.setAttribute('aria-hidden',String(!on));});if(focus)tabs[current].focus();const cap=$('.method-caption',method);if(cap)cap.textContent=$('p',tabs[current]).textContent;const key=panels[current].id.replace('stage-','');scenes[key]?.(panels[current],run);}
+ tabs.forEach((t,i)=>{t.addEventListener('click',()=>select(i));t.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();select(current+1,true);}if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();select(current-1,true);}});$('.tab-progress i',t).addEventListener('animationend',()=>{if(t.classList.contains('is-active'))select(current+1);});});
+ method.addEventListener('pointerenter',()=>method.classList.add('is-paused'));method.addEventListener('pointerleave',()=>{if(visible)method.classList.remove('is-paused');});
+ new IntersectionObserver(([e])=>{visible=e.isIntersecting;method.classList.toggle('is-paused',!visible);if(visible&&!method.dataset.started){method.dataset.started='1';select(0);}},{threshold:.35}).observe(method);
+ method.classList.add('is-paused');select(0);
+}
+
+// Scroll-linked: section rails fill, testimonial words light up as you read.
+if(motion){
+ const rails=$$('.rail-section');
+ const quote=$('.testimonial blockquote');let words=[];
+ if(quote){const text=quote.textContent;quote.textContent='';text.split(/(\s+)/).forEach(w=>{if(/^\s+$/.test(w)||!w){quote.append(w);return;}const s=document.createElement('span');s.className='w';s.textContent=w;quote.append(s);words.push(s);});}
+ const planet=$('[data-planet]');
+ let raf=false;const tick=()=>{raf=false;const vh=innerHeight;
+  if(planet){const r=planet.getBoundingClientRect();planet.style.setProperty('--rise',Math.min(1,Math.max(0,(vh-r.top)/(vh*.75))).toFixed(3));}
+  rails.forEach(sec=>{const line=$('.rail-line',sec);if(!line)return;const r=line.getBoundingClientRect();const f=Math.min(1,Math.max(0,(vh*.6-r.top)/r.height));line.style.setProperty('--fill',f.toFixed(3));});
+  if(quote){const r=quote.getBoundingClientRect();const f=Math.min(1,Math.max(0,(vh*.85-r.top)/(vh*.45)));const n=Math.round(f*words.length);words.forEach((w,i)=>w.classList.toggle('lit',i<n));}
+ };
+ addEventListener('scroll',()=>{if(!raf){raf=true;requestAnimationFrame(tick);}},{passive:true});tick();
+ // Primary buttons lean slightly towards the pointer.
+ if(matchMedia('(pointer:fine)').matches)$$('.hero-cta,.calc-cta,.header-cta').forEach(b=>{b.classList.add('magnetic');b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.translate=`${((e.clientX-r.left-r.width/2)*.12).toFixed(1)}px ${((e.clientY-r.top-r.height/2)*.2).toFixed(1)}px`;});b.addEventListener('pointerleave',()=>{b.style.translate='';});});
+}
+
+// Hero VSL: silent autoplay preview; one click restarts it with sound and native controls.
+$$('[data-vsl]').forEach(box=>{const v=$('video',box),btn=$('.vsl-unmute',box);let marks={};
+ if(motion){v.play().catch(()=>{});}
+ btn.addEventListener('click',()=>{v.currentTime=0;v.muted=false;v.controls=true;box.classList.add('is-playing');v.play().catch(()=>{});if(window.fbq)fbq('trackCustom','VSLPlay');});
+ v.addEventListener('timeupdate',()=>{if(v.muted||!v.duration)return;const p=Math.floor(v.currentTime/v.duration*4)*25;if(p&&!marks[p]){marks[p]=1;if(window.fbq)fbq('trackCustom','VSLProgress',{percent:p});}});
+});
