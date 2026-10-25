@@ -242,10 +242,12 @@ dialog::backdrop{background:rgba(20,24,32,.5);backdrop-filter:blur(5px)}dialog[o
 @keyframes orbit{to{transform:rotate(360deg)}}@keyframes modal-in{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}@keyframes step-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@keyframes chart-in{from{clip-path:inset(100% 0 0)}to{clip-path:inset(0)}}
 
 /* Cookie banner */
-.cookie-banner{position:fixed;z-index:50;left:50%;bottom:16px;transform:translateX(-50%);width:min(760px,calc(100% - 24px));display:flex;align-items:center;gap:20px;padding:16px 16px 16px 20px;background:#fff;border:1px solid #dfe0e2;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.14);font-size:14px;line-height:20px;color:var(--body)}
-.cookie-banner p{flex:1}.cookie-banner p button{padding:0;border:0;background:none;color:inherit;font-size:inherit;text-decoration:underline;text-underline-offset:3px}
-.cookie-banner div{display:flex;gap:8px;flex-shrink:0}
-@media(max-width:700px){.cookie-banner{flex-direction:column;align-items:stretch;gap:12px;bottom:12px}.cookie-banner div>.button{flex:1}}
+.cookie-banner{position:fixed;inset:auto 0 0 0;z-index:2147483647;margin:0;width:100%;max-width:none;height:auto;display:flex;align-items:center;justify-content:center;gap:32px;padding:24px max(24px,calc((100% - 1200px)/2));background:#fff;border:0;border-top:1px solid #dfe0e2;border-radius:0;box-shadow:0 -12px 40px rgba(0,0,0,.12);font-size:17px;line-height:26px;color:var(--body);overflow:visible}
+.cookie-banner p{flex:1;max-width:720px}.cookie-banner p button{padding:0;border:0;background:none;color:inherit;font-size:inherit;text-decoration:underline;text-underline-offset:3px}
+.cookie-banner div{display:flex;gap:12px;flex-shrink:0}
+.cookie-banner .cookie-choice{width:168px;min-height:56px;padding:14px 24px;background:var(--ink);color:#fff;border:1px solid var(--ink);font-size:17px;font-weight:600}
+.cookie-banner .cookie-choice:hover{background:#000}
+@media(max-width:700px){.cookie-banner{flex-direction:column;align-items:stretch;gap:16px;padding:20px 16px calc(20px + env(safe-area-inset-bottom))}.cookie-banner div>.cookie-choice{flex:1;width:auto}}
 
 /* ===== v3 · motion layer ===== */
 /* Sticky header */
