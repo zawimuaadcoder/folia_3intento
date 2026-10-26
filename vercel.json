@@ -1,0 +1,5 @@
+{
+  "installCommand": "echo skip",
+  "buildCommand": "mkdir -p public && cp -r index.html robots.txt sitemap.xml assets captacion-pacientes-clinicas-capilares sistema-captacion-leads-clinicas guias public/",
+  "outputDirectory": "public"
+}
