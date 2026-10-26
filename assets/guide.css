@@ -1,0 +1,19 @@
+@font-face{font-family:Inter;src:url(/assets/inter-var.woff2) format("woff2");font-weight:100 900;font-display:swap}
+:root{--ink:#1d1f20;--body:#31373d;--muted:#555e67;--blue:#266df0;--line:#edeef0;--panel:#f4f5f6;--night:#18191b}
+*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--body);font-family:Inter,Arial,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+.g-header{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1120px;margin:0 auto;padding:20px 16px}
+.g-brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:600;font-size:15px}
+.g-cta,.g-button{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;font-weight:600;border-radius:999px;padding:12px 20px;font-size:15px;line-height:1.2}
+.g-cta:hover,.g-button:hover{background:var(--blue)}
+.g-main{max-width:760px;margin:0 auto;padding:8px 16px 64px}
+.g-crumbs{font-size:14px;color:var(--muted);margin-bottom:24px}.g-crumbs a{color:var(--muted)}
+h1{font-size:44px;line-height:1.12;letter-spacing:-1.6px;color:var(--ink);margin:0 0 20px;font-weight:600}
+h2{font-size:28px;line-height:1.2;letter-spacing:-.8px;color:var(--ink);margin:48px 0 14px;font-weight:600}
+.g-lead{font-size:21px;color:var(--ink)}
+li{margin-bottom:10px}
+.g-box{background:var(--night);color:#d7dbe1;border-radius:20px;padding:28px;margin-top:56px}.g-box h2{color:#fff;margin-top:0}.g-box .g-button{background:#fff;color:var(--ink)}.g-box .g-button:hover{background:var(--blue);color:#fff}
+.g-faq details{border-bottom:1px solid var(--line);padding:16px 0}.g-faq summary{cursor:pointer;color:var(--ink);font-weight:600}.g-faq p{margin:10px 0 0}
+.g-related{padding-left:20px}
+.g-footer{background:var(--panel);padding:40px 16px;font-size:15px}.g-footer>div{max-width:1120px;margin:0 auto}.g-footer ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:8px 24px;margin:16px 0}.g-footer a{color:var(--ink)}.g-footer p{color:var(--muted);margin:0}
+@media (max-width:640px){body{font-size:17px}h1{font-size:32px;letter-spacing:-1px}h2{font-size:23px}.g-brand span{display:none}.g-cta{padding:10px 16px;font-size:14px}}
