@@ -1,0 +1,137 @@
+{
+ "audio": "voz.mp3",
+ "words": "words.json",
+ "out": "reel_palabras.mp4",
+ "dark": 0.16,
+ "bw": true,
+ "music": {
+  "hits": [
+   31.56
+  ],
+  "volume": 0.4,
+  "bed": "musica_vieja.wav",
+  "bed_gain": 0.9
+ },
+ "sources": {
+  "soda": "soda640.mp4",
+  "sup_399": "sup_399.mp4",
+  "sup_229": "sup_229.mp4",
+  "sup_149": "sup_149.mp4",
+  "sup_359": "sup_359.mp4",
+  "sup_129": "sup_129.mp4",
+  "sup_199": "sup_199.mp4",
+  "sup_469": "sup_469.mp4",
+  "sup_109": "sup_109.mp4",
+  "sup_309": "sup_309.mp4",
+  "sup_133": "sup_133.mp4",
+  "sup_113": "sup_113.mp4",
+  "sup_499": "sup_499.mp4"
+ },
+ "clips": [
+  {
+   "from": 0,
+   "source": "sup_399",
+   "src": 0
+  },
+  {
+   "from": 2.3,
+   "source": "sup_229",
+   "src": 0
+  },
+  {
+   "from": 5.5,
+   "source": "sup_149",
+   "src": 0
+  },
+  {
+   "from": 9.2,
+   "source": "soda",
+   "src": 98
+  },
+  {
+   "from": 10.5,
+   "source": "soda",
+   "src": 101
+  },
+  {
+   "from": 11.3,
+   "source": "soda",
+   "src": 98
+  },
+  {
+   "from": 12.1,
+   "source": "soda",
+   "src": 101
+  },
+  {
+   "from": 12.9,
+   "source": "soda",
+   "src": 98
+  },
+  {
+   "from": 13.9,
+   "source": "sup_359",
+   "src": 0
+  },
+  {
+   "from": 16.0,
+   "source": "soda",
+   "src": 249
+  },
+  {
+   "from": 17.3,
+   "source": "soda",
+   "src": 122
+  },
+  {
+   "from": 19.9,
+   "source": "soda",
+   "src": 96
+  },
+  {
+   "from": 22.6,
+   "source": "sup_229",
+   "src": 2
+  },
+  {
+   "from": 25.3,
+   "source": "soda",
+   "src": 218
+  },
+  {
+   "from": 28.4,
+   "source": "soda",
+   "src": 138
+  },
+  {
+   "from": 31.5,
+   "source": "sup_133",
+   "src": 0
+  },
+  {
+   "from": 35.6,
+   "source": "sup_199",
+   "src": 0
+  },
+  {
+   "from": 38.4,
+   "source": "soda",
+   "src": 162
+  },
+  {
+   "from": 39.65,
+   "source": "sup_499",
+   "src": 3
+  },
+  {
+   "from": 40.6,
+   "source": "soda",
+   "src": 274
+  },
+  {
+   "from": 41.8,
+   "source": "sup_113",
+   "src": 1
+  }
+ ]
+}

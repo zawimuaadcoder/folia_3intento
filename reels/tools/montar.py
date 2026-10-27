@@ -60,21 +60,26 @@ def render_subs(words, duration, outdir):
         img.save(os.path.join(outdir, f"s_{f:05d}.png"))
 
 
-def make_music(dur, hits, out):
-    """Drone grave sintetizado + subida de tensión y golpe de sub-bajo en cada 'hit' (segundo)."""
+def make_music(dur, hits, out, bed=None, bed_gain=1.0):
+    """Drone grave sintetizado + subida de tensión y golpe de sub-bajo en cada 'hit' (segundo).
+    Si se pasa 'bed' (un audio), se mezcla encima a 'bed_gain' (p. ej. la música vieja de musica_vieja.py)."""
     drone = ("0.30*sin(2*PI*41.2*t)*(0.75+0.25*sin(2*PI*0.11*t))"
              "+0.16*sin(2*PI*61.7*t+sin(2*PI*0.07*t))+0.08*sin(2*PI*82.4*t)*(0.6+0.4*sin(2*PI*0.05*t))")
     for h in hits:
         # riser de 2 s antes del golpe y boom descendente después
         drone += f"+if(between(t,{h - 2},{h}),0.12*((t-{h - 2})/2)^2*sin(2*PI*(110+200*(t-{h - 2}))*t),0)"
         drone += f"+if(gte(t,{h}),0.9*exp(-(t-{h})*1.6)*sin(2*PI*(30+50*exp(-(t-{h})*6))*(t-{h})),0)"
+    fc = ("[1:a]lowpass=f=180[n];[0:a][n]amix=inputs=2:normalize=0,"
+          "lowpass=f=900,afade=t=in:d=1.5,afade=t=out:st=" + f"{dur - 1.5:.3f}:d=1.5,"
+          "aformat=channel_layouts=stereo")
+    extra = []
+    if bed:
+        extra = ["-i", bed]
+        fc += f"[dr];[2:a]aformat=channel_layouts=stereo,volume={bed_gain}[bd];[dr][bd]amix=inputs=2:duration=first:normalize=0"
     subprocess.check_call(["ffmpeg", "-v", "error", "-y",
                            "-f", "lavfi", "-i", f"aevalsrc='{drone}':s=44100:d={dur:.3f}",
                            "-f", "lavfi", "-i", f"anoisesrc=color=brown:amplitude=0.25:d={dur:.3f}",
-                           "-filter_complex", "[1:a]lowpass=f=180[n];[0:a][n]amix=inputs=2:normalize=0,"
-                           "lowpass=f=900,afade=t=in:d=1.5,afade=t=out:st=" + f"{dur - 1.5:.3f}:d=1.5,"
-                           "aformat=channel_layouts=stereo",
-                           out])
+                           *extra, "-filter_complex", fc, out])
 
 
 def main(cfg_path):
@@ -102,7 +107,9 @@ def main(cfg_path):
     inputs += ["-framerate", str(FPS), "-i", os.path.join(tmp, "s_%05d.png"), "-i", p("audio")]
     if "music" in cfg:
         music = os.path.join(tmp, "music.wav")
-        make_music(dur, cfg["music"].get("hits", []), music)
+        bed = cfg["music"].get("bed")
+        make_music(dur, cfg["music"].get("hits", []), music,
+                   os.path.join(base, bed) if bed else None, cfg["music"].get("bed_gain", 1.0))
         inputs += ["-i", music]
     fc = ";".join(chains) + ";" + "".join(f"[v{i}]" for i in range(k)) + f"concat=n={k}:v=1:a=0[mv];"
     fc += f"[mv][{k}:v]overlay=0:0:format=auto[sv];"
