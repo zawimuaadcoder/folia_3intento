@@ -30,7 +30,7 @@ Música: Erik Satie – "Gymnopédie No. 1"
 
 ## 2. Palabras inventadas (efecto de mera exposición)
 [GANCHO] En 1968, un psicólogo enseñó palabras que no existían.
-"Iktitaf". "Saricik". "Biwojni".
+"Iktitaf". "Saricik". "Biwonjni".
 Algunas las enseñaba una vez.
 Otras… veinticinco veces.
 Luego preguntó qué significaban.
@@ -112,7 +112,7 @@ Música: Erik Satie – "Gymnopédie No. 1"
 [GANCHO] En 1944, dos psicólogos enseñaron un dibujo animado muy extraño.
 No había personas. No había caras.
 Solo dos triángulos, un círculo… y una caja.
-Moviéndose durante un minuto y medio.
+Moviéndose durante dos minutos y medio.
 Luego preguntaron: ¿qué has visto?
 Casi nadie dijo "figuras".
 Dijeron que el triángulo grande era un abusón.
