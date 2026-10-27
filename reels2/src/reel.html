@@ -1,0 +1,252 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  :root { --ink:#1D1F20; --blue:#3B87F2; }
+  html,body { margin:0; width:1080px; height:1920px; overflow:hidden; background:#FFFFFF; font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  .scene { position:absolute; inset:0; }
+  .title { position:absolute; left:90px; right:90px; top:300px; height:260px; display:flex; flex-wrap:wrap; align-content:center; justify-content:center;
+           column-gap:24px; font-weight:800; font-size:96px; line-height:1.05; letter-spacing:-2px; color:var(--ink); text-align:center; }
+  .title span { display:inline-block; will-change:transform,filter,opacity; }
+  .title .k { color:var(--blue); }
+  svg.art { position:absolute; left:0; top:620px; width:1080px; height:640px; overflow:visible; transform-origin:540px 320px; }
+  #sub { position:absolute; left:100px; right:100px; top:1330px; height:170px; display:flex; align-items:center; justify-content:center; text-align:center;
+         font-weight:600; font-size:56px; line-height:1.18; letter-spacing:-0.5px; }
+  #sub span { display:inline-block; margin:0 8px; }
+  svg text { font-family:'Inter',sans-serif; }
+</style></head>
+<body>
+<div id="stage"></div>
+<div id="sub"></div>
+<script>
+const INK = '#1D1F20', BLUE = '#3B87F2', TINT = 'rgba(29,31,32,0.07)', MUTE = 'rgba(29,31,32,0.35)';
+const S = (w = 6, c = INK) => `fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"`;
+const T = (x, y, s, txt, o = {}) => `<text x="${x}" y="${y}" font-size="${s}" font-weight="${o.w || 600}" fill="${o.c || INK}" text-anchor="${o.a || 'middle'}" dominant-baseline="central" letter-spacing="${o.ls || -0.3}">${txt}</text>`;
+
+// ---------- easing ----------
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const io = p => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;   // ease-in-out cubic
+const eo = p => 1 - Math.pow(1 - p, 3);
+const pop = p => p <= 0 ? 0 : p < 0.6 ? lerp(0.9, 1.03, io(p / 0.6)) : lerp(1.03, 1, io((p - 0.6) / 0.4)); // 0.9 → 1.03 → 1
+const lerp = (a, b, p) => a + (b - a) * p;
+
+// ---------- primitives ----------
+const phone = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="52" fill="#fff" ${S()}/><rect x="${x + w / 2 - 42}" y="${y + 22}" width="84" height="16" rx="8" fill="${INK}"/>`;
+// bubble width is measured from the real text in setup (data-b = anchor side)
+const bubbleIn = (x, y, txt, s = 38) => ({ m: `<g data-b="l" data-x="${x}"><rect y="${y}" height="${s + 46}" rx="${(s + 46) / 2}" fill="${TINT}"/>` + T(0, y + (s + 46) / 2, s, txt, { a: 'start' }) + `</g>` });
+const bubbleOut = (xr, y, txt, s = 38) => ({ m: `<g data-b="r" data-x="${xr}"><rect y="${y}" height="${s + 46}" rx="${(s + 46) / 2}" fill="${BLUE}"/>` + T(0, y + (s + 46) / 2, s, txt, { a: 'start', c: '#fff' }) + `</g>` });
+const check = (cx, cy, r, c = BLUE, w = 10) => `<path d="M${cx - r} ${cy} L${cx - r * 0.3} ${cy + r * 0.7} L${cx + r} ${cy - r * 0.7}" ${S(w, c)}/>`;
+const heart = (s = 1) => `<path transform="scale(${s})" d="M0 38 C -70 -8, -52 -72, 0 -38 C 52 -72, 70 -8, 0 38 Z" fill="${BLUE}"/>`;
+const face = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" ${S()}/><path d="M${cx - r * 0.75} ${cy - r * 0.45} Q${cx} ${cy - r * 1.15} ${cx + r * 0.75} ${cy - r * 0.45}" ${S()}/><circle cx="${cx - r * 0.3}" cy="${cy + r * 0.05}" r="5" fill="${INK}"/><circle cx="${cx + r * 0.3}" cy="${cy + r * 0.05}" r="5" fill="${INK}"/><path d="M${cx - r * 0.25} ${cy + r * 0.4} Q${cx} ${cy + r * 0.58} ${cx + r * 0.25} ${cy + r * 0.4}" ${S(5)}/>`;
+
+// ---------- mascot (clean vector) ----------
+const BROWS = {
+  neutral: ['M-56 -50 Q-38 -55 -20 -50', 'M20 -50 Q38 -55 56 -50'],
+  happy: ['M-56 -52 Q-38 -66 -20 -52', 'M20 -52 Q38 -66 56 -52'],
+  worried: ['M-56 -46 L-22 -60', 'M22 -60 L56 -46'],
+  brow: ['M-58 -64 Q-38 -80 -18 -64', 'M20 -48 L56 -48'],
+};
+const MOUTH = { neutral: 'M-22 38 Q0 50 22 38', happy: 'M-32 30 Q0 74 32 30 Z', worried: 'M-24 50 Q0 36 24 50', brow: 'M-20 46 L24 40' };
+const ARMS = {
+  down: ['M-100 30 Q-124 60 -118 96', 'M100 30 Q124 60 118 96'],
+  point: ['M-100 30 Q-124 60 -118 96', 'M100 22 Q148 8 176 -26'],
+  facepalm: ['M-100 30 Q-124 60 -118 96', 'M100 30 Q110 -10 44 -16'],
+  celebrate: ['M-100 10 Q-146 -36 -136 -94', 'M100 10 Q146 -36 136 -94'],
+};
+const lastXY = d => { const n = d.match(/-?\d+(\.\d+)?/g).map(Number); return [n[n.length - 2], n[n.length - 1]]; };
+function mascot(o) {
+  const expr = o.expr || [[0, 'neutral']], pose = o.pose || [[0, 'down']];
+  return {
+    m: `<g class="mb">
+      <path d="M0 -100 Q4 -116 14 -126" ${S()}/>
+      <path class="leaf" d="M14 -126 C 26 -164, 72 -168, 84 -156 C 76 -124, 40 -110, 14 -126 Z" fill="${BLUE}"/>
+      <path class="aL" ${S()}/><path class="aR" ${S()}/>
+      <path d="M-34 100 v30 M34 100 v30" ${S()}/><path d="M-50 130 h20 M30 130 h20" ${S()}/>
+      <rect x="-100" y="-100" width="200" height="200" rx="66" fill="#fff" ${S()}/>
+      <ellipse cx="-64" cy="22" rx="13" ry="7" fill="${BLUE}" opacity="0.55"/><ellipse cx="64" cy="22" rx="13" ry="7" fill="${BLUE}" opacity="0.55"/>
+      <g class="eyes"><ellipse cx="-36" cy="-12" rx="10" ry="15" fill="${INK}"/><ellipse cx="36" cy="-12" rx="10" ry="15" fill="${INK}"/></g>
+      <path class="bL" ${S()}/><path class="bR" ${S()}/><path class="mo" ${S()}/>
+      <circle class="hL" r="14" fill="#fff" ${S(5)}/><circle class="hR" r="14" fill="#fff" ${S(5)}/>
+    </g>`, t: o.t || 0, d: 0.5, a: 'pop', x: o.x, y: o.y, s: o.s || 1,
+    u(el, lt) {
+      const at = arr => arr.filter(e => lt >= e[0]).pop()[1];
+      const e = at(expr), p = at(pose), q = el.querySelector('.mb');
+      el.querySelector('.bL').setAttribute('d', BROWS[e][0]); el.querySelector('.bR').setAttribute('d', BROWS[e][1]);
+      const mo = el.querySelector('.mo'); mo.setAttribute('d', MOUTH[e]); mo.setAttribute('fill', e === 'happy' ? INK : 'none');
+      const [al, ar] = ARMS[p]; el.querySelector('.aL').setAttribute('d', al); el.querySelector('.aR').setAttribute('d', ar);
+      const [lx, ly] = lastXY(al), [rx, ry] = lastXY(ar);
+      const hL = el.querySelector('.hL'), hR = el.querySelector('.hR');
+      hL.setAttribute('cx', lx); hL.setAttribute('cy', ly); hR.setAttribute('cx', rx); hR.setAttribute('cy', ry); hR.setAttribute('r', p === 'point' ? 22 : 14);
+      const ph = (lt + (o.blink || 1.1)) % 2.7, b = ph < 0.07 ? 1 - ph / 0.07 : ph < 0.14 ? (ph - 0.07) / 0.07 : 1;
+      el.querySelector('.eyes').setAttribute('transform', `translate(0 -12) scale(1 ${0.1 + 0.9 * b}) translate(0 12)`);
+      let dy = Math.sin(lt * 2.6) * 3, rot = 0;
+      if (o.nod && lt > o.nod[0] && lt < o.nod[1]) dy += Math.sin((lt - o.nod[0]) * 9) * 7;
+      if (p === 'celebrate') dy -= Math.abs(Math.sin(lt * 6)) * 18;
+      if (p === 'facepalm') rot = -4;
+      q.setAttribute('transform', `translate(0 ${dy.toFixed(2)}) rotate(${rot})`);
+      el.querySelector('.leaf').setAttribute('transform', `rotate(${(Math.sin(lt * 2.2) * 5).toFixed(2)} 14 -126)`);
+    },
+  };
+}
+
+// ---------- reel 6 · Tinder ----------
+// each scene gets w = local start time of each spoken word (seconds from scene start)
+const R6 = [
+  w => [
+    { m: phone(130, 10, 300, 520) + face(280, 200, 74) + `<rect x="205" y="330" width="140" height="18" rx="9" fill="${TINT}"/><rect x="235" y="366" width="90" height="14" rx="7" fill="${TINT}"/>`, t: 0, d: 0.55 },
+    { m: phone(650, 10, 300, 520) + `<circle cx="800" cy="200" r="74" fill="#fff" ${S()}/><path d="M800 162 v76 M762 200 h76" ${S(13, BLUE)}/><rect x="730" y="330" width="140" height="18" rx="9" fill="${TINT}"/><rect x="755" y="366" width="90" height="14" rx="7" fill="${TINT}"/>`, t: 0.08, d: 0.55 },
+    { m: heart(1.4), t: w[7] - 0.15, d: 0.45, a: 'pop', x: 540, y: 260, u(el, lt) { const p = lt - w[7]; if (p > 0.5) el.setAttribute('transform', `translate(540 260) scale(${(1.4 * (1 + 0.04 * Math.sin((p - 0.5) * 5))).toFixed(3)})`); } },
+    { m: `<path d="M466 168 l-24 -24 M614 168 l24 -24 M540 146 v-34" ${S(6, BLUE)}/>`, t: w[7] + 0.1, d: 0.35 },
+    { m: T(280, 592, 36, 'Paciente') + T(800, 592, 36, 'Tu clínica'), t: 0.45, d: 0.4, a: 'fade' },
+  ],
+  w => {
+    const a = bubbleIn(150, 110, '¡Hola!'), b = bubbleOut(490, 230, 'Son 3.000 €', 40);
+    return [
+      { m: phone(110, 0, 420, 640), t: 0, d: 0, a: 'fade' },
+      { m: a.m, t: w[3] - 0.1, d: 0.4, a: 'pop' },
+      { m: b.m, t: w[8] - 0.1, d: 0.4, a: 'pop' },
+      mascot({ x: 820, y: 330, s: 1.2, t: 0.1, expr: [[0, 'neutral'], [w[8] + 0.2, 'brow']] }),
+    ];
+  },
+  w => {
+    const a = bubbleIn(150, 110, '¡Hola!'), b = bubbleOut(490, 230, 'Son 3.000 €', 40);
+    return [
+      { m: phone(110, 0, 420, 640) + a.m + b.m, t: 0, d: 0, a: 'fade' },
+      { m: T(486, 342, 28, 'Visto', { c: MUTE, a: 'end', w: 500 }), t: w[3] - 0.1, d: 0.3, a: 'fade' },
+      { m: `<rect x="180" y="500" width="280" height="64" rx="32" fill="${TINT}"/>` + T(320, 532, 28, 'Ha salido del chat', { c: MUTE, w: 500 }), t: w[5] - 0.1, d: 0.4, a: 'pop' },
+      mascot({ x: 820, y: 330, s: 1.2, t: 0, expr: [[0, 'brow'], [w[3], 'worried']], pose: [[0, 'down'], [w[3], 'facepalm']] }),
+    ];
+  },
+  w => {
+    const a = bubbleIn(150, 90, '¡Hola!', 36), b = bubbleOut(490, 200, '¿Qué te preocupa?', 32), c = bubbleIn(150, 310, 'Se me nota', 32), c2 = bubbleIn(150, 400, 'la coronilla…', 32), h = bubbleOut(490, 510, 'Te ayudamos', 32);
+    return [
+      { m: phone(110, 0, 420, 640), t: 0, d: 0, a: 'fade' },
+      { m: a.m, t: 0.05, d: 0.35, a: 'pop' },
+      { m: b.m, t: w[3] - 0.1, d: 0.4, a: 'pop' },
+      { m: c.m, t: w[7] - 0.1, d: 0.4, a: 'pop' },
+      { m: c2.m, t: w[7] + 0.15, d: 0.4, a: 'pop' },
+      { m: h.m, t: w[8] + 0.35, d: 0.35, a: 'pop' },
+      mascot({ x: 820, y: 330, s: 1.2, t: 0.1, expr: [[0, 'neutral'], [w[3], 'happy']], nod: [w[7], w[7] + 1.4] }),
+    ];
+  },
+  w => [
+    // calendar chip
+    { m: `<rect x="300" y="20" width="480" height="120" rx="28" fill="${BLUE}"/><rect x="330" y="46" width="68" height="68" rx="14" fill="#fff"/>` + T(364, 80, 30, '17h', { w: 800, c: BLUE }) + T(420, 64, 30, 'Valoración', { a: 'start', c: '#fff', w: 700 }) + T(420, 100, 24, 'Martes · en consulta', { a: 'start', c: '#fff', w: 500 }), t: w[4] - 0.1, d: 0.45, a: 'pop' },
+    // table + chairs + cups
+    { m: `<path d="M330 400 H750" ${S(7)}/><path d="M380 400 V560 M700 400 V560" ${S()}/>` +
+         `<path d="M200 330 V560 M200 450 H290 V560 M200 330 Q200 300 230 300" ${S()}/>` +
+         `<path d="M880 330 V560 M880 450 H790 V560 M880 330 Q880 300 850 300" ${S()}/>`, t: 0, d: 0.8 },
+    { m: `<path d="M440 350 h60 v30 q0 20 -20 20 h-20 q-20 0 -20 -20 z M500 360 q18 0 18 12 q0 12 -18 12" ${S(5)}/><path d="M580 350 h60 v30 q0 20 -20 20 h-20 q-20 0 -20 -20 z M640 360 q18 0 18 12 q0 12 -18 12" ${S(5)}/>`, t: 0.6, d: 0.5 },
+    { m: `<path d="M462 330 q-8 -14 0 -28 q8 -14 0 -28 M602 330 q-8 -14 0 -28 q8 -14 0 -28" ${S(4, BLUE)}/>`, t: 1.0, d: 0.6, u(el, lt) { el.setAttribute('transform', `translate(0 ${(-Math.abs(Math.sin(lt * 1.6)) * 6).toFixed(2)})`); } },
+    { m: check(370, 205, 18, BLUE, 8) + T(400, 205, 30, 'Sin compromiso', { a: 'start', w: 600 }), t: w[6] - 0.1, d: 0.4, a: 'fade' },
+  ],
+  w => [
+    { m: `<rect x="130" y="60" width="380" height="480" rx="30" fill="#fff" ${S()}/>` + T(320, 130, 30, 'Tu plan', { w: 800 }) +
+         [0, 1, 2, 3].map(i => check(185, 210 + i * 80, 14, BLUE, 7) + `<rect x="215" y="${200 + i * 80}" width="${220 - i * 25}" height="18" rx="9" fill="${TINT}"/>`).join(''), t: 0, d: 0.9 },
+    { m: `<g transform="rotate(-8)"><path d="M-170 -80 H90 L170 0 L90 80 H-170 Q-190 80 -190 60 V-60 Q-190 -80 -170 -80 Z" fill="${BLUE}"/><circle cx="105" cy="0" r="16" fill="#fff"/>` + T(-50, 2, 64, '3.000 €', { c: '#fff', w: 800, ls: -1 }) + `</g>`, t: w[7] - 0.15, d: 0.5, a: 'pop', x: 780, y: 300, s: 0.95 },
+  ],
+  w => [
+    { m: `<rect x="110" y="40" width="340" height="300" rx="48" fill="#fff" ${S(7)}/>` + T(280, 192, 170, 'A', { w: 800 }), t: 0.1, d: 0.45, a: 'pop' },
+    { m: `<rect x="630" y="40" width="340" height="300" rx="48" fill="${BLUE}"/>` + T(800, 192, 170, 'B', { w: 800, c: '#fff' }), t: 0.3, d: 0.45, a: 'pop',
+      u(el, lt) { const p = lt - w[7]; if (p > 0) { el.style.transformBox = 'fill-box'; el.style.transformOrigin = 'center'; el.style.transform = `scale(${(1 + 0.025 * Math.sin(p * 4)).toFixed(4)})`; } } },
+    mascot({ x: 540, y: 470, s: 0.72, t: 0, expr: [[0, 'brow'], [w[8] + 0.4, 'happy']], pose: [[0, 'point']] }),
+  ],
+];
+const DEFS = { 'reel-6-tinder': R6 };
+
+// ---------- engine ----------
+let REEL, scenes = [];
+const NS = 'http://www.w3.org/2000/svg';
+window.setup = (name, meta) => {
+  REEL = meta; const stage = document.getElementById('stage');
+  meta.scenes.forEach((sc, i) => {
+    const div = document.createElement('div'); div.className = 'scene'; stage.appendChild(div);
+    const title = document.createElement('div'); title.className = 'title'; div.appendChild(title);
+    sc.title.split(' ').forEach(w => { const s = document.createElement('span'); s.innerHTML = w.replace(/\*([^*]+)\*/g, '<b class="k" style="font-weight:800">$1</b>'); title.appendChild(s); });
+    const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'art'); svg.setAttribute('viewBox', '0 0 1080 640'); div.appendChild(svg);
+    const root = document.createElementNS(NS, 'g'); svg.appendChild(root);
+    const lw = sc.words.map(x => x.t - sc.start);
+    const els = DEFS[name][i](lw);
+    els.forEach(e => {
+      const g = document.createElementNS(NS, 'g'); g.innerHTML = e.m; root.appendChild(g);
+      e.el = g; g._s = e.s || 1; e.a = e.a || 'draw';
+      g.querySelectorAll('[data-b]').forEach(b => { const tx = b.querySelector('text'), r = b.querySelector('rect'), L = tx.getComputedTextLength(), w = L + 64, x0 = +b.dataset.x;
+        const left = b.dataset.b === 'l' ? x0 : x0 - w; r.setAttribute('x', left); r.setAttribute('width', w); tx.setAttribute('x', left + 32); });
+      if (e.x !== undefined) g.setAttribute('transform', `translate(${e.x} ${e.y}) scale(${g._s})`);
+      if (e.a === 'draw') {
+        e.parts = [...g.querySelectorAll('path,rect,circle,ellipse,line')].filter(p => p.getAttribute('stroke') && p.getAttribute('stroke') !== 'none')
+          .map(p => { const L = p.getTotalLength(); p.style.strokeDasharray = `${L + 1} ${L + 1}`; return { p, L }; });
+        e.fills = [...g.querySelectorAll('path,rect,circle,ellipse')].filter(p => !p.getAttribute('stroke') || p.getAttribute('stroke') === 'none');
+        e.sfills = e.parts.map(x => x.p).filter(p => p.getAttribute('fill') && p.getAttribute('fill') !== 'none');
+        e.texts = [...g.querySelectorAll('text')]; e.total = e.parts.reduce((a, b) => a + b.L, 0);
+      }
+    });
+    scenes.push({ sc, div, title: [...title.children], els, svg, root });
+  });
+  // subtitle chunks: 3–6 words, cut at punctuation
+  REEL.chunks = [];
+  meta.scenes.forEach(sc => {
+    let cur = [];
+    sc.words.forEach((w, i) => {
+      cur.push(w);
+      const punct = /[,.:?!»]$/.test(w.w);
+      if ((punct && cur.length >= 2) || cur.length >= 6 || i === sc.words.length - 1) { REEL.chunks.push({ words: cur, start: cur[0].t }); cur = []; }
+    });
+  });
+  REEL.chunks.forEach((c, i) => { const nx = REEL.chunks[i + 1]; c.end = nx ? nx.start : REEL.total; });
+};
+
+function animEl(e, lt) {
+  const g = e.el, p = clamp((lt - e.t) / Math.max(e.d, 1e-3));
+  if (e.a === 'draw') {
+    const k = io(p); let acc = 0; const done = k * e.total;
+    e.parts.forEach(({ p: el, L }) => { const v = clamp(done - acc, 0, L); el.style.strokeDashoffset = L + 1 - v; el.style.opacity = v > 0 ? 1 : 0; acc += L; });
+    const fp = clamp((lt - e.t - e.d * 0.6) / 0.35); e.fills.forEach(f => f.style.opacity = io(fp)); e.sfills.forEach(f => f.style.fillOpacity = io(fp));
+    e.texts.forEach(t => t.style.opacity = io(clamp((lt - e.t - e.d * 0.7) / 0.3)));
+  } else if (e.a === 'pop') {
+    const sc = lt < e.t ? 0 : pop(p), op = lt < e.t ? 0 : io(clamp(p * 2.5));
+    if (e.x !== undefined) g.setAttribute('transform', `translate(${e.x} ${e.y}) scale(${(g._s * sc).toFixed(4)})`);
+    else { g.style.transformBox = 'fill-box'; g.style.transformOrigin = 'center'; g.style.transform = `scale(${sc.toFixed(4)})`; }
+    g.style.opacity = op;
+  } else if (e.a === 'fade') { g.style.opacity = lt < e.t ? 0 : (e.d ? io(p) : 1); g.style.transform = e.d ? `translateY(${((1 - io(p)) * 14).toFixed(2)}px)` : ''; }
+  if (e.u && lt >= e.t) e.u(g, lt);
+}
+
+const X = 0.15; // half cross-fade window
+window.render = (t, opt = {}) => {
+  scenes.forEach((Sx, i) => {
+    const { start, dur } = Sx.sc, lt = t - start;
+    const first = i === 0, last = i === scenes.length - 1;
+    const vin = first ? 1 : io(clamp((lt + X) / (2 * X))), vout = last ? 1 : 1 - io(clamp((lt - dur + X) / (2 * X)));
+    const vis = Math.min(vin, vout);
+    if (opt.full ? i !== 0 : vis <= 0.001) { Sx.div.style.display = 'none'; return; }
+    Sx.div.style.display = ''; Sx.div.style.opacity = opt.full ? 1 : vis;
+    Sx.div.style.filter = vis < 0.999 && !opt.full ? `blur(${((1 - vis) * 10).toFixed(2)}px)` : 'none';
+    const p = clamp(lt / dur), z = i % 2 === 0 ? lerp(1.0, 1.04, io(p)) : lerp(1.04, 1.0, io(p));
+    Sx.svg.style.transform = `scale(${z.toFixed(4)})`;
+    Sx.title.forEach((w, k) => { const q = opt.full ? 1 : io(clamp((lt - 0.02 - k * 0.08) / 0.35)); w.style.opacity = q; w.style.filter = q < 1 ? `blur(${((1 - q) * 12).toFixed(2)}px)` : 'none'; w.style.transform = `translateY(${((1 - q) * 20).toFixed(2)}px)`; });
+    Sx.els.forEach(e => animEl(e, opt.full ? Math.max(lt, 60) : lt));
+  });
+  const box = document.getElementById('sub');
+  const c = opt.nosub ? null : REEL.chunks.find(c => t >= c.start - 0.05 && t < c.end);
+  if (!c) { box.style.opacity = 0; return; }
+  const k = c.start + '';
+  if (box._k !== k) { box.innerHTML = c.words.map(w => `<span>${w.w}</span>`).join(''); box._k = k; }
+  box.style.opacity = io(clamp((t - c.start + 0.05) / 0.15));
+  [...box.children].forEach((sp, i) => { const q = io(clamp((t - c.words[i].t + 0.04) / 0.12)); sp.style.color = `rgba(29,31,32,${(0.25 + 0.75 * q).toFixed(3)})`; });
+};
+
+// layout check: returns list of violations at time t
+window.check = () => {
+  const bad = [];
+  scenes.forEach((Sx, i) => {
+    if (Sx.div.style.display === 'none') return;
+    const tr = Sx.title.map(s => s.getBoundingClientRect()).filter(r => r.width);
+    if (tr.length) { const top = Math.min(...tr.map(r => r.top)), bot = Math.max(...tr.map(r => r.bottom)); if (top < 295 || bot > 565) bad.push(`s${i + 1} title ${top | 0}-${bot | 0}`); }
+    const r = Sx.root.getBoundingClientRect(); if (r.top < 600 || r.bottom > 1280 || r.left < 40 || r.right > 1040) bad.push(`s${i + 1} art ${r.left | 0},${r.top | 0}-${r.right | 0},${r.bottom | 0}`);
+  });
+  const sb = [...document.querySelectorAll('#sub span')].map(s => s.getBoundingClientRect());
+  if (sb.length) { const top = Math.min(...sb.map(r => r.top)), bot = Math.max(...sb.map(r => r.bottom)); if (top < 1320 || bot > 1515) bad.push(`sub ${top | 0}-${bot | 0}`); }
+  return bad;
+};
+</script>
+</body></html>
