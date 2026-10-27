@@ -53,7 +53,8 @@ def render_subs(words, duration, outdir):
                 txt = w["text"].rstrip(".,:")
                 if t >= w["start"]:
                     a = min(1.0, (t - w["start"]) / FADE)
-                    d.text((x + 1, VH / 2 + 2), txt, font=font, fill=(0, 0, 0, int(160 * a)), anchor="lm")
+                    for dx, dy in ((1, 2), (-1, 1), (2, 0), (0, 3)):
+                        d.text((x + dx, VH / 2 + dy), txt, font=font, fill=(0, 0, 0, int(200 * a)), anchor="lm")
                     d.text((x, VH / 2), txt, font=font, fill=(255, 255, 255, int(235 * a)), anchor="lm")
                 x += font.getlength(txt) + space
         img.save(os.path.join(outdir, f"s_{f:05d}.png"))
@@ -91,11 +92,11 @@ def main(cfg_path):
     clips = cfg["clips"]
     look = (f"crop=iw:iw*9/16,scale={VW}:{VH},setsar=1,fps={FPS},"
             f"eq=brightness={-0.10 - cfg.get('dark', 0)}:contrast=1.08:saturation={0.70 - cfg.get('dark', 0)}:gamma={0.85 - cfg.get('dark', 0)},"
-            "colorbalance=bs=0.06:bm=0.03,vignette=PI/4,noise=alls=7:allf=t")
+            "colorbalance=bs=0.06:bm=0.03," + ("hue=s=0," if cfg.get("bw") else "") + "vignette=PI/4,noise=alls=7:allf=t")
     inputs, chains = [], []
     for i, c in enumerate(clips):
         length = (clips[i + 1]["from"] if i + 1 < len(clips) else dur) - c["from"]
-        inputs += ["-ss", str(c["src"]), "-t", f"{length:.3f}", "-i", cfg["source"]]
+        inputs += ["-ss", str(c["src"]), "-t", f"{length:.3f}", "-i", cfg.get("sources", {}).get(c.get("source"), cfg.get("source"))]
         chains.append(f"[{i}:v]{look},trim=duration={length:.3f},setpts=PTS-STARTPTS[v{i}]")
     k = len(clips)
     inputs += ["-framerate", str(FPS), "-i", os.path.join(tmp, "s_%05d.png"), "-i", p("audio")]
@@ -108,7 +109,7 @@ def main(cfg_path):
     fc += f"color=black:s={W}x{H}:r={FPS}:d={dur:.3f}[bg];[bg][sv]overlay=0:{VY}:shortest=1,format=yuv420p[out]"
     amap = f"{k + 1}:a"
     if "music" in cfg:
-        fc += (f";[{k + 1}:a]aformat=channel_layouts=stereo,volume=1.0[vo];[{k + 2}:a]volume=0.32[mu];"
+        fc += (f";[{k + 1}:a]aformat=channel_layouts=stereo,volume=1.0[vo];[{k + 2}:a]volume={cfg['music'].get('volume', 0.32)}[mu];"
                "[vo][mu]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11[aout]")
         amap = "[aout]"
     subprocess.check_call(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", fc,

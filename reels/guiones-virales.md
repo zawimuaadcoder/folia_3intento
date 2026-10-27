@@ -66,3 +66,18 @@ Te abrí una pregunta en el primer segundo… y todavía no te la he cerrado.
 Por eso sigues aquí.
 Los vídeos que explotan no te informan. Abren algo que tu cabeza necesita cerrar.
 CTA: Sígueme y te enseño cómo.
+
+## R3 v3 – "La cafetería" (~48 s) – MONTADO en reels/r3_v3
+Música a añadir en Instagram: The Caretaker – "It's just a burning memory" (vol. 10–15 %).
+Gancho: En 1927, una psicóloga vio algo muy raro en una cafetería.
+Los camareros se acordaban de todos los pedidos… sin apuntar nada.
+Pero solo de los que aún no habían cobrado.
+En cuanto el cliente pagaba… se les borraba de la cabeza.
+Y descubrió por qué. Tu cerebro no puede soltar algo que se ha quedado a medias.
+Por eso no puedes dejar una serie a mitad de capítulo.
+Por eso una canción cortada se te queda pegada todo el día.
+[clic mental] Y por eso… sigues viendo este vídeo.
+Porque en el primer segundo te dije que había algo raro… y hasta ahora no te había dicho qué era.
+Y esto es lo que casi nadie entiende de Instagram.
+Los vídeos que explotan no son los más bonitos. Son los que dejan algo a medias… y no te dejan irte.
+CTA: Sígueme. Cada día te cuento una cosa así.

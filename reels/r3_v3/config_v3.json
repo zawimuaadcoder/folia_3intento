@@ -1,0 +1,118 @@
+{
+ "audio": "voz_v3.mp3",
+ "words": "words_v3.json",
+ "out": "reel_r3_v3.mp4",
+ "dark": 0.16,
+ "bw": true,
+ "music": {
+  "hits": [
+   28.78
+  ],
+  "volume": 0.22
+ },
+ "sources": {
+  "sup": "https://archive.org/download/mad-scientist-superman-fleischer/The%20Mad%20Scientist%20%7C%20Superman%20Fleischer%20Studios%20Cartoon%20%7C%2016mm.mp4",
+  "soda": "soda640.mp4",
+  "sup_229": "sup_229.mp4",
+  "sup_399": "sup_399.mp4",
+  "sup_129": "sup_129.mp4",
+  "sup_449": "sup_449.mp4",
+  "sup_309": "sup_309.mp4",
+  "sup_199": "sup_199.mp4",
+  "sup_499": "sup_499.mp4",
+  "sup_509": "sup_509.mp4",
+  "sup_109": "sup_109.mp4"
+ },
+ "clips": [
+  {
+   "from": 0,
+   "source": "soda",
+   "src": 18
+  },
+  {
+   "from": 5.6,
+   "source": "soda",
+   "src": 98
+  },
+  {
+   "from": 8.5,
+   "source": "soda",
+   "src": 138
+  },
+  {
+   "from": 10.2,
+   "source": "soda",
+   "src": 122
+  },
+  {
+   "from": 12.8,
+   "source": "soda",
+   "src": 162
+  },
+  {
+   "from": 14.6,
+   "source": "soda",
+   "src": 249
+  },
+  {
+   "from": 16.8,
+   "source": "sup_229",
+   "src": 0
+  },
+  {
+   "from": 18.5,
+   "source": "sup_399",
+   "src": 0
+  },
+  {
+   "from": 21.7,
+   "source": "sup_129",
+   "src": 0
+  },
+  {
+   "from": 24.7,
+   "source": "soda",
+   "src": 218
+  },
+  {
+   "from": 28.7,
+   "source": "sup_449",
+   "src": 0
+  },
+  {
+   "from": 31.1,
+   "source": "soda",
+   "src": 274
+  },
+  {
+   "from": 33.9,
+   "source": "sup_309",
+   "src": 0
+  },
+  {
+   "from": 36.6,
+   "source": "sup_199",
+   "src": 0
+  },
+  {
+   "from": 39.6,
+   "source": "sup_499",
+   "src": 0
+  },
+  {
+   "from": 42.2,
+   "source": "sup_509",
+   "src": 0
+  },
+  {
+   "from": 44.1,
+   "source": "soda",
+   "src": 298
+  },
+  {
+   "from": 45.6,
+   "source": "sup_109",
+   "src": 3.8
+  }
+ ]
+}
