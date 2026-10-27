@@ -6,8 +6,10 @@ os.makedirs(B, exist_ok=True)
 SR = 44100
 
 REELS = {
- 'reel-6-tinder': dict(prefix='r6', scenes=[
-  "¡*Match*!", "Opción *A*", "Te deja en *visto*", "Opción *B*", "Primera *cita*", "Ahora sí, el *precio*", "¿*A* o *B*?"]),
+ 'reel-5-medianoche': dict(prefix='r5', scenes=["23:47", "Otra vez la *coronilla*", "Escribe a una *clínica*", "Sin *respuesta*", "Otra clínica *sí* contesta", "Cita *reservada*", "Demasiado *tarde*", "Contesta *rápido*"]),
+ 'reel-6-tinder': dict(prefix='r6', scenes=["¡*Match*!", "Opción *A*", "Te deja en *visto*", "Opción *B*", "Primera *cita*", "Ahora sí, el *precio*", "¿*A* o *B*?"]),
+ 'reel-7-cabeza': dict(prefix='r7', scenes=["Dentro de su *cabeza*", "¿Se nota *mucho*?", "¿Me *dolerá*?", "¿Y si sale *mal*?", "Tiene *miedo*", "Quítale el *miedo*", "Y entonces *escribe*"]),
+ 'reel-8-a-vs-b': dict(prefix='r8', scenes=["Clínica A vs *B*", "Ronda 1 · *Responder*", "Ronda 2 · *Preguntar*", "Ronda 3 · *Insistir*", "Gana la *B*", "¿Eres A o *B*?"]),
 }
 LEAD, TAIL, LAST_TAIL = 0.3, 0.45, 1.2
 
@@ -86,7 +88,7 @@ for name, cfg in REELS.items():
     # second pass: measure and correct the residual gain so the delivered file sits at -14 LUFS
     r = subprocess.run(['ffmpeg','-nostats','-i',os.path.join(B, name + '.wav'),'-af','ebur128','-f','null','-'],capture_output=True,text=True).stderr
     lufs = float([l for l in r.splitlines() if l.strip().startswith('I:')][-1].split()[1])
-    subprocess.run(['ffmpeg','-y','-v','error','-i',os.path.join(B, name + '.wav'),'-af',f'volume={-14-lufs:.2f}dB,alimiter=limit=0.89',
+    subprocess.run(['ffmpeg','-y','-v','error','-i',os.path.join(B, name + '.wav'),'-af',f'volume={-14-lufs:.2f}dB,alimiter=limit=0.89:level=false',
                     '-c:a','aac','-b:a','192k',os.path.join(B, name + '.m4a')], check=True)
     os.remove(raw)
     meta[name] = dict(total=total, scenes=sc)

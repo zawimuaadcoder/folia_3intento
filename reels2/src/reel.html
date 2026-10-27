@@ -2,158 +2,348 @@
 <html><head><meta charset="utf-8">
 <style>
   :root { --ink:#1D1F20; --blue:#3B87F2; }
-  html,body { margin:0; width:1080px; height:1920px; overflow:hidden; background:#FFFFFF; font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  html,body { margin:0; width:1080px; height:1920px; overflow:hidden; background:#FFFFFF; font-family:'Inter Display','Inter',sans-serif; -webkit-font-smoothing:antialiased; }
   .scene { position:absolute; inset:0; }
-  .title { position:absolute; left:90px; right:90px; top:300px; height:260px; display:flex; flex-wrap:wrap; align-content:center; justify-content:center;
-           column-gap:24px; font-weight:800; font-size:96px; line-height:1.05; letter-spacing:-2px; color:var(--ink); text-align:center; }
-  .title span { display:inline-block; will-change:transform,filter,opacity; }
+  .title { position:absolute; left:80px; right:80px; top:300px; height:260px; display:flex; flex-wrap:wrap; align-content:center; justify-content:center;
+           column-gap:22px; font-weight:700; font-size:92px; line-height:1.02; letter-spacing:-0.035em; color:var(--ink); text-align:center; }
+  .title span { display:inline-block; }
   .title .k { color:var(--blue); }
-  svg.art { position:absolute; left:0; top:620px; width:1080px; height:640px; overflow:visible; transform-origin:540px 320px; }
-  #sub { position:absolute; left:100px; right:100px; top:1330px; height:170px; display:flex; align-items:center; justify-content:center; text-align:center;
-         font-weight:600; font-size:56px; line-height:1.18; letter-spacing:-0.5px; }
-  #sub span { display:inline-block; margin:0 8px; }
-  svg text { font-family:'Inter',sans-serif; }
+  svg.art { position:absolute; left:0; top:620px; width:1080px; height:640px; overflow:visible; transform-origin:540px 420px; }
+  #sub { position:absolute; left:110px; right:110px; top:1335px; height:160px; display:flex; flex-wrap:wrap; align-content:center; justify-content:center; text-align:center;
+         font-weight:500; font-size:48px; line-height:1.22; letter-spacing:-0.015em; column-gap:13px; }
+  svg text { font-family:'Inter Display','Inter',sans-serif; }
 </style></head>
 <body>
 <div id="stage"></div>
 <div id="sub"></div>
 <script>
-const INK = '#1D1F20', BLUE = '#3B87F2', TINT = 'rgba(29,31,32,0.07)', MUTE = 'rgba(29,31,32,0.35)';
+const INK = '#1D1F20', BLUE = '#3B87F2', TINT = '#EEEFF0', MUTE = 'rgba(29,31,32,0.38)';
 const S = (w = 6, c = INK) => `fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"`;
-const T = (x, y, s, txt, o = {}) => `<text x="${x}" y="${y}" font-size="${s}" font-weight="${o.w || 600}" fill="${o.c || INK}" text-anchor="${o.a || 'middle'}" dominant-baseline="central" letter-spacing="${o.ls || -0.3}">${txt}</text>`;
-
-// ---------- easing ----------
+const T = (x, y, s, txt, o = {}) => `<text x="${x}" y="${y}" font-size="${s}" font-weight="${o.w || 600}" fill="${o.c || INK}" text-anchor="${o.a || 'middle'}" dominant-baseline="central" letter-spacing="${o.ls ?? -0.5}">${txt}</text>`;
 const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
-const io = p => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;   // ease-in-out cubic
-const eo = p => 1 - Math.pow(1 - p, 3);
-const pop = p => p <= 0 ? 0 : p < 0.6 ? lerp(0.9, 1.03, io(p / 0.6)) : lerp(1.03, 1, io((p - 0.6) / 0.4)); // 0.9 → 1.03 → 1
 const lerp = (a, b, p) => a + (b - a) * p;
+const io = p => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const pop = p => p <= 0 ? 0 : p < 0.6 ? lerp(0.86, 1.04, io(p / 0.6)) : lerp(1.04, 1, io((p - 0.6) / 0.4));
 
-// ---------- primitives ----------
-const phone = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="52" fill="#fff" ${S()}/><rect x="${x + w / 2 - 42}" y="${y + 22}" width="84" height="16" rx="8" fill="${INK}"/>`;
-// bubble width is measured from the real text in setup (data-b = anchor side)
-const bubbleIn = (x, y, txt, s = 38) => ({ m: `<g data-b="l" data-x="${x}"><rect y="${y}" height="${s + 46}" rx="${(s + 46) / 2}" fill="${TINT}"/>` + T(0, y + (s + 46) / 2, s, txt, { a: 'start' }) + `</g>` });
-const bubbleOut = (xr, y, txt, s = 38) => ({ m: `<g data-b="r" data-x="${xr}"><rect y="${y}" height="${s + 46}" rx="${(s + 46) / 2}" fill="${BLUE}"/>` + T(0, y + (s + 46) / 2, s, txt, { a: 'start', c: '#fff' }) + `</g>` });
-const check = (cx, cy, r, c = BLUE, w = 10) => `<path d="M${cx - r} ${cy} L${cx - r * 0.3} ${cy + r * 0.7} L${cx + r} ${cy - r * 0.7}" ${S(w, c)}/>`;
-const heart = (s = 1) => `<path transform="scale(${s})" d="M0 38 C -70 -8, -52 -72, 0 -38 C 52 -72, 70 -8, 0 38 Z" fill="${BLUE}"/>`;
-const face = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" ${S()}/><path d="M${cx - r * 0.75} ${cy - r * 0.45} Q${cx} ${cy - r * 1.15} ${cx + r * 0.75} ${cy - r * 0.45}" ${S()}/><circle cx="${cx - r * 0.3}" cy="${cy + r * 0.05}" r="5" fill="${INK}"/><circle cx="${cx + r * 0.3}" cy="${cy + r * 0.05}" r="5" fill="${INK}"/><path d="M${cx - r * 0.25} ${cy + r * 0.4} Q${cx} ${cy + r * 0.58} ${cx + r * 0.25} ${cy + r * 0.4}" ${S(5)}/>`;
+// ================= props =================
+// iMessage-style bubble; width measured at setup. side: 'out' (blue, tail right) | 'in' (grey, tail left) | 'ink'
+function bub(x, y, txt, o = {}) {
+  const s = o.size || 34, side = o.side || 'in', lines = txt.split('\n'), lh = s * 1.22, h = lines.length * lh + 34;
+  const fill = side === 'out' ? BLUE : side === 'ink' ? INK : TINT, col = side === 'in' ? INK : '#fff';
+  const tx = lines.map((l, i) => T(0, y + 17 + lh * (i + 0.5), s, l, { a: 'start', c: col, w: 500 })).join('');
+  return `<g data-bub="${o.anchor || (side === 'in' ? 'l' : 'r')}" data-x="${x}" data-y="${y}" data-h="${h}" data-side="${side}"><path fill="${fill}"/>${tx}</g>`;
+}
+function bubPath(x, y, w, h, side) {
+  const r = Math.min(28, h / 2), b = y + h;
+  let d = `M${x + r} ${y} H${x + w - r} Q${x + w} ${y} ${x + w} ${y + r} V${b - r} Q${x + w} ${b} ${x + w - r} ${b} H${x + r} Q${x} ${b} ${x} ${b - r} V${y + r} Q${x} ${y} ${x + r} ${y} Z`;
+  if (side === 'in') d += `M${x + 4} ${b - 22} Q${x - 2} ${b + 2} ${x - 14} ${b + 6} Q${x + 10} ${b + 6} ${x + 24} ${b - 4} Z`;
+  else d += `M${x + w - 4} ${b - 22} Q${x + w + 2} ${b + 2} ${x + w + 14} ${b + 6} Q${x + w - 10} ${b + 6} ${x + w - 24} ${b - 4} Z`;
+  return d;
+}
+// small pill label (centered)
+const pill = (cx, cy, txt, o = {}) => `<g data-pill="1" data-x="${cx}" data-y="${cy}" data-s="${o.size || 30}"><rect fill="${o.fill ? BLUE : '#fff'}" ${o.fill ? '' : S(4)}/>${T(cx, cy, o.size || 30, txt, { c: o.fill ? '#fff' : INK, w: 600 })}</g>`;
+const star = (x, y, r, c = BLUE) => `<path d="M${x} ${y - r} Q${x + r * 0.18} ${y - r * 0.18} ${x + r} ${y} Q${x + r * 0.18} ${y + r * 0.18} ${x} ${y + r} Q${x - r * 0.18} ${y + r * 0.18} ${x - r} ${y} Q${x - r * 0.18} ${y - r * 0.18} ${x} ${y - r} Z" fill="${c}"/>`;
+const heartP = (x, y, s, c = BLUE) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0 14 C -26 -3, -19 -27, 0 -13 C 19 -27, 26 -3, 0 14 Z" fill="${c}"/>`;
+const check = (cx, cy, r, c = BLUE, w = 8) => `<path d="M${cx - r} ${cy} L${cx - r * 0.3} ${cy + r * 0.7} L${cx + r} ${cy - r * 0.7}" ${S(w, c)}/>`;
+const clockIcon = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" ${S(6)}/><path class="ch" d="M${x} ${y} V${y - r * 0.55}" ${S(6)}/><path class="cm" d="M${x} ${y} H${x + r * 0.4}" ${S(6, BLUE)}/>`;
+const card = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="30" fill="#fff" ${S(5)}/>`;
+const thought = (x, y, w, h, dir = -1) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h / 2}" fill="#fff" ${S(5)}/><circle cx="${x + w / 2 + dir * w * 0.28}" cy="${y + h + 22}" r="11" fill="#fff" ${S(5)}/><circle cx="${x + w / 2 + dir * w * 0.38}" cy="${y + h + 46}" r="6" fill="#fff" ${S(4)}/>`;
 
-// ---------- mascot (clean vector) ----------
-const BROWS = {
-  neutral: ['M-56 -50 Q-38 -55 -20 -50', 'M20 -50 Q38 -55 56 -50'],
-  happy: ['M-56 -52 Q-38 -66 -20 -52', 'M20 -52 Q38 -66 56 -52'],
-  worried: ['M-56 -46 L-22 -60', 'M22 -60 L56 -46'],
-  brow: ['M-58 -64 Q-38 -80 -18 -64', 'M20 -48 L56 -48'],
+// ================= character rig =================
+// origin = between the feet on the ground. head centre (0,-238), r 78.
+const SH = [[-30, -152], [30, -152]], HP = [[-19, -74], [19, -74]];
+const POSES = {
+  stand:    { h: [[-66, -96], [66, -96]],    f: [[-24, 0], [24, 0]], b: [1, -1] },
+  wave:     { h: [[-50, -86], [100, -236]],  f: [[-24, 0], [24, 0]], b: [1, 1] },
+  cheer:    { h: [[-92, -262], [92, -262]],  f: [[-30, 0], [30, 0]], b: [-1, 1] },
+  facepalm: { h: [[-50, -86], [12, -250]],   f: [[-24, 0], [24, 0]], b: [1, 1] },
+  think:    { h: [[16, -118], [20, -186]],   f: [[-24, 0], [24, 0]], b: [-1, 1] },
+  shrug:    { h: [[-104, -168], [104, -168]], f: [[-24, 0], [24, 0]], b: [1, -1] },
+  point:    { h: [[-50, -86], [140, -190]],  f: [[-24, 0], [24, 0]], b: [1, 1] },
+  pointL:   { h: [[-140, -190], [50, -86]],  f: [[-24, 0], [24, 0]], b: [-1, -1] },
+  phone:    { h: [[-26, -96], [26, -102]],  f: [[-24, 0], [24, 0]], b: [-1, 1], prop: 'phone' },
+  selfie:   { h: [[-50, -86], [70, -330]],   f: [[-24, 0], [24, 0]], b: [1, 1], prop: 'phoneHigh' },
+  cheeks:   { h: [[-62, -222], [62, -222]],  f: [[-24, 0], [24, 0]], b: [-1, 1] },
+  panic:    { h: [[-66, -300], [66, -300]],  f: [[-34, 0], [34, 0]], b: [-1, 1] },
+  hug:      { h: [[34, -124], [-34, -128]],  f: [[-16, 0], [16, 0]], b: [-1, 1] },
+  sleep:    { h: [[-64, -206], [-40, -196]], f: [[-24, 0], [24, 0]], b: [-1, -1] },
+  card:     { h: [[-50, -86], [118, -150]],  f: [[-24, 0], [24, 0]], b: [1, 1], prop: 'card' },
+  walk:     { h: [[-30, -92], [62, -108]],   f: [[-40, 0], [30, -8]], b: [1, -1] },
 };
-const MOUTH = { neutral: 'M-22 38 Q0 50 22 38', happy: 'M-32 30 Q0 74 32 30 Z', worried: 'M-24 50 Q0 36 24 50', brow: 'M-20 46 L24 40' };
-const ARMS = {
-  down: ['M-100 30 Q-124 60 -118 96', 'M100 30 Q124 60 118 96'],
-  point: ['M-100 30 Q-124 60 -118 96', 'M100 22 Q148 8 176 -26'],
-  facepalm: ['M-100 30 Q-124 60 -118 96', 'M100 30 Q110 -10 44 -16'],
-  celebrate: ['M-100 10 Q-146 -36 -136 -94', 'M100 10 Q146 -36 136 -94'],
+const FACES = {
+  neutral: { eyes: 'dot', mouth: 'M-10 30 Q0 37 10 30' },
+  happy:   { eyes: 'arc', mouth: 'M-17 24 Q0 50 17 24 Z', mfill: 1, blush: 1 },
+  laugh:   { eyes: 'xx', mouth: 'M-22 22 Q0 58 22 22 Z', mfill: 1, blush: 1 },
+  smile:   { eyes: 'dot', mouth: 'M-14 27 Q0 41 14 27', blush: 1 },
+  shock:   { eyes: 'big', mouth: 'M-9 26 Q-9 22 0 22 Q9 22 9 26 V44 Q9 50 0 50 Q-9 50 -9 44 Z', mfill: 1 },
+  worried: { eyes: 'dot', brows: ['M-40 -18 L-16 -26', 'M16 -26 L40 -18'], mouth: 'M-14 36 Q-7 30 0 35 Q7 40 14 34' },
+  sad:     { eyes: 'dot', brows: ['M-40 -16 L-16 -26', 'M16 -26 L40 -16'], mouth: 'M-12 38 Q0 28 12 38' },
+  tired:   { eyes: 'half', mouth: 'M-8 34 H8' },
+  sleep:   { eyes: 'closed', mouth: 'M-8 30 Q0 36 8 30', blush: 1 },
+  smug:    { eyes: 'smug', mouth: 'M-12 30 Q4 38 16 26' },
+  shy:     { eyes: 'arc', mouth: 'M-8 32 Q0 37 8 32', blush: 1 },
+  annoyed: { eyes: 'half', brows: ['M-40 -22 L-16 -16', 'M16 -16 L40 -22'], mouth: 'M-12 34 H12' },
 };
-const lastXY = d => { const n = d.match(/-?\d+(\.\d+)?/g).map(Number); return [n[n.length - 2], n[n.length - 1]]; };
-function mascot(o) {
-  const expr = o.expr || [[0, 'neutral']], pose = o.pose || [[0, 'down']];
+function eyesSvg(kind) {
+  const L = -27, R = 27, y = 6;
+  switch (kind) {
+    case 'arc': return `<path d="M${L - 11} ${y + 4} Q${L} ${y - 9} ${L + 11} ${y + 4} M${R - 11} ${y + 4} Q${R} ${y - 9} ${R + 11} ${y + 4}" ${S(6)}/>`;
+    case 'xx': return `<path d="M${L - 10} ${y - 8} L${L + 8} ${y} L${L - 10} ${y + 8} M${R + 10} ${y - 8} L${R - 8} ${y} L${R + 10} ${y + 8}" ${S(6)}/>`;
+    case 'big': return `<circle cx="${L}" cy="${y}" r="13" fill="#fff" ${S(5)}/><circle cx="${R}" cy="${y}" r="13" fill="#fff" ${S(5)}/><circle cx="${L}" cy="${y}" r="4.5" fill="${INK}"/><circle cx="${R}" cy="${y}" r="4.5" fill="${INK}"/>`;
+    case 'half': return `<path d="M${L - 11} ${y - 2} H${L + 11} M${R - 11} ${y - 2} H${R + 11}" ${S(5)}/><circle cx="${L}" cy="${y + 4}" r="5.5" fill="${INK}"/><circle cx="${R}" cy="${y + 4}" r="5.5" fill="${INK}"/>`;
+    case 'closed': return `<path d="M${L - 10} ${y} Q${L} ${y + 9} ${L + 10} ${y} M${R - 10} ${y} Q${R} ${y + 9} ${R + 10} ${y}" ${S(6)}/>`;
+    case 'smug': return `<path d="M${L - 11} ${y} Q${L} ${y - 6} ${L + 11} ${y} M${R - 11} ${y} Q${R} ${y - 6} ${R + 11} ${y}" ${S(6)}/><circle cx="${L + 2}" cy="${y + 5}" r="5" fill="${INK}"/><circle cx="${R + 2}" cy="${y + 5}" r="5" fill="${INK}"/>`;
+    default: return `<g class="blink"><ellipse cx="${L}" cy="${y}" rx="7.5" ry="9" fill="${INK}"/><ellipse cx="${R}" cy="${y}" rx="7.5" ry="9" fill="${INK}"/></g>`;
+  }
+}
+const MARKS = {
+  sweat: `<path d="M84 -300 Q74 -282 74 -272 A10 10 0 0 0 94 -272 Q94 -282 84 -300 Z" fill="${BLUE}"/>`,
+  bang: `<path d="M100 -330 L94 -296 M122 -318 L108 -290" ${S(6)}/><circle cx="91" cy="-280" r="4" fill="${INK}"/>`,
+  q: T(104, -318, 58, '?', { w: 700 }),
+  qq: T(-108, -306, 48, '?', { w: 700 }) + T(108, -324, 58, '?', { w: 700 }),
+  spark: star(-112, -300, 16) + star(118, -270, 11) + star(96, -334, 8, INK),
+  hearts: heartP(-104, -300, 1.1) + heartP(110, -320, 0.8),
+  zzz: T(96, -318, 30, 'z', { w: 700 }) + T(124, -344, 38, 'z', { w: 700 }) + T(156, -376, 46, 'z', { w: 700, c: BLUE }),
+  spiral: `<path d="M-108 -300 a8 8 0 1 1 8 8 a14 14 0 1 1 -14 -14" ${S(4)}/><path d="M112 -318 a7 7 0 1 1 7 7 a12 12 0 1 1 -12 -12" ${S(4)}/>`,
+  glow: `<path d="M-40 -200 l-26 -10 M-36 -176 l-30 4 M40 -200 l26 -10" ${S(4, BLUE)}/>`,
+  speed: `<path d="M-120 -170 H-160 M-116 -130 H-170 M-122 -90 H-152" ${S(5, MUTE)}/>`,
+};
+const ACC = {
+  hair: `<path d="M-34 -306 Q-30 -322 -20 -326 M-8 -315 Q-4 -334 8 -336 M18 -312 Q26 -326 36 -322" ${S(6)}/>`,
+  sprout: `<path d="M0 -316 Q2 -334 8 -342" ${S(6)}/><path d="M8 -342 C 16 -372, 54 -376, 62 -364 C 56 -340, 28 -330, 8 -342 Z" fill="${BLUE}"/><path d="M6 -340 C -2 -364, -34 -366, -40 -356 C -34 -338, -12 -332, 6 -340 Z" fill="${BLUE}"/>`,
+  mirror: `<circle cx="0" cy="-316" r="16" fill="#fff" ${S(5)}/><circle cx="0" cy="-316" r="6" fill="${BLUE}"/>`,
+};
+const PROPS = {
+  phone: `<g transform="rotate(-6 0 -120)"><rect x="-30" y="-150" width="60" height="96" rx="13" fill="#fff" ${S(5)}/><rect x="-12" y="-141" width="24" height="5" rx="2.5" fill="${INK}"/><rect x="-18" y="-126" width="36" height="12" rx="6" fill="${BLUE}"/><rect x="-18" y="-106" width="26" height="10" rx="5" fill="${TINT}"/></g>`,
+  phoneHigh: `<rect x="48" y="-372" width="44" height="72" rx="10" fill="#fff" ${S(5)}/><circle cx="70" cy="-358" r="5" fill="${BLUE}"/>`,
+  card: '',
+};
+function limb(a, b, bend, k = 0.22) {
+  const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1;
+  const cx = mx - dy / L * L * k * bend, cy = my + dx / L * L * k * bend;
+  return `M${a[0].toFixed(1)} ${a[1].toFixed(1)} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${b[0].toFixed(1)} ${b[1].toFixed(1)}`;
+}
+const blendPose = (A, B, p) => ({ h: A.h.map((v, i) => [lerp(v[0], B.h[i][0], p), lerp(v[1], B.h[i][1], p)]), f: A.f.map((v, i) => [lerp(v[0], B.f[i][0], p), lerp(v[1], B.f[i][1], p)]), b: p < 0.5 ? A.b : B.b, prop: p < 0.5 ? A.prop : B.prop });
+const TORSO = 'M-36 -160 Q-44 -120 -40 -84 Q-38 -66 -20 -66 H20 Q38 -66 40 -84 Q44 -120 36 -160 Q0 -174 -36 -160 Z';
+// o: {x,y,s,t, pose:[[t,name]], face:[[t,name]], marks:[[t0,t1,name]], acc, flip, look, hop:[t], shake:[t0,t1]}
+function char(o) {
   return {
-    m: `<g class="mb">
-      <path d="M0 -100 Q4 -116 14 -126" ${S()}/>
-      <path class="leaf" d="M14 -126 C 26 -164, 72 -168, 84 -156 C 76 -124, 40 -110, 14 -126 Z" fill="${BLUE}"/>
-      <path class="aL" ${S()}/><path class="aR" ${S()}/>
-      <path d="M-34 100 v30 M34 100 v30" ${S()}/><path d="M-50 130 h20 M30 130 h20" ${S()}/>
-      <rect x="-100" y="-100" width="200" height="200" rx="66" fill="#fff" ${S()}/>
-      <ellipse cx="-64" cy="22" rx="13" ry="7" fill="${BLUE}" opacity="0.55"/><ellipse cx="64" cy="22" rx="13" ry="7" fill="${BLUE}" opacity="0.55"/>
-      <g class="eyes"><ellipse cx="-36" cy="-12" rx="10" ry="15" fill="${INK}"/><ellipse cx="36" cy="-12" rx="10" ry="15" fill="${INK}"/></g>
-      <path class="bL" ${S()}/><path class="bR" ${S()}/><path class="mo" ${S()}/>
-      <circle class="hL" r="14" fill="#fff" ${S(5)}/><circle class="hR" r="14" fill="#fff" ${S(5)}/>
-    </g>`, t: o.t || 0, d: 0.5, a: 'pop', x: o.x, y: o.y, s: o.s || 1,
+    m: `<g class="cb"><g class="lb"><path class="l0" ${S(36)}/><path class="l1" ${S(36)}/><path class="l2" ${S(36)}/><path class="l3" ${S(36)}/><path d="${TORSO}" fill="${INK}" stroke="${INK}" stroke-width="14" stroke-linejoin="round"/></g>
+        <g class="lw"><path class="l0" ${S(22, '#fff')}/><path class="l1" ${S(22, '#fff')}/><path class="l2" ${S(22, '#fff')}/><path class="l3" ${S(22, '#fff')}/><path d="${TORSO}" fill="#fff"/></g>
+        <g class="prop"></g>
+        <g class="hd"><circle cx="0" cy="-238" r="78" fill="#fff" ${S(7)}/>${ACC[o.acc] || ''}<g class="fc" transform="translate(0 -238)"></g></g>
+        <g class="mk"></g></g>`,
+    t: o.t || 0, d: 0.45, a: 'pop', x: o.x, y: o.y ?? 600, s: o.s || 1, flip: o.flip,
     u(el, lt) {
-      const at = arr => arr.filter(e => lt >= e[0]).pop()[1];
-      const e = at(expr), p = at(pose), q = el.querySelector('.mb');
-      el.querySelector('.bL').setAttribute('d', BROWS[e][0]); el.querySelector('.bR').setAttribute('d', BROWS[e][1]);
-      const mo = el.querySelector('.mo'); mo.setAttribute('d', MOUTH[e]); mo.setAttribute('fill', e === 'happy' ? INK : 'none');
-      const [al, ar] = ARMS[p]; el.querySelector('.aL').setAttribute('d', al); el.querySelector('.aR').setAttribute('d', ar);
-      const [lx, ly] = lastXY(al), [rx, ry] = lastXY(ar);
-      const hL = el.querySelector('.hL'), hR = el.querySelector('.hR');
-      hL.setAttribute('cx', lx); hL.setAttribute('cy', ly); hR.setAttribute('cx', rx); hR.setAttribute('cy', ry); hR.setAttribute('r', p === 'point' ? 22 : 14);
-      const ph = (lt + (o.blink || 1.1)) % 2.7, b = ph < 0.07 ? 1 - ph / 0.07 : ph < 0.14 ? (ph - 0.07) / 0.07 : 1;
-      el.querySelector('.eyes').setAttribute('transform', `translate(0 -12) scale(1 ${0.1 + 0.9 * b}) translate(0 12)`);
-      let dy = Math.sin(lt * 2.6) * 3, rot = 0;
-      if (o.nod && lt > o.nod[0] && lt < o.nod[1]) dy += Math.sin((lt - o.nod[0]) * 9) * 7;
-      if (p === 'celebrate') dy -= Math.abs(Math.sin(lt * 6)) * 18;
-      if (p === 'facepalm') rot = -4;
-      q.setAttribute('transform', `translate(0 ${dy.toFixed(2)}) rotate(${rot})`);
-      el.querySelector('.leaf').setAttribute('transform', `rotate(${(Math.sin(lt * 2.2) * 5).toFixed(2)} 14 -126)`);
+      const pick = (arr, dflt) => { let cur = arr ? arr[0] : [0, dflt], prev = cur; (arr || []).forEach(e => { if (lt >= e[0]) { prev = cur; cur = e; } }); return [prev, cur]; };
+      // pose blend
+      const [pp, pc] = pick(o.pose, 'stand'), k = io(clamp((lt - pc[0]) / 0.32)), P = blendPose(POSES[pp[1]], POSES[pc[1]], pp === pc ? 1 : k);
+      const breathe = Math.sin(lt * 2.4) * 3, sway = Math.sin(lt * 1.7) * 3;
+      const hands = P.h.map((h, i) => [h[0] + (i ? sway : -sway) * 0.6, h[1] + breathe]);
+      const ds = [limb(SH[0], hands[0], P.b[0]), limb(SH[1], hands[1], P.b[1]), limb(HP[0], P.f[0], 0.15, 0.1), limb(HP[1], P.f[1], -0.15, 0.1)];
+      el.querySelectorAll('.l0').forEach(p => p.setAttribute('d', ds[0])); el.querySelectorAll('.l1').forEach(p => p.setAttribute('d', ds[1]));
+      el.querySelectorAll('.l2').forEach(p => p.setAttribute('d', ds[2])); el.querySelectorAll('.l3').forEach(p => p.setAttribute('d', ds[3]));
+      const pr = el.querySelector('.prop'); const pk = P.prop || ''; if (pr._k !== pk) { pr.innerHTML = PROPS[pk] || (pk === 'card' && o.card ? o.card : ''); pr._k = pk; }
+      // face
+      const [, fc] = pick(o.face, 'neutral'), F = FACES[fc[1]], fg = el.querySelector('.fc');
+      if (fg._k !== fc[1]) {
+        fg._k = fc[1];
+        fg.innerHTML = eyesSvg(F.eyes) + (F.brows ? `<path d="${F.brows[0]}" ${S(5)}/><path d="${F.brows[1]}" ${S(5)}/>` : '') +
+          `<path d="${F.mouth}" ${F.mfill ? `fill="${INK}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"` : S(5)}/>` +
+          (F.blush ? `<path d="M-60 28 l-8 10 M-50 28 l-8 10 M-40 28 l-8 10 M48 28 l-8 10 M58 28 l-8 10 M68 28 l-8 10" ${S(3.5, BLUE)}/>` : '');
+        const pf = clamp((lt - fc[0]) / 0.15); fg._t = fc[0];
+      }
+      const fp = io(clamp((lt - fg._t) / 0.18)); fg.setAttribute('transform', `translate(${(o.look || 0)} ${-238 + (1 - fp) * 3}) scale(${(0.94 + 0.06 * fp).toFixed(3)})`);
+      const bl = fg.querySelector('.blink'); if (bl) { const ph = (lt + (o.blink || 0.7)) % 3.1, b = ph < 0.08 ? 1 - ph / 0.08 : ph < 0.16 ? (ph - 0.08) / 0.08 : 1; bl.setAttribute('transform', `translate(0 6) scale(1 ${(0.12 + 0.88 * b).toFixed(3)}) translate(0 -6)`); }
+      // marks
+      const mk = el.querySelector('.mk'), on = (o.marks || []).filter(m => lt >= m[0] && lt < m[1]);
+      const key = on.map(m => m[2]).join(','); if (mk._k !== key) { mk.innerHTML = on.map(m => `<g data-m="${m[0]}">${MARKS[m[2]]}</g>`).join(''); mk._k = key; }
+      mk.querySelectorAll('[data-m]').forEach(g => { const q = clamp((lt - +g.dataset.m) / 0.3); g.style.transformBox = 'fill-box'; g.style.transformOrigin = 'center'; g.style.transform = `scale(${pop(q).toFixed(3)}) translateY(${(Math.sin(lt * 4) * 3).toFixed(2)}px)`; g.style.opacity = io(clamp(q * 2)); });
+      // body motion
+      let dy = 0, rot = 0, sx = 1;
+      (o.hop || []).forEach(h0 => { const q = (lt - h0) / 0.45; if (q > 0 && q < 1) dy -= Math.sin(q * Math.PI) * 34; });
+      if (o.shake && lt > o.shake[0] && lt < o.shake[1]) rot = Math.sin((lt - o.shake[0]) * 22) * 5;
+      if (pc[1] === 'cheer') dy -= Math.abs(Math.sin(lt * 5.5)) * 14;
+      if (pc[1] === 'sleep' || pc[1] === 'think') rot += -4;
+      if (o.flip) sx = -1;
+      el.querySelector('.hd').setAttribute('transform', `rotate(${(rot + Math.sin(lt * 1.3) * 1.5).toFixed(2)} 0 -170)`);
+      el.querySelector('.cb').setAttribute('transform', `translate(0 ${dy.toFixed(2)}) scale(${sx} 1)`);
+      el.querySelector('.mk').setAttribute('transform', `scale(${sx} 1)`);
     },
   };
 }
 
-// ---------- reel 6 · Tinder ----------
-// each scene gets w = local start time of each spoken word (seconds from scene start)
-const R6 = [
+// ================= scenes =================
+// every scene function gets w = local start times of its spoken words
+const JAVI = { acc: 'hair' }, FOLIA = { acc: 'sprout' };
+const R5 = [
   w => [
-    { m: phone(130, 10, 300, 520) + face(280, 200, 74) + `<rect x="205" y="330" width="140" height="18" rx="9" fill="${TINT}"/><rect x="235" y="366" width="90" height="14" rx="7" fill="${TINT}"/>`, t: 0, d: 0.55 },
-    { m: phone(650, 10, 300, 520) + `<circle cx="800" cy="200" r="74" fill="#fff" ${S()}/><path d="M800 162 v76 M762 200 h76" ${S(13, BLUE)}/><rect x="730" y="330" width="140" height="18" rx="9" fill="${TINT}"/><rect x="755" y="366" width="90" height="14" rx="7" fill="${TINT}"/>`, t: 0.08, d: 0.55 },
-    { m: heart(1.4), t: w[7] - 0.15, d: 0.45, a: 'pop', x: 540, y: 260, u(el, lt) { const p = lt - w[7]; if (p > 0.5) el.setAttribute('transform', `translate(540 260) scale(${(1.4 * (1 + 0.04 * Math.sin((p - 0.5) * 5))).toFixed(3)})`); } },
-    { m: `<path d="M466 168 l-24 -24 M614 168 l24 -24 M540 146 v-34" ${S(6, BLUE)}/>`, t: w[7] + 0.1, d: 0.35 },
-    { m: T(280, 592, 36, 'Paciente') + T(800, 592, 36, 'Tu clínica'), t: 0.45, d: 0.4, a: 'fade' },
-  ],
-  w => {
-    const a = bubbleIn(150, 110, '¡Hola!'), b = bubbleOut(490, 230, 'Son 3.000 €', 40);
-    return [
-      { m: phone(110, 0, 420, 640), t: 0, d: 0, a: 'fade' },
-      { m: a.m, t: w[3] - 0.1, d: 0.4, a: 'pop' },
-      { m: b.m, t: w[8] - 0.1, d: 0.4, a: 'pop' },
-      mascot({ x: 820, y: 330, s: 1.2, t: 0.1, expr: [[0, 'neutral'], [w[8] + 0.2, 'brow']] }),
-    ];
-  },
-  w => {
-    const a = bubbleIn(150, 110, '¡Hola!'), b = bubbleOut(490, 230, 'Son 3.000 €', 40);
-    return [
-      { m: phone(110, 0, 420, 640) + a.m + b.m, t: 0, d: 0, a: 'fade' },
-      { m: T(486, 342, 28, 'Visto', { c: MUTE, a: 'end', w: 500 }), t: w[3] - 0.1, d: 0.3, a: 'fade' },
-      { m: `<rect x="180" y="500" width="280" height="64" rx="32" fill="${TINT}"/>` + T(320, 532, 28, 'Ha salido del chat', { c: MUTE, w: 500 }), t: w[5] - 0.1, d: 0.4, a: 'pop' },
-      mascot({ x: 820, y: 330, s: 1.2, t: 0, expr: [[0, 'brow'], [w[3], 'worried']], pose: [[0, 'down'], [w[3], 'facepalm']] }),
-    ];
-  },
-  w => {
-    const a = bubbleIn(150, 90, '¡Hola!', 36), b = bubbleOut(490, 200, '¿Qué te preocupa?', 32), c = bubbleIn(150, 310, 'Se me nota', 32), c2 = bubbleIn(150, 400, 'la coronilla…', 32), h = bubbleOut(490, 510, 'Te ayudamos', 32);
-    return [
-      { m: phone(110, 0, 420, 640), t: 0, d: 0, a: 'fade' },
-      { m: a.m, t: 0.05, d: 0.35, a: 'pop' },
-      { m: b.m, t: w[3] - 0.1, d: 0.4, a: 'pop' },
-      { m: c.m, t: w[7] - 0.1, d: 0.4, a: 'pop' },
-      { m: c2.m, t: w[7] + 0.15, d: 0.4, a: 'pop' },
-      { m: h.m, t: w[8] + 0.35, d: 0.35, a: 'pop' },
-      mascot({ x: 820, y: 330, s: 1.2, t: 0.1, expr: [[0, 'neutral'], [w[3], 'happy']], nod: [w[7], w[7] + 1.4] }),
-    ];
-  },
-  w => [
-    // calendar chip
-    { m: `<rect x="300" y="20" width="480" height="120" rx="28" fill="${BLUE}"/><rect x="330" y="46" width="68" height="68" rx="14" fill="#fff"/>` + T(364, 80, 30, '17h', { w: 800, c: BLUE }) + T(420, 64, 30, 'Valoración', { a: 'start', c: '#fff', w: 700 }) + T(420, 100, 24, 'Martes · en consulta', { a: 'start', c: '#fff', w: 500 }), t: w[4] - 0.1, d: 0.45, a: 'pop' },
-    // table + chairs + cups
-    { m: `<path d="M330 400 H750" ${S(7)}/><path d="M380 400 V560 M700 400 V560" ${S()}/>` +
-         `<path d="M200 330 V560 M200 450 H290 V560 M200 330 Q200 300 230 300" ${S()}/>` +
-         `<path d="M880 330 V560 M880 450 H790 V560 M880 330 Q880 300 850 300" ${S()}/>`, t: 0, d: 0.8 },
-    { m: `<path d="M440 350 h60 v30 q0 20 -20 20 h-20 q-20 0 -20 -20 z M500 360 q18 0 18 12 q0 12 -18 12" ${S(5)}/><path d="M580 350 h60 v30 q0 20 -20 20 h-20 q-20 0 -20 -20 z M640 360 q18 0 18 12 q0 12 -18 12" ${S(5)}/>`, t: 0.6, d: 0.5 },
-    { m: `<path d="M462 330 q-8 -14 0 -28 q8 -14 0 -28 M602 330 q-8 -14 0 -28 q8 -14 0 -28" ${S(4, BLUE)}/>`, t: 1.0, d: 0.6, u(el, lt) { el.setAttribute('transform', `translate(0 ${(-Math.abs(Math.sin(lt * 1.6)) * 6).toFixed(2)})`); } },
-    { m: check(370, 205, 18, BLUE, 8) + T(400, 205, 30, 'Sin compromiso', { a: 'start', w: 600 }), t: w[6] - 0.1, d: 0.4, a: 'fade' },
+    { m: `<path d="M846 112 a58 58 0 1 0 50 88 a46 46 0 1 1 -50 -88 Z" fill="${BLUE}"/>` + star(740, 120, 12, INK) + star(960, 260, 9, INK) + star(700, 230, 7), t: 0, d: 0.5, a: 'pop' },
+    char({ ...JAVI, x: 420, s: 1.3, pose: [[0, 'phone']], face: [[0, 'tired']], marks: [[0.2, 99, 'glow']] }),
+    { m: pill(800, 360, '23:47', { size: 34 }), t: 0.35, d: 0.4, a: 'pop' },
   ],
   w => [
-    { m: `<rect x="130" y="60" width="380" height="480" rx="30" fill="#fff" ${S()}/>` + T(320, 130, 30, 'Tu plan', { w: 800 }) +
-         [0, 1, 2, 3].map(i => check(185, 210 + i * 80, 14, BLUE, 7) + `<rect x="215" y="${200 + i * 80}" width="${220 - i * 25}" height="18" rx="9" fill="${TINT}"/>`).join(''), t: 0, d: 0.9 },
-    { m: `<g transform="rotate(-8)"><path d="M-170 -80 H90 L170 0 L90 80 H-170 Q-190 80 -190 60 V-60 Q-190 -80 -170 -80 Z" fill="${BLUE}"/><circle cx="105" cy="0" r="16" fill="#fff"/>` + T(-50, 2, 64, '3.000 €', { c: '#fff', w: 800, ls: -1 }) + `</g>`, t: w[7] - 0.15, d: 0.5, a: 'pop', x: 780, y: 300, s: 0.95 },
+    char({ ...JAVI, x: 360, s: 1.3, pose: [[0, 'selfie']], face: [[0, 'worried'], [w[7] - 0.1, 'annoyed']], marks: [[w[7], 99, 'sweat']] }),
+    { m: card(640, 90, 300, 300) + `<circle cx="790" cy="240" r="96" fill="#fff" ${S(5)}/>` + Array.from({ length: 18 }, (_, i) => { const a = i / 18 * Math.PI * 2; return `<path d="M${790 + Math.cos(a) * 92} ${240 + Math.sin(a) * 92} L${790 + Math.cos(a) * 72} ${240 + Math.sin(a) * 72}" ${S(5)}/>`; }).join('') + `<circle cx="790" cy="240" r="46" fill="${BLUE}" opacity="0.18"/><circle cx="790" cy="240" r="46" fill="none" stroke="${BLUE}" stroke-width="4" stroke-dasharray="2 10" stroke-linecap="round"/>`, t: w[5] - 0.2, d: 0.45, a: 'pop' },
   ],
   w => [
-    { m: `<rect x="110" y="40" width="340" height="300" rx="48" fill="#fff" ${S(7)}/>` + T(280, 192, 170, 'A', { w: 800 }), t: 0.1, d: 0.45, a: 'pop' },
-    { m: `<rect x="630" y="40" width="340" height="300" rx="48" fill="${BLUE}"/>` + T(800, 192, 170, 'B', { w: 800, c: '#fff' }), t: 0.3, d: 0.45, a: 'pop',
-      u(el, lt) { const p = lt - w[7]; if (p > 0) { el.style.transformBox = 'fill-box'; el.style.transformOrigin = 'center'; el.style.transform = `scale(${(1 + 0.025 * Math.sin(p * 4)).toFixed(4)})`; } } },
-    mascot({ x: 540, y: 470, s: 0.72, t: 0, expr: [[0, 'brow'], [w[8] + 0.4, 'happy']], pose: [[0, 'point']] }),
+    char({ ...JAVI, x: 280, s: 1.25, pose: [[0, 'phone']], face: [[0, 'neutral'], [w[6], 'worried']] }),
+    { m: bub(1000, 150, 'Hola, ¿cuánto cuesta\nun injerto?', { side: 'out', size: 38 }), t: w[6] - 0.1, d: 0.45, a: 'pop' },
+    { m: T(1000, 320, 26, 'Enviado · 23:49', { a: 'end', c: MUTE, w: 500 }), t: w[6] + 0.6, d: 0.4, a: 'fade' },
+  ],
+  w => [
+    char({ ...JAVI, x: 300, s: 1.25, pose: [[0, 'phone'], [w[3] + 0.2, 'stand']], face: [[0, 'neutral'], [w[3], 'sad']], marks: [[w[3], 99, 'q']] }),
+    { m: card(620, 130, 340, 330) + T(790, 200, 34, 'Clínica', { w: 700 }) + `<rect x="680" y="250" width="220" height="70" rx="35" fill="${TINT}"/>` + T(790, 285, 30, 'Cerrado', { w: 600, c: MUTE }) + `<path class="cl" d="M790 400 V368 M790 400 H812" ${S(6, BLUE)}/><circle cx="790" cy="400" r="40" fill="none" ${S(5)}/>`, t: 0.05, d: 0.5, a: 'pop',
+      u(el, lt) { el.querySelector('.cl').setAttribute('transform', `rotate(${(lt * 160).toFixed(1)} 790 400)`); } },
+    { m: T(980, 120, 30, 'z', { w: 700 }) + T(1005, 92, 38, 'z', { w: 700, c: BLUE }), t: w[2], d: 0.4, a: 'pop' },
+  ],
+  w => [
+    char({ ...JAVI, x: 280, s: 1.25, pose: [[0, 'phone']], face: [[0, 'neutral'], [w[11] - 0.1, 'shock'], [w[11] + 0.9, 'happy']], marks: [[w[11], w[11] + 0.9, 'bang'], [w[11] + 0.9, 99, 'spark']], hop: [w[11] + 0.9] }),
+    { m: bub(520, 150, '¡Hola Javi! ¿Desde\ncuándo lo notas?', { side: 'in', size: 38 }), t: w[11] - 0.15, d: 0.45, a: 'pop' },
+    { m: pill(620, 360, 'hace 2 min', { size: 28, fill: 1 }), t: w[12], d: 0.4, a: 'pop' },
+  ],
+  w => [
+    { m: card(560, 110, 420, 230) + `<rect x="600" y="150" width="74" height="74" rx="18" fill="${BLUE}"/>` + check(637, 187, 18, '#fff', 7) + T(700, 170, 30, 'Valoración', { a: 'start', w: 700 }) + T(700, 210, 26, 'Mañana · 10:00', { a: 'start', c: MUTE, w: 500 }) + `<rect x="600" y="260" width="340" height="16" rx="8" fill="${TINT}"/><rect x="600" y="290" width="220" height="16" rx="8" fill="${TINT}"/>`, t: w[5] - 0.15, d: 0.45, a: 'pop' },
+    char({ ...JAVI, x: 300, s: 1.25, pose: [[0, 'phone'], [w[8], 'sleep']], face: [[0, 'smile'], [w[8], 'sleep']], marks: [[w[10], 99, 'zzz']] }),
+  ],
+  w => [
+    char({ x: 280, s: 1.25, acc: 'mirror', pose: [[0, 'phone']], face: [[0, 'smile'], [w[7] - 0.1, 'shock']], marks: [[w[7], 99, 'sweat'], [w[7], 99, 'bang']] }),
+    { m: pill(280, 40, '9:00', { size: 32 }), t: 0.1, d: 0.4, a: 'pop' },
+    { m: bub(1000, 110, '¡Buenos días! ¿Seguimos\ncon tu consulta?', { side: 'out', size: 32 }), t: w[2], d: 0.45, a: 'pop' },
+    { m: bub(560, 280, 'Ya tengo cita, gracias', { side: 'in', size: 32 }), t: w[7] - 0.2, d: 0.45, a: 'pop' },
+  ],
+  w => [
+    char({ ...FOLIA, x: 540, s: 1.35, pose: [[0, 'wave'], [w[5], 'point']], face: [[0, 'smile'], [w[5], 'smug']], marks: [[w[5], 99, 'spark']], hop: [w[5]] }),
+    { m: `<g transform="translate(870 210)"><circle r="78" fill="#fff" ${S(6)}/><path d="M-14 -96 H14 M0 -96 V-80" ${S(7)}/><path class="w" fill="${BLUE}"/><circle r="7" fill="${INK}"/></g>`, t: 0.3, d: 0.45, a: 'pop',
+      u(el, lt) { const a = Math.min(lt * 110, 300) * Math.PI / 180, r = 62; el.querySelector('.w').setAttribute('d', `M0 0 L0 ${-r} A${r} ${r} 0 ${a > Math.PI ? 1 : 0} 1 ${(Math.sin(a) * r).toFixed(1)} ${(-Math.cos(a) * r).toFixed(1)} Z`); } },
   ],
 ];
-const DEFS = { 'reel-6-tinder': R6 };
 
-// ---------- engine ----------
+const R6 = [
+  w => [
+    char({ ...JAVI, x: 260, s: 1.15, pose: [[0, 'wave']], face: [[0, 'smile'], [w[7], 'happy']], hop: [w[7]] }),
+    char({ ...FOLIA, x: 820, s: 1.15, pose: [[0, 'wave']], face: [[0, 'smile'], [w[7], 'happy']], hop: [w[7] + 0.1], blink: 1.6 }),
+    { m: heartP(540, 300, 3.4) + star(470, 210, 14) + star(612, 222, 10, INK) + star(600, 380, 8), t: w[7] - 0.15, d: 0.45, a: 'pop',
+      u(el, lt) { el.style.transform = `translateY(${(Math.sin(lt * 3) * 6).toFixed(2)}px)`; } },
+  ],
+  w => [
+    char({ ...JAVI, x: 260, s: 1.15, pose: [[0, 'wave'], [w[6], 'stand']], face: [[0, 'smile'], [w[8], 'shock']], marks: [[w[8] + 0.1, 99, 'bang']] }),
+    char({ ...FOLIA, x: 820, s: 1.15, pose: [[0, 'stand'], [w[8] - 0.1, 'card']], face: [[0, 'neutral'], [w[8], 'smug']] }),
+    { m: bub(90, 40, '¡Hola!', { side: 'in' }), t: w[3] - 0.1, d: 0.4, a: 'pop' },
+    { m: bub(990, 40, 'Son 3.000 €', { side: 'out' }), t: w[8] - 0.1, d: 0.4, a: 'pop' },
+  ],
+  w => [
+    char({ ...JAVI, x: 220, s: 1.15, flip: 1, pose: [[0, 'walk']], face: [[0, 'annoyed']] }),
+    { m: T(220, 100, 30, 'Visto', { c: MUTE, w: 500 }), t: w[3] - 0.1, d: 0.3, a: 'fade' },
+    char({ ...FOLIA, x: 780, s: 1.15, pose: [[0, 'stand'], [w[3], 'facepalm']], face: [[0, 'neutral'], [w[3], 'sad']], marks: [[w[3] + 0.2, 99, 'sweat']] }),
+  ],
+  w => [
+    char({ ...FOLIA, x: 820, s: 1.15, pose: [[0, 'think']], face: [[0, 'smile']] }),
+    char({ ...JAVI, x: 260, s: 1.15, pose: [[0, 'stand'], [w[7], 'hug']], face: [[0, 'neutral'], [w[7], 'shy']], marks: [[w[7] + 0.4, 99, 'hearts']] }),
+    { m: bub(990, 20, '¿Qué te preocupa?', { side: 'out', size: 32 }), t: w[3] - 0.1, d: 0.4, a: 'pop' },
+    { m: bub(60, 150, 'Se me nota\nla coronilla…', { side: 'in', size: 32 }), t: w[7] - 0.1, d: 0.4, a: 'pop' },
+  ],
+  w => [
+    { m: pill(540, 50, 'Valoración · Martes 17:00', { size: 32, fill: 1 }), t: w[4] - 0.1, d: 0.45, a: 'pop' },
+    { m: check(410, 130, 14, BLUE, 6) + T(436, 130, 30, 'Sin compromiso', { a: 'start', w: 600 }), t: w[6] - 0.1, d: 0.4, a: 'fade' },
+    char({ ...JAVI, x: 300, s: 1.1, pose: [[0, 'stand'], [w[4], 'wave']], face: [[0, 'smile'], [w[4], 'happy']] }),
+    char({ ...FOLIA, x: 780, s: 1.1, pose: [[0, 'wave']], face: [[0, 'happy']], blink: 1.5 }),
+  ],
+  w => [
+    char({ ...FOLIA, x: 300, s: 1.15, card: `<g transform="translate(150 -160)"><rect x="-74" y="-46" width="148" height="92" rx="20" fill="${BLUE}"/>${T(0, 0, 36, '3.000 €', { c: '#fff', w: 700 })}</g>`, pose: [[0, 'stand'], [w[7] - 0.2, 'card']], face: [[0, 'smile']] }),
+    char({ ...JAVI, x: 820, s: 1.15, pose: [[0, 'stand'], [w[7] + 0.2, 'think']], face: [[0, 'smile'], [w[7] + 0.4, 'happy']], marks: [[w[7] + 0.4, 99, 'spark']] }),
+  ],
+  w => [
+    { m: pill(330, 120, '  A  ', { size: 44 }), t: w[4] - 0.15, d: 0.4, a: 'pop' },
+    { m: pill(750, 120, '  B  ', { size: 44, fill: 1 }), t: w[7] - 0.15, d: 0.4, a: 'pop' },
+    char({ ...FOLIA, x: 540, s: 1.2, pose: [[0, 'point']], face: [[0, 'smug'], [w[8], 'happy']], marks: [[w[8], 99, 'q']] }),
+  ],
+];
+
+const R7 = [
+  w => [
+    char({ ...JAVI, x: 540, s: 1.3, pose: [[0, 'think']], face: [[0, 'neutral']] }),
+    { m: thought(120, 60, 180, 90, 1), t: w[3], d: 0.4, a: 'pop' },
+    { m: thought(780, 30, 200, 100, -1), t: w[5], d: 0.4, a: 'pop' },
+    { m: thought(800, 230, 150, 76, -1), t: w[8], d: 0.4, a: 'pop' },
+  ],
+  w => [
+    { m: `<ellipse cx="800" cy="280" rx="150" ry="220" fill="#fff" ${S(6)}/><path d="M690 120 l40 -40 M712 166 l70 -70" ${S(5, MUTE)}/><circle cx="800" cy="300" r="78" fill="none" ${S(5, MUTE)}/>` + `<path d="M766 236 Q770 222 780 218 M792 228 Q796 210 808 208 M820 232 Q828 220 838 222" ${S(5, MUTE)}/>`, t: 0, d: 0.6 },
+    char({ ...JAVI, x: 330, s: 1.25, pose: [[0, 'stand'], [w[1], 'think']], face: [[0, 'neutral'], [w[1], 'worried']], marks: [[w[1], w[4], 'q'], [w[4], 99, 'qq']], look: 10 }),
+  ],
+  w => [
+    char({ ...JAVI, x: 380, s: 1.3, pose: [[0, 'stand'], [w[1] - 0.1, 'cheeks']], face: [[0, 'neutral'], [w[1], 'shock']], marks: [[w[1] + 0.1, 99, 'sweat']], shake: [w[1], w[1] + 0.5] }),
+    { m: thought(680, 60, 280, 150, -1) + `<g transform="translate(820 135) rotate(-30)"><rect x="-70" y="-14" width="100" height="28" rx="8" fill="#fff" ${S(5)}/><path d="M30 0 H62 M-70 0 H-86 M-86 -14 V14" ${S(5)}/><rect x="-60" y="-8" width="50" height="16" rx="4" fill="${BLUE}"/></g>`, t: w[2] - 0.1, d: 0.45, a: 'pop' },
+  ],
+  w => [
+    char({ ...JAVI, x: 540, s: 1.35, pose: [[0, 'cheeks'], [w[4] - 0.1, 'panic']], face: [[0, 'worried'], [w[4], 'shock']], marks: [[w[4], 99, 'spiral'], [w[4] + 0.2, 99, 'sweat']], shake: [w[4], w[4] + 0.8] }),
+  ],
+  w => [
+    char({ ...JAVI, x: 540, s: 1.2, pose: [[0, 'hug']], face: [[0, 'sad']], marks: [[w[5], 99, 'sweat']] }),
+    { m: pill(250, 120, '¿Se nota?', { size: 30 }), t: 0.2, d: 0.4, a: 'pop' },
+    { m: pill(830, 80, '¿Dolerá?', { size: 30 }), t: 0.6, d: 0.4, a: 'pop' },
+    { m: pill(820, 300, '¿Y si sale mal?', { size: 30 }), t: 1.0, d: 0.4, a: 'pop' },
+    { m: pill(250, 330, 'Miedo', { size: 30, fill: 1 }), t: w[5] - 0.1, d: 0.4, a: 'pop' },
+  ],
+  w => [
+    char({ ...FOLIA, x: 200, s: 1.05, pose: [[0, 'stand'], [w[3], 'pointL'], [w[3] + 0.01, 'point']], face: [[0, 'smile']] }),
+    { m: card(330, 40, 420, 250) + T(450, 82, 24, 'ANTES', { c: MUTE, w: 600, ls: 1 }) + T(630, 82, 24, 'DESPUÉS', { c: BLUE, w: 700, ls: 1 }) +
+        `<circle cx="450" cy="190" r="60" fill="#fff" ${S(5)}/><path d="M406 150 Q412 140 420 138 M480 138 Q490 142 494 150" ${S(5)}/>` +
+        `<circle cx="630" cy="190" r="60" fill="#fff" ${S(5)}/>` + [-40, -24, -8, 8, 24, 40].map(dx => `<path d="M${630 + dx} 136 Q${634 + dx} 124 ${642 + dx} 120" ${S(5)}/>`).join(''), t: w[3] - 0.1, d: 0.5, a: 'pop' },
+    { m: [['1', 'Consulta'], ['2', 'Plan'], ['3', 'Resultado']].map(([n, l], i) => `<circle cx="${420 + i * 130}" cy="370" r="24" fill="${i === 2 ? BLUE : '#fff'}" ${i === 2 ? '' : S(4)}/>` + T(420 + i * 130, 370, 26, n, { w: 700, c: i === 2 ? '#fff' : INK }) + T(420 + i * 130, 420, 24, l, { w: 500 }) + (i < 2 ? `<path d="M${450 + i * 130} 370 H${480 + i * 130}" ${S(4, MUTE)}/>` : '')).join(''), t: w[7], d: 0.5, a: 'fade' },
+    char({ ...JAVI, x: 900, s: 1.0, pose: [[0, 'hug'], [w[7] + 0.4, 'stand']], face: [[0, 'worried'], [w[3] + 0.5, 'neutral'], [w[7] + 0.6, 'smile']] }),
+  ],
+  w => [
+    char({ ...JAVI, x: 300, s: 1.25, pose: [[0, 'phone']], face: [[0, 'smile'], [w[5], 'happy']], marks: [[w[5] + 0.2, 99, 'spark']], hop: [w[7]] }),
+    { m: bub(1000, 160, '¡Hola! Quiero\ninformarme 😊'.replace(' 😊', ''), { side: 'out', size: 38 }), t: w[5] - 0.1, d: 0.45, a: 'pop' },
+    { m: T(1000, 330, 26, 'Enviado', { a: 'end', c: MUTE, w: 500 }), t: w[5] + 0.6, d: 0.4, a: 'fade' },
+  ],
+];
+
+const DIV = { m: `<path d="M540 40 V600" stroke="${TINT}" stroke-width="4" stroke-linecap="round"/>`, t: 0, d: 0, a: 'fade' };
+const R8 = [
+  w => [
+    { m: `<path d="M540 40 V600" stroke="${TINT}" stroke-width="4" stroke-linecap="round"/>`, t: 0, d: 0.6 },
+    { m: pill(270, 60, 'Clínica A', { size: 32 }), t: w[0], d: 0.4, a: 'pop' },
+    { m: pill(810, 60, 'Clínica B', { size: 32, fill: 1 }), t: w[1], d: 0.4, a: 'pop' },
+    char({ x: 270, s: 1.05, acc: 'mirror', pose: [[0, 'stand']], face: [[0, 'neutral']] }),
+    char({ ...FOLIA, x: 810, s: 1.05, pose: [[0, 'stand'], [w[4], 'wave']], face: [[0, 'smile']], blink: 1.4 }),
+  ],
+  w => [
+    DIV,
+    char({ x: 270, s: 1.05, acc: 'mirror', pose: [[0, 'stand'], [w[5], 'sleep']], face: [[0, 'neutral'], [w[5], 'sleep']], marks: [[w[5] + 0.2, 99, 'zzz']] }),
+    { m: pill(270, 60, '2 días', { size: 32 }), t: w[6], d: 0.4, a: 'pop' },
+    char({ ...FOLIA, x: 810, s: 1.05, pose: [[0, 'stand'], [w[10], 'phone']], face: [[0, 'smile'], [w[10], 'happy']], marks: [[w[10], 99, 'speed']], hop: [w[10]] }),
+    { m: pill(810, 60, '2 min', { size: 32, fill: 1 }), t: w[11], d: 0.4, a: 'pop' },
+  ],
+  w => [
+    DIV,
+    char({ x: 270, s: 1.05, acc: 'mirror', pose: [[0, 'stand'], [w[5], 'card']], card: `<g transform="translate(118 -150)"><rect x="-60" y="-34" width="120" height="68" rx="16" fill="${INK}"/>${T(0, 0, 28, '3.000 €', { c: '#fff', w: 700 })}</g>`, face: [[0, 'neutral'], [w[5], 'smug']] }),
+    char({ ...FOLIA, x: 810, s: 1.05, pose: [[0, 'stand'], [w[9], 'think']], face: [[0, 'smile']] }),
+    { m: bub(995, 30, '¿Qué te gustaría\nconseguir?', { side: 'out', size: 30 }), t: w[9], d: 0.45, a: 'pop' },
+  ],
+  w => [
+    DIV,
+    char({ x: 270, s: 1.05, acc: 'mirror', pose: [[0, 'stand'], [w[3], 'shrug']], face: [[0, 'neutral'], [w[3], 'tired']], marks: [[w[4], 99, 'q']] }),
+    char({ ...FOLIA, x: 810, s: 1.05, pose: [[0, 'phone']], face: [[0, 'smile'], [w[14], 'happy']], hop: [w[14]] }),
+    { m: bub(995, 20, '¿Pudiste verlo?', { side: 'out', size: 30 }), t: w[10], d: 0.45, a: 'pop' },
+    { m: pill(810, 130, '✓ Cita: jueves', { size: 26, fill: 1 }), t: w[14], d: 0.45, a: 'pop' },
+  ],
+  w => [
+    DIV,
+    char({ x: 270, s: 1.0, acc: 'mirror', pose: [[0, 'stand']], face: [[0, 'sad']], marks: [[0.4, 99, 'sweat']] }),
+    char({ ...FOLIA, x: 810, s: 1.1, pose: [[0, 'cheer']], face: [[0, 'laugh']], marks: [[w[3], 99, 'spark']], hop: [w[3]] }),
+    { m: `<path d="M772 168 L788 136 L810 158 L832 136 L848 168 Z" fill="${BLUE}" stroke="${BLUE}" stroke-width="6" stroke-linejoin="round"/>`, t: w[3], d: 0.45, a: 'pop' },
+  ],
+  w => [
+    { m: pill(330, 120, '  A  ', { size: 44 }), t: w[6] - 0.15, d: 0.4, a: 'pop' },
+    { m: pill(750, 120, '  B  ', { size: 44, fill: 1 }), t: w[9] - 0.15, d: 0.4, a: 'pop' },
+    char({ ...FOLIA, x: 540, s: 1.2, pose: [[0, 'point']], face: [[0, 'smug']], marks: [[w[10], 99, 'q']] }),
+  ],
+];
+const DEFS = { 'reel-5-medianoche': R5, 'reel-6-tinder': R6, 'reel-7-cabeza': R7, 'reel-8-a-vs-b': R8 };
+
+// ================= engine =================
 let REEL, scenes = [];
 const NS = 'http://www.w3.org/2000/svg';
 window.setup = (name, meta) => {
@@ -161,35 +351,36 @@ window.setup = (name, meta) => {
   meta.scenes.forEach((sc, i) => {
     const div = document.createElement('div'); div.className = 'scene'; stage.appendChild(div);
     const title = document.createElement('div'); title.className = 'title'; div.appendChild(title);
-    sc.title.split(' ').forEach(w => { const s = document.createElement('span'); s.innerHTML = w.replace(/\*([^*]+)\*/g, '<b class="k" style="font-weight:800">$1</b>'); title.appendChild(s); });
+    sc.title.split(' ').forEach(w => { const s = document.createElement('span'); s.innerHTML = w.replace(/\*([^*]+)\*/g, '<b class="k" style="font-weight:700">$1</b>'); title.appendChild(s); });
     const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'art'); svg.setAttribute('viewBox', '0 0 1080 640'); div.appendChild(svg);
     const root = document.createElementNS(NS, 'g'); svg.appendChild(root);
-    const lw = sc.words.map(x => x.t - sc.start);
-    const els = DEFS[name][i](lw);
+    const els = DEFS[name][i](sc.words.map(x => x.t - sc.start));
     els.forEach(e => {
       const g = document.createElementNS(NS, 'g'); g.innerHTML = e.m; root.appendChild(g);
       e.el = g; g._s = e.s || 1; e.a = e.a || 'draw';
-      g.querySelectorAll('[data-b]').forEach(b => { const tx = b.querySelector('text'), r = b.querySelector('rect'), L = tx.getComputedTextLength(), w = L + 64, x0 = +b.dataset.x;
-        const left = b.dataset.b === 'l' ? x0 : x0 - w; r.setAttribute('x', left); r.setAttribute('width', w); tx.setAttribute('x', left + 32); });
+      g.querySelectorAll('[data-bub]').forEach(b => {
+        const tx = [...b.querySelectorAll('text')], W = Math.max(...tx.map(t => t.getComputedTextLength())) + 56, h = +b.dataset.h, y = +b.dataset.y, x0 = +b.dataset.x;
+        const left = b.dataset.bub === 'l' ? x0 : b.dataset.bub === 'c' ? x0 - W / 2 : x0 - W;
+        b.querySelector('path').setAttribute('d', bubPath(left, y, W, h, b.dataset.side === 'in' ? 'in' : 'out')); tx.forEach(t => t.setAttribute('x', left + 28));
+      });
+      g.querySelectorAll('[data-pill]').forEach(p => { const tx = p.querySelector('text'), s = +p.dataset.s, W = tx.getComputedTextLength() + s * 1.4, H = s * 1.9, r = p.querySelector('rect');
+        r.setAttribute('x', +p.dataset.x - W / 2); r.setAttribute('y', +p.dataset.y - H / 2); r.setAttribute('width', W); r.setAttribute('height', H); r.setAttribute('rx', H / 2); });
       if (e.x !== undefined) g.setAttribute('transform', `translate(${e.x} ${e.y}) scale(${g._s})`);
       if (e.a === 'draw') {
-        e.parts = [...g.querySelectorAll('path,rect,circle,ellipse,line')].filter(p => p.getAttribute('stroke') && p.getAttribute('stroke') !== 'none')
+        e.parts = [...g.querySelectorAll('path,rect,circle,ellipse,line')].filter(p => p.getAttribute('stroke') && p.getAttribute('stroke') !== 'none' && p.getAttribute('fill') !== INK)
           .map(p => { const L = p.getTotalLength(); p.style.strokeDasharray = `${L + 1} ${L + 1}`; return { p, L }; });
-        e.fills = [...g.querySelectorAll('path,rect,circle,ellipse')].filter(p => !p.getAttribute('stroke') || p.getAttribute('stroke') === 'none');
-        e.sfills = e.parts.map(x => x.p).filter(p => p.getAttribute('fill') && p.getAttribute('fill') !== 'none');
-        e.texts = [...g.querySelectorAll('text')]; e.total = e.parts.reduce((a, b) => a + b.L, 0);
+        e.fills = [...g.querySelectorAll('path,rect,circle,ellipse')].filter(p => !e.parts.some(x => x.p === p));
+        e.texts = [...g.querySelectorAll('text')]; e.total = e.parts.reduce((a, b) => a + b.L, 0) || 1;
       }
     });
     scenes.push({ sc, div, title: [...title.children], els, svg, root });
   });
-  // subtitle chunks: 3–6 words, cut at punctuation
   REEL.chunks = [];
   meta.scenes.forEach(sc => {
     let cur = [];
     sc.words.forEach((w, i) => {
       cur.push(w);
-      const punct = /[,.:?!»]$/.test(w.w);
-      if ((punct && cur.length >= 2) || cur.length >= 6 || i === sc.words.length - 1) { REEL.chunks.push({ words: cur, start: cur[0].t }); cur = []; }
+      if ((/[,.:?!»]$/.test(w.w) && cur.length >= 2) || cur.length >= 6 || i === sc.words.length - 1) { REEL.chunks.push({ words: cur, start: cur[0].t }); cur = []; }
     });
   });
   REEL.chunks.forEach((c, i) => { const nx = REEL.chunks[i + 1]; c.end = nx ? nx.start : REEL.total; });
@@ -200,52 +391,47 @@ function animEl(e, lt) {
   if (e.a === 'draw') {
     const k = io(p); let acc = 0; const done = k * e.total;
     e.parts.forEach(({ p: el, L }) => { const v = clamp(done - acc, 0, L); el.style.strokeDashoffset = L + 1 - v; el.style.opacity = v > 0 ? 1 : 0; acc += L; });
-    const fp = clamp((lt - e.t - e.d * 0.6) / 0.35); e.fills.forEach(f => f.style.opacity = io(fp)); e.sfills.forEach(f => f.style.fillOpacity = io(fp));
-    e.texts.forEach(t => t.style.opacity = io(clamp((lt - e.t - e.d * 0.7) / 0.3)));
+    const fp = io(clamp((lt - e.t - e.d * 0.6) / 0.35)); e.fills.forEach(f => f.style.opacity = fp); e.texts.forEach(t => t.style.opacity = fp);
   } else if (e.a === 'pop') {
     const sc = lt < e.t ? 0 : pop(p), op = lt < e.t ? 0 : io(clamp(p * 2.5));
     if (e.x !== undefined) g.setAttribute('transform', `translate(${e.x} ${e.y}) scale(${(g._s * sc).toFixed(4)})`);
     else { g.style.transformBox = 'fill-box'; g.style.transformOrigin = 'center'; g.style.transform = `scale(${sc.toFixed(4)})`; }
     g.style.opacity = op;
-  } else if (e.a === 'fade') { g.style.opacity = lt < e.t ? 0 : (e.d ? io(p) : 1); g.style.transform = e.d ? `translateY(${((1 - io(p)) * 14).toFixed(2)}px)` : ''; }
+  } else if (e.a === 'fade') { g.style.opacity = lt < e.t ? 0 : (e.d ? io(p) : 1); g.style.transform = e.d ? `translateY(${((1 - io(p)) * 12).toFixed(2)}px)` : ''; }
   if (e.u && lt >= e.t) e.u(g, lt);
 }
 
-const X = 0.15; // half cross-fade window
+const X = 0.15;
 window.render = (t, opt = {}) => {
   scenes.forEach((Sx, i) => {
-    const { start, dur } = Sx.sc, lt = t - start;
-    const first = i === 0, last = i === scenes.length - 1;
-    const vin = first ? 1 : io(clamp((lt + X) / (2 * X))), vout = last ? 1 : 1 - io(clamp((lt - dur + X) / (2 * X)));
-    const vis = Math.min(vin, vout);
+    const { start, dur } = Sx.sc, lt = t - start, last = i === scenes.length - 1;
+    const vin = i === 0 ? 1 : io(clamp((lt + X) / (2 * X))), vout = last ? 1 : 1 - io(clamp((lt - dur + X) / (2 * X))), vis = Math.min(vin, vout);
     if (opt.full ? i !== 0 : vis <= 0.001) { Sx.div.style.display = 'none'; return; }
     Sx.div.style.display = ''; Sx.div.style.opacity = opt.full ? 1 : vis;
     Sx.div.style.filter = vis < 0.999 && !opt.full ? `blur(${((1 - vis) * 10).toFixed(2)}px)` : 'none';
-    const p = clamp(lt / dur), z = i % 2 === 0 ? lerp(1.0, 1.04, io(p)) : lerp(1.04, 1.0, io(p));
+    const p = clamp(lt / dur), z = i % 2 === 0 ? lerp(1.0, 1.035, io(p)) : lerp(1.035, 1.0, io(p));
     Sx.svg.style.transform = `scale(${z.toFixed(4)})`;
-    Sx.title.forEach((w, k) => { const q = opt.full ? 1 : io(clamp((lt - 0.02 - k * 0.08) / 0.35)); w.style.opacity = q; w.style.filter = q < 1 ? `blur(${((1 - q) * 12).toFixed(2)}px)` : 'none'; w.style.transform = `translateY(${((1 - q) * 20).toFixed(2)}px)`; });
-    Sx.els.forEach(e => animEl(e, opt.full ? Math.max(lt, 60) : lt));
+    Sx.title.forEach((w, k) => { const q = opt.full ? 1 : io(clamp((lt - 0.02 - k * 0.07) / 0.4)); w.style.opacity = q; w.style.filter = q < 1 ? `blur(${((1 - q) * 12).toFixed(2)}px)` : 'none'; w.style.transform = `translateY(${((1 - q) * 18).toFixed(2)}px)`; });
+    Sx.els.forEach(e => animEl(e, opt.full ? Math.max(lt, opt.ft || lt) : lt));
   });
   const box = document.getElementById('sub');
   const c = opt.nosub ? null : REEL.chunks.find(c => t >= c.start - 0.05 && t < c.end);
   if (!c) { box.style.opacity = 0; return; }
-  const k = c.start + '';
-  if (box._k !== k) { box.innerHTML = c.words.map(w => `<span>${w.w}</span>`).join(''); box._k = k; }
+  if (box._k !== c.start) { box.innerHTML = c.words.map(w => `<span>${w.w}</span>`).join(''); box._k = c.start; }
   box.style.opacity = io(clamp((t - c.start + 0.05) / 0.15));
-  [...box.children].forEach((sp, i) => { const q = io(clamp((t - c.words[i].t + 0.04) / 0.12)); sp.style.color = `rgba(29,31,32,${(0.25 + 0.75 * q).toFixed(3)})`; });
+  [...box.children].forEach((sp, i) => { const q = io(clamp((t - c.words[i].t + 0.04) / 0.14)); sp.style.color = `rgba(29,31,32,${(0.22 + 0.78 * q).toFixed(3)})`; });
 };
 
-// layout check: returns list of violations at time t
 window.check = () => {
   const bad = [];
   scenes.forEach((Sx, i) => {
     if (Sx.div.style.display === 'none') return;
     const tr = Sx.title.map(s => s.getBoundingClientRect()).filter(r => r.width);
-    if (tr.length) { const top = Math.min(...tr.map(r => r.top)), bot = Math.max(...tr.map(r => r.bottom)); if (top < 295 || bot > 565) bad.push(`s${i + 1} title ${top | 0}-${bot | 0}`); }
-    const r = Sx.root.getBoundingClientRect(); if (r.top < 600 || r.bottom > 1280 || r.left < 40 || r.right > 1040) bad.push(`s${i + 1} art ${r.left | 0},${r.top | 0}-${r.right | 0},${r.bottom | 0}`);
+    if (tr.length) { const top = Math.min(...tr.map(r => r.top)), bot = Math.max(...tr.map(r => r.bottom)); if (top < 290 || bot > 570) bad.push(`s${i + 1}:title`); }
+    const r = Sx.root.getBoundingClientRect(); if (r.width && (r.top < 590 || r.bottom > 1290 || r.left < 30 || r.right > 1050)) bad.push(`s${i + 1}:art(${r.left | 0},${r.top | 0},${r.right | 0},${r.bottom | 0})`);
   });
   const sb = [...document.querySelectorAll('#sub span')].map(s => s.getBoundingClientRect());
-  if (sb.length) { const top = Math.min(...sb.map(r => r.top)), bot = Math.max(...sb.map(r => r.bottom)); if (top < 1320 || bot > 1515) bad.push(`sub ${top | 0}-${bot | 0}`); }
+  if (sb.length) { const top = Math.min(...sb.map(r => r.top)), bot = Math.max(...sb.map(r => r.bottom)); if (top < 1320 || bot > 1515) bad.push(`sub(${top | 0}-${bot | 0})`); }
   return bad;
 };
 </script>
