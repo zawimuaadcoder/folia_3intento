@@ -14,6 +14,6 @@
 
 ## Regenerar
 
-1. `audio/rXsY.mp3`: locución por escena (ElevenLabs, voz Helena, eleven_multilingual_v2).
+1. `audio/rXsY.mp3`: locución por escena (ElevenLabs, voz Helena, eleven_v4).
 2. `python3 src/timeline.py` → tiempos de escena, subtítulos, música generada (sin copyright, ~13 % del volumen de la voz) y mezcla de audio en `build/`.
 3. `node src/render.js <reel>` renderiza el MP4; `--cover` genera la portada.
