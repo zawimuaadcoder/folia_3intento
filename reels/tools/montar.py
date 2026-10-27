@@ -35,13 +35,19 @@ def phrases(words):
     return out
 
 
-def render_subs(words, duration, outdir):
+def render_subs(words, duration, outdir, shift=None):
+    """shift = {"start": s, "end": s, "to": [r, g, b]}: el texto cambia de blanco a ese color poco a poco."""
     font = ImageFont.truetype(FONT, FONT_SIZE)
     groups = phrases(words)
     space = font.getlength(" ")
     n = int(duration * FPS) + 1
     for f in range(n):
         t = f / FPS
+        col = (255, 255, 255)
+        if shift:
+            k = min(1.0, max(0.0, (t - shift["start"]) / (shift["end"] - shift["start"])))
+            k = k * k * (3 - 2 * k)
+            col = tuple(int(255 + (c - 255) * k) for c in shift["to"])
         img = Image.new("RGBA", (VW, VH), (0, 0, 0, 0))
         d = ImageDraw.Draw(img)
         for gi, g in enumerate(groups):
@@ -55,7 +61,7 @@ def render_subs(words, duration, outdir):
                     a = min(1.0, (t - w["start"]) / FADE)
                     for dx, dy in ((1, 2), (-1, 1), (2, 0), (0, 3)):
                         d.text((x + dx, VH / 2 + dy), txt, font=font, fill=(0, 0, 0, int(200 * a)), anchor="lm")
-                    d.text((x, VH / 2), txt, font=font, fill=(255, 255, 255, int(235 * a)), anchor="lm")
+                    d.text((x, VH / 2), txt, font=font, fill=(*col, int(235 * a)), anchor="lm")
                 x += font.getlength(txt) + space
         img.save(os.path.join(outdir, f"s_{f:05d}.png"))
 
@@ -92,7 +98,7 @@ def main(cfg_path):
     dur = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                                          "-of", "csv=p=0", p("audio")]).decode()) + 0.3
     tmp = tempfile.mkdtemp(dir=base)
-    render_subs(words, dur, tmp)
+    render_subs(words, dur, tmp, cfg.get("color_shift"))
 
     clips = cfg["clips"]
     look = (f"crop=iw:iw*9/16,scale={VW}:{VH},setsar=1,fps={FPS},"
