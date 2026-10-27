@@ -1,0 +1,4 @@
+{"audio":"voz4.mp3","words":"words.json","out":"reel_r3.mp4",
+ "source":"https://archive.org/download/mad-scientist-superman-fleischer/The%20Mad%20Scientist%20%7C%20Superman%20Fleischer%20Studios%20Cartoon%20%7C%2016mm.mp4",
+ "clips":[{"from":0,"src":328},{"from":3.0,"src":178},{"from":5.2,"src":268},{"from":6.9,"src":539},
+          {"from":9.2,"src":419},{"from":11.4,"src":449},{"from":13.8,"src":89},{"from":15.9,"src":119}]}
