@@ -28,7 +28,8 @@ def phrases(words):
     for i, w in enumerate(words):
         cur.append(w)
         nxt = words[i + 1] if i + 1 < len(words) else None
-        if w["text"][-1] in ".,?!…" or nxt is None or nxt["start"] - w["end"] > 0.45:
+        long_ = sum(len(x["text"]) + 1 for x in cur) > 38
+        if w["text"][-1] in ".,:?!…" or nxt is None or nxt["start"] - w["end"] > 0.45 or long_:
             out.append(cur)
             cur = []
     return out
@@ -49,13 +50,30 @@ def render_subs(words, duration, outdir):
                 continue
             x = TEXT_X
             for w in g:
-                txt = w["text"].rstrip(".,")
+                txt = w["text"].rstrip(".,:")
                 if t >= w["start"]:
                     a = min(1.0, (t - w["start"]) / FADE)
                     d.text((x + 1, VH / 2 + 2), txt, font=font, fill=(0, 0, 0, int(160 * a)), anchor="lm")
                     d.text((x, VH / 2), txt, font=font, fill=(255, 255, 255, int(235 * a)), anchor="lm")
                 x += font.getlength(txt) + space
         img.save(os.path.join(outdir, f"s_{f:05d}.png"))
+
+
+def make_music(dur, hits, out):
+    """Drone grave sintetizado + subida de tensión y golpe de sub-bajo en cada 'hit' (segundo)."""
+    drone = ("0.30*sin(2*PI*41.2*t)*(0.75+0.25*sin(2*PI*0.11*t))"
+             "+0.16*sin(2*PI*61.7*t+sin(2*PI*0.07*t))+0.08*sin(2*PI*82.4*t)*(0.6+0.4*sin(2*PI*0.05*t))")
+    for h in hits:
+        # riser de 2 s antes del golpe y boom descendente después
+        drone += f"+if(between(t,{h - 2},{h}),0.12*((t-{h - 2})/2)^2*sin(2*PI*(110+200*(t-{h - 2}))*t),0)"
+        drone += f"+if(gte(t,{h}),0.9*exp(-(t-{h})*1.6)*sin(2*PI*(30+50*exp(-(t-{h})*6))*(t-{h})),0)"
+    subprocess.check_call(["ffmpeg", "-v", "error", "-y",
+                           "-f", "lavfi", "-i", f"aevalsrc='{drone}':s=44100:d={dur:.3f}",
+                           "-f", "lavfi", "-i", f"anoisesrc=color=brown:amplitude=0.25:d={dur:.3f}",
+                           "-filter_complex", "[1:a]lowpass=f=180[n];[0:a][n]amix=inputs=2:normalize=0,"
+                           "lowpass=f=900,afade=t=in:d=1.5,afade=t=out:st=" + f"{dur - 1.5:.3f}:d=1.5,"
+                           "aformat=channel_layouts=stereo",
+                           out])
 
 
 def main(cfg_path):
@@ -72,7 +90,7 @@ def main(cfg_path):
 
     clips = cfg["clips"]
     look = (f"crop=iw:iw*9/16,scale={VW}:{VH},setsar=1,fps={FPS},"
-            "eq=brightness=-0.10:contrast=1.08:saturation=0.70:gamma=0.85,"
+            f"eq=brightness={-0.10 - cfg.get('dark', 0)}:contrast=1.08:saturation={0.70 - cfg.get('dark', 0)}:gamma={0.85 - cfg.get('dark', 0)},"
             "colorbalance=bs=0.06:bm=0.03,vignette=PI/4,noise=alls=7:allf=t")
     inputs, chains = [], []
     for i, c in enumerate(clips):
@@ -81,11 +99,20 @@ def main(cfg_path):
         chains.append(f"[{i}:v]{look},trim=duration={length:.3f},setpts=PTS-STARTPTS[v{i}]")
     k = len(clips)
     inputs += ["-framerate", str(FPS), "-i", os.path.join(tmp, "s_%05d.png"), "-i", p("audio")]
+    if "music" in cfg:
+        music = os.path.join(tmp, "music.wav")
+        make_music(dur, cfg["music"].get("hits", []), music)
+        inputs += ["-i", music]
     fc = ";".join(chains) + ";" + "".join(f"[v{i}]" for i in range(k)) + f"concat=n={k}:v=1:a=0[mv];"
     fc += f"[mv][{k}:v]overlay=0:0:format=auto[sv];"
     fc += f"color=black:s={W}x{H}:r={FPS}:d={dur:.3f}[bg];[bg][sv]overlay=0:{VY}:shortest=1,format=yuv420p[out]"
+    amap = f"{k + 1}:a"
+    if "music" in cfg:
+        fc += (f";[{k + 1}:a]aformat=channel_layouts=stereo,volume=1.0[vo];[{k + 2}:a]volume=0.32[mu];"
+               "[vo][mu]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11[aout]")
+        amap = "[aout]"
     subprocess.check_call(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", fc,
-                           "-map", "[out]", "-map", f"{k + 1}:a", "-c:v", "libx264", "-crf", "18",
+                           "-map", "[out]", "-map", amap, "-c:v", "libx264", "-crf", "23",
                            "-preset", "medium", "-c:a", "aac", "-b:a", "192k", "-t", f"{dur:.3f}",
                            "-movflags", "+faststart", p("out")])
     subprocess.call(["rm", "-rf", tmp])

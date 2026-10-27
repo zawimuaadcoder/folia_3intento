@@ -53,3 +53,16 @@ un solo vídeo lo cambia todo.
 Casi todos lo dejan
 un vídeo antes.
 CTA: Sígueme para no ser uno de ellos.
+
+## R3 v2 – "La mentira" + efecto Zeigarnik (versión larga, ~42 s) – MONTADO en reels/r3_v2
+Gancho: Te han mentido sobre cómo crecer en Instagram.
+No necesitas publicar cada día. No necesitas bailar. No necesitas enseñar tu cara.
+En 1927, una psicóloga se dio cuenta de algo muy raro:
+los camareros recordaban perfectamente los pedidos que todavía no habían cobrado…
+y en cuanto los cobraban, los olvidaban.
+Tu cerebro no soporta dejar algo a medias.
+[clic mental] Y eso es exactamente lo que acabo de hacer contigo.
+Te abrí una pregunta en el primer segundo… y todavía no te la he cerrado.
+Por eso sigues aquí.
+Los vídeos que explotan no te informan. Abren algo que tu cabeza necesita cerrar.
+CTA: Sígueme y te enseño cómo.
