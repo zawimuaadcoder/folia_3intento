@@ -430,7 +430,14 @@ async function createOrUpdateHubSpotContact(
       {
         method: 'POST',
         body: JSON.stringify({
-          properties,
+          // Al asignar propietario, HubSpot avisa del lead nuevo
+          // por email y en su app, sin gastar créditos de Make.
+          properties: {
+            ...properties,
+            hubspot_owner_id:
+              env.HUBSPOT_OWNER_ID ||
+              '99940934',
+          },
         }),
       },
       env
