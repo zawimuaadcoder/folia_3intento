@@ -1,15 +1,26 @@
 """Voice + lo-fi bed (ducked, -14 LUFS) and word timings for reel 13."""
 import json, subprocess, os, re, numpy as np
 ROOT = os.path.dirname(os.path.abspath(__file__)); B = os.path.join(ROOT, 'build'); os.makedirs(B, exist_ok=True)
-SR, LEAD, TAIL, NAME = 44100, 0.4, 1.5, 'reel-13-cuantos-acaban-en-cita'
+import sys
+SR, LEAD, TAIL = 44100, 0.4, 1.5
+PREFIX, NAME = (sys.argv[1], sys.argv[2]) if len(sys.argv) > 2 else ('r13', 'reel-13-cuantos-acaban-en-cita')
+PAUSE = float(sys.argv[3]) if len(sys.argv) > 3 else 0     # min silence after . ? : … (reference reel breathes ~0.55 s)
 src = open(os.path.join(ROOT, '..', 'reels2', 'src', 'build.py')).read()
 exec(src[src.index('def lofi'):src.index('meta = {}')])          # reuse the same music generator
 def load(p):
     raw = subprocess.run(['ffmpeg','-v','error','-i',p,'-ac','1','-ar',str(SR),'-f','f32le','-'],capture_output=True,check=True).stdout
     return np.frombuffer(raw, np.float32).copy()
-v = load(os.path.join(ROOT, 'audio', 'r13.mp3'))
-words = [dict(w=w['text'], t=round(w['start']+LEAD,3), e=round(w['end']+LEAD,3))
-         for w in json.load(open(os.path.join(ROOT, 'audio', 'r13-words.json')))['words'] if w['type']=='word' and w['end'] > 0.16]
+v = load(os.path.join(ROOT, 'audio', PREFIX+'.mp3'))
+raw_w = [w for w in json.load(open(os.path.join(ROOT, 'audio', PREFIX+'-words.json')))['words'] if w['type']=='word' and w['end'] > 0.16]
+# stretch sentence gaps: cut mid-gap and splice in silence so every sentence end breathes at least PAUSE
+segs, shift, cur, words = [], 0.0, 0, []
+for i, w in enumerate(raw_w):
+    words.append(dict(w=w['text'], t=round(w['start']+shift+LEAD,3), e=round(w['end']+shift+LEAD,3)))
+    if PAUSE and i < len(raw_w)-1 and re.search(r'[.?:…]$', w['text']):
+        gap = raw_w[i+1]['start'] - w['end']; add = max(0, PAUSE - gap)
+        if add:
+            cut = int((w['end'] + gap/2)*SR); segs += [v[cur:cut], np.zeros(int(add*SR))]; cur = cut; shift += add
+segs.append(v[cur:]); v = np.concatenate(segs)
 total = round(LEAD + len(v)/SR + TAIL, 3); N = int(total*SR)
 voice = np.zeros(N); a = int(LEAD*SR); voice[a:a+len(v)] = v[:N-a]
 mus = lofi(total, bpm=96, seed=4)
