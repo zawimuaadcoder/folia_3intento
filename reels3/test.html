@@ -1,90 +1,132 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
-html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#fff;font-family:'Inter Display','Inter',sans-serif;-webkit-font-smoothing:antialiased;color:#1D1F20}
-#grid{position:absolute;inset:0;background-image:linear-gradient(#1D1F2010 1.5px,transparent 1.5px),linear-gradient(90deg,#1D1F2010 1.5px,transparent 1.5px);background-size:135px 135px;background-position:-1px 60px}
-#cam{position:absolute;inset:0;top:170px;transform-origin:540px 960px}
-.a{position:absolute;left:0;top:0;will-change:transform,filter,opacity}
-.w{position:absolute;font-weight:700;letter-spacing:-0.04em;white-space:nowrap;transform-origin:center}
-.b{color:#3B87F2}
-.n{position:absolute;left:150px;width:780px;height:150px;border-radius:40px;background:#fff;box-shadow:0 2px 6px #1D1F2012,0 24px 60px #1D1F201a;display:flex;align-items:center;gap:28px;padding:0 34px;box-sizing:border-box}
-.ic{width:86px;height:86px;border-radius:24px;background:#1D1F20;flex:none;display:flex;align-items:center;justify-content:center}
-.ic i{width:40px;height:34px;border-radius:17px;background:#fff;display:block;position:relative}
-.ic i:after{content:'';position:absolute;left:4px;bottom:-7px;border:8px solid transparent;border-top-color:#fff;border-left-color:#fff;transform:rotate(10deg)}
-.n h4{margin:0;font-size:34px;font-weight:650;letter-spacing:-0.02em}
-.n p{margin:4px 0 0;font-size:30px;color:#1D1F2099;font-weight:500;letter-spacing:-0.01em}
-.n .t{position:absolute;right:36px;top:30px;font-size:24px;color:#1D1F2066;font-weight:500}
-.bar{position:absolute;height:112px;border-radius:30px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;box-sizing:border-box;font-size:40px;font-weight:650;letter-spacing:-0.02em;overflow:hidden;white-space:nowrap}
-#wipe{position:absolute;border-radius:50%;background:#1D1F20;width:10px;height:10px}
+:root{--ink:#1D1F20;--blue:#3B87F2;--line:#E7E7E5}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#fff;font-family:'Inter Display','Inter',sans-serif;-webkit-font-smoothing:antialiased;color:var(--ink)}
+.sc{position:absolute;inset:0;display:none;overflow:hidden}
+.dark{background:var(--ink);color:#fff}
+.cam{position:absolute;inset:0;transform-origin:540px 960px}
+.word{position:absolute;left:0;right:0;text-align:center;font-weight:650;letter-spacing:-0.045em;line-height:1;white-space:nowrap}
+.lbl{position:absolute;font-size:26px;font-weight:500;letter-spacing:-0.01em;white-space:nowrap}
+.dl{position:absolute;border:0 dashed #1D1F2030}
+.dark .dl{border-color:#ffffff38}
+svg{position:absolute;left:0;top:0;overflow:visible}
+/* UI */
+.win{position:absolute;left:90px;top:520px;width:900px;height:880px;border-radius:34px;background:#fff;box-shadow:0 0 0 1.5px #ECECEA,0 30px 80px -20px #1D1F2026;overflow:hidden;font-size:24px}
+.top{height:84px;border-bottom:1.5px solid #F0F0EE;display:flex;align-items:center;padding:0 32px;gap:14px}
+.dot{width:16px;height:16px;border-radius:50%;background:#E4E4E2}
+.top b{margin-left:18px;font-size:25px;font-weight:600;letter-spacing:-0.015em}
+.top span{margin-left:auto;font-size:21px;color:#1D1F2080;padding:8px 16px;border-radius:12px;background:#F5F5F4}
+.tabs{display:flex;gap:10px;padding:26px 32px 14px}
+.tab{font-size:21px;font-weight:550;padding:9px 18px;border-radius:999px;color:#1D1F2099;background:#F5F5F4}
+.tab.on{background:var(--ink);color:#fff}
+.row{position:absolute;left:24px;right:24px;height:118px;border-radius:22px;display:flex;align-items:center;gap:24px;padding:0 24px;box-sizing:border-box}
+.av{width:64px;height:64px;border-radius:50%;background:#F1F1EF;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:24px;color:#1D1F20aa;flex:none}
+.row h5{margin:0;font-size:25px;font-weight:600;letter-spacing:-0.015em}
+.row p{margin:6px 0 0;font-size:22px;color:#1D1F2088;letter-spacing:-0.005em}
+.st{margin-left:auto;font-size:19px;font-weight:600;padding:8px 14px;border-radius:10px;white-space:nowrap}
+.src{font-size:18px;color:#1D1F2070;font-weight:500;margin-left:8px}
 </style></head><body>
-<div id="grid"></div>
-<div id="cam">
-  <div class="w" id="t1" style="font-size:84px;top:470px">Tu clínica recibe</div>
-  <div class="w b" id="num" style="font-size:300px;top:560px">0</div>
-  <div class="w" id="t2" style="font-size:84px;top:880px">mensajes al mes.</div>
-  <div id="notes"></div>
-  <div class="w" id="q" style="font-size:96px;top:420px">¿Cuántas acaban</div>
-  <div class="w" id="q2" style="font-size:96px;top:530px">en <span class="b" id="cita">cita</span>?</div>
-  <div id="bars"></div>
-</div>
-<div id="wipe"></div>
-<div class="w" id="f1" style="font-size:96px;top:820px;color:#fff">Eso lo arreglamos.</div>
-<div class="w" id="f2" style="font-size:64px;top:960px;color:#fff;font-weight:600">folia<span class="b">.</span></div>
+<svg width="0" height="0"><filter id="brush" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter></svg>
+
+<!-- S1: Tu clínica (dark, grid) -->
+<div class="sc dark" id="s1"><div class="cam">
+  <div class="dl" style="left:0;right:0;top:820px;border-top-width:2px"></div><div class="dl" style="left:0;right:0;top:1100px;border-top-width:2px"></div>
+  <div class="dl" style="top:0;bottom:0;left:150px;border-left-width:2px"></div><div class="dl" style="top:0;bottom:0;left:930px;border-left-width:2px"></div>
+  <div class="word" id="w1" style="top:885px;font-size:150px">Tu clínica</div>
+  <div class="lbl" style="left:170px;top:770px;color:#fff9">capilar</div><div class="lbl" style="right:170px;top:1115px;color:#fff9">Madrid · Valencia · Sevilla</div>
+</div></div>
+
+<!-- S2: recibe mensajes (stacked echo) -->
+<div class="sc" id="s2"><div class="cam" id="c2">
+  <div id="stack"></div>
+  <div class="lbl" style="left:60px;top:470px">WhatsApp</div><div class="lbl" style="right:60px;top:520px">Instagram</div><div class="lbl" style="left:80px;top:1360px">Formulario web</div><div class="lbl" style="right:70px;top:1330px">Meta Ads</div><div class="lbl" style="left:470px;top:1420px">Llamadas</div>
+</div></div>
+
+<!-- S3: ¿Cuántos (inverted box) -->
+<div class="sc dark" id="s3"><div class="cam">
+  <div class="dl" style="left:0;right:0;top:860px;border-top-width:2px"></div><div class="dl" style="left:0;right:0;top:1060px;border-top-width:2px"></div>
+  <div class="dl" style="top:0;bottom:0;left:250px;border-left-width:2px"></div><div class="dl" style="top:0;bottom:0;left:830px;border-left-width:2px"></div>
+  <div id="box" style="position:absolute;background:#fff"></div>
+  <div class="word" id="w3" style="top:888px;font-size:140px;color:var(--ink)">¿cuántos</div>
+</div></div>
+
+<!-- S4: acaban en cita? (brush circle) -->
+<div class="sc" id="s4"><div class="cam">
+  <div class="dl" style="top:0;bottom:0;left:540px;border-left-width:2px"></div>
+  <div class="word" id="w4a" style="top:700px;font-size:110px">acaban en</div>
+  <div class="word" id="w4b" style="top:880px;font-size:230px">cita<span style="color:var(--blue)">?</span></div>
+  <svg width="1080" height="1920"><path id="circ" d="M300 905 C 340 830, 760 820, 830 900 C 900 990, 840 1110, 560 1125 C 330 1135, 210 1060, 245 960 C 262 915, 330 880, 410 870" fill="none" stroke="#3B87F2" stroke-width="16" stroke-linecap="round" filter="url(#brush)"/></svg>
+</div></div>
+
+<!-- S5: UI inbox -->
+<div class="sc" id="s5"><div class="cam" id="c5">
+  <div class="dl" style="left:0;right:0;top:470px;border-top-width:2px"></div><div class="dl" style="left:0;right:0;top:1450px;border-top-width:2px"></div>
+  <div class="dl" style="top:0;bottom:0;left:60px;border-left-width:2px"></div><div class="dl" style="top:0;bottom:0;left:1020px;border-left-width:2px"></div>
+  <div class="lbl" style="left:90px;top:420px;color:#1D1F2080">bandeja de entrada</div>
+  <div class="win" id="win">
+    <div class="top"><i class="dot"></i><i class="dot"></i><i class="dot"></i><b>Pacientes nuevos</b><span>Hoy</span></div>
+    <div class="tabs"><div class="tab on">Todos 30</div><div class="tab">Sin responder 18</div><div class="tab">Con cita 4</div></div>
+    <div id="rows"></div>
+  </div>
+  <svg width="1080" height="1920"><path id="arr" d="M150 1640 C 230 1560, 330 1500, 420 1395" fill="none" stroke="#3B87F2" stroke-width="13" stroke-linecap="round" filter="url(#brush)"/><path id="arrh" d="M372 1400 L 424 1388 L 430 1445" fill="none" stroke="#3B87F2" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#brush)"/></svg>
+  <div class="lbl" id="note" style="left:120px;top:1665px;font-size:34px;font-weight:600;letter-spacing:-0.02em">18 pacientes esperando respuesta</div>
+</div></div>
+
+<!-- S6: folia -->
+<div class="sc dark" id="s6"><div class="cam">
+  <div class="word" id="w6" style="top:880px;font-size:180px">folia<span style="color:var(--blue)">.</span></div>
+  <svg width="1080" height="1920"><path id="und" d="M330 1100 C 450 1080, 620 1085, 760 1070" fill="none" stroke="#3B87F2" stroke-width="15" stroke-linecap="round" filter="url(#brush)"/></svg>
+  <div class="lbl" id="l6" style="left:0;right:0;text-align:center;top:1150px;color:#fff9;font-size:30px">Marketing Health for Clinics</div>
+</div></div>
+
 <script>
 const $=id=>document.getElementById(id);
-const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
-const p=(t,a,d)=>cl((t-a)/d);
-const out=x=>1-Math.pow(1-x,4);                       // long ease-out
-const io=x=>x<.5?8*x**4:1-Math.pow(-2*x+2,4)/2;
-const spr=x=>x>=1?1:1-Math.exp(-7*x)*Math.cos(9*x);   // low-bounce spring
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), p=(t,a,d)=>cl((t-a)/d);
+const out=x=>1-Math.pow(1-x,3), out5=x=>1-Math.pow(1-x,5);
+const io=x=>x<.5?4*x**3:1-Math.pow(-2*x+2,3)/2;
 const lerp=(a,b,k)=>a+(b-a)*k;
-// center helper for absolutely positioned words
-function center(el){el.style.left=(540-el.offsetWidth/2)+'px'}
-// blur-rise entry / blur exit
-function blurIn(el,t,a,b,dy=40){const k=out(p(t,a,.45)),o=b==null?0:io(p(t,b,.35));
-  el.style.opacity=k*(1-o);el.style.filter=`blur(${(1-k)*18+o*18}px)`;
-  el.style.transform=`translateY(${(1-k)*dy-o*30}px) scale(${lerp(.94,1,k)+o*.04})`}
-// per-word build for t1
-function splitWords(el){const ws=el.textContent.split(' ');el.innerHTML=ws.map(w=>`<span style="display:inline-block">${w}</span>`).join(' ');return [...el.children]}
-const W1=splitWords($('t1')),W2=splitWords($('t2'));
-const NOTES=[['Laura','Hola, ¿precio del injerto?','ahora'],['Carlos','¿Hacéis FUE sin rapar?','1 min'],['Marta','Me interesa, ¿cuándo?','3 min'],['Javi','¿Me dolerá mucho?','5 min']];
-$('notes').innerHTML=NOTES.map(n=>`<div class="n a"><div class="ic"><i></i></div><div><h4>${n[0]}</h4><p>${n[1]}</p></div><span class="t">${n[2]}</span></div>`).join('');
-const BARS=[['Mensajes',30,780],['Respondidos',12,520],['Citas',4,300]];
-$('bars').innerHTML=BARS.map(b=>`<div class="bar a"><span>${b[0]}</span><span class="v">0</span></div>`).join('');
-['t1','t2','q','q2','f1','f2'].forEach(i=>center($(i)));
+// scene cuts (hard cuts, motion never stops inside a shot)
+const S=[['s1',0,.95],['s2',.95,2.05],['s3',2.05,2.75],['s4',2.75,3.95],['s5',3.95,6.05],['s6',6.05,7.01]];
+// echo stack
+const ROWS=5;$('stack').innerHTML=Array.from({length:ROWS},(_,i)=>`<div class="word" style="font-size:150px;top:${700+i*110}px">mensajes</div>`).join('')+`<div class="word" id="rec" style="font-size:64px;top:590px;font-weight:600">recibe</div>`;
+// inbox rows
+const R=[['L','Laura M.','¿Precio del injerto FUE?','WhatsApp','Sin responder · 3 h',1],['C','Carlos R.','¿Se nota mucho después?','Instagram','Sin responder · 5 h',0],['M','Marta G.','Quiero pedir valoración','Web','Cita · Jue 10:30',2],['J','Javi P.','¿Hacéis financiación?','Meta Ads','Sin responder · 1 d',0],['A','Ana S.','¿Cuánto dura la recuperación?','WhatsApp','Sin responder · 2 d',0]];
+$('rows').innerHTML=R.map((r,i)=>`<div class="row" style="top:${190+i*132}px"><div class="av">${r[0]}</div><div><h5>${r[1]}<span class="src">${r[3]}</span></h5><p>${r[2]}</p></div><div class="st" style="${r[5]==2?'background:#3B87F2;color:#fff':'background:#F5F5F4;color:#1D1F20aa'}">${r[4]}</div></div>`).join('');
+const dash=(el,k)=>{const L=el.getTotalLength();el.style.strokeDasharray=L;el.style.strokeDashoffset=L*(1-k)};
 
 window.render=function(t){
-  // camera: slow push + scene drift
-  const cz=1+0.04*out(p(t,0,7))+0.06*io(p(t,1.9,1.4))-0.06*io(p(t,3.6,.6));
-  $('cam').style.transform=`scale(${cz}) translateY(${-60*io(p(t,1.9,1.4))+60*io(p(t,3.6,.6))}px)`;
-  $('grid').style.opacity=.9*out(p(t,0,.8));
-  // S1 words stagger
-  W1.forEach((w,i)=>blurIn(w,t,.1+i*.12,1.75));
-  W2.forEach((w,i)=>blurIn(w,t,.85+i*.12,1.75));
-  const nm=$('num');blurIn(nm,t,.45,1.75,60);
-  nm.textContent=Math.round(30*out(p(t,.45,1.1)));center(nm);
-  nm.style.transform+=` scale(${spr(p(t,.45,.7))})`;
-  // S2 notifications stacking in (spring), pushed down as new ones arrive
-  [...$('notes').children].forEach((el,i)=>{
-    const a=1.95+i*.28,k=spr(p(t,a,.6)),e=out(p(t,a,.3));
-    const below=NOTES.length-1-i, pushed=[0,1,2,3].filter(j=>j>i&&t>1.95+j*.28).length;
-    const y=640+pushed*175*1+0;const ext=io(p(t,3.45+i*.04,.35));
-    el.style.top=(lerp(y-120,y,k))+'px';el.style.opacity=e*(1-ext);
-    el.style.filter=`blur(${(1-e)*14+ext*16}px)`;
-    el.style.transform=`scale(${lerp(.85,1,k)-ext*.06})`;
-  });
-  // S3 funnel
-  blurIn($('q'),t,3.65,null);blurIn($('q2'),t,3.77,null);
-  [...$('bars').children].forEach((el,i)=>{const b=BARS[i],a=4.05+i*.22,k=spr(p(t,a,.7)),e=out(p(t,a,.3));
-    const w=lerp(130,b[2],out(p(t,a,.6)));
-    el.style.width=w+'px';el.style.left=(540-w/2)+'px';el.style.top=(820+i*150)+'px';
-    el.style.opacity=e;el.style.transform=`scale(${lerp(.9,1,k)})`;
-    el.style.background=i==2?'#3B87F2':(i==1?'#1D1F20':'#F1F2F3');el.style.color=i==0?'#1D1F20':'#fff';
-    el.querySelector('.v').textContent=Math.round(b[1]*out(p(t,a+.1,.6)));
-    el.firstChild.style.opacity=out(p(t,a+.25,.3));});
-  // S4 circle wipe from "cita"
-  const k=io(p(t,5.35,.7)),r=k*2400,c=$('cita').getBoundingClientRect(),wp=$('wipe');
-  const cx=c.left+c.width/2,cy=c.top+c.height/2;
-  wp.style.width=wp.style.height=2*r+'px';wp.style.left=(cx-r)+'px';wp.style.top=(cy-r)+'px';
-  blurIn($('f1'),t,5.85,null);blurIn($('f2'),t,6.15,null,20);
+  for(const [id,a,b] of S){$(id).style.display=t>=a&&t<b?'block':'none'}
+  // S1: continuous push + word rise
+  {const l=t, k=out5(p(l,0,.45));$('s1').firstElementChild.style.transform=`scale(${1+.09*l})`;
+   $('w1').style.cssText+=`;opacity:${k};transform:translateY(${(1-k)*50}px);filter:blur(${(1-k)*12}px)`;}
+  // S2: "recibe" then stack fans out vertically from center
+  {const l=t-.95;$('c2').style.transform=`scale(${1.12-.08*l})`;
+   const kr=out5(p(l,0,.3));$('rec').style.cssText+=`;opacity:${kr};transform:translateY(${(1-kr)*30}px)`;
+   [...$('stack').children].slice(0,ROWS).forEach((el,i)=>{const d=i-2,k=out5(p(l,.08+Math.abs(d)*.09,.5));
+     el.style.transform=`translateY(${-d*110*(1-k)}px)`;el.style.opacity=d==0?1:(.18+.12*(2-Math.abs(d)))*k;
+     el.style.clipPath=d==0?'none':`inset(${d<0?0:55}% 0 ${d<0?45:0}% 0)`;el.style.color=d==0?'#1D1F20':'#1D1F20';});
+   [...$('s2').querySelectorAll('.lbl')].forEach((el,i)=>{const k=out(p(l,.35+i*.07,.3));el.style.opacity=k;el.style.transform=`translateY(${(1-k)*14}px)`});}
+  // S3: white box grows behind word, word scales continuously
+  {const l=t-2.05,k=out5(p(l,0,.35)),s=1+.12*l;$('w3').style.transform=`scale(${.85+.15*k+.1*l})`;
+   const w=lerp(240,620,k)*s,h=lerp(120,190,k)*s;Object.assign($('box').style,{left:540-w/2+'px',top:960-h/2+'px',width:w+'px',height:h+'px'});}
+  // S4: words + brush circle draw
+  {const l=t-2.75;$('s4').firstElementChild.style.transform=`scale(${1+.06*l}) rotate(${-.6+.8*l}deg)`;
+   const a=out5(p(l,0,.35)),b=out5(p(l,.15,.4));
+   $('w4a').style.cssText+=`;opacity:${a};transform:translateY(${(1-a)*30}px);filter:blur(${(1-a)*10}px)`;
+   $('w4b').style.cssText+=`;opacity:${b};transform:scale(${lerp(.8,1,b)});filter:blur(${(1-b)*16}px)`;
+   dash($('circ'),io(p(l,.45,.55)));}
+  // S5: UI flies in, rows stagger, camera pushes into the unanswered row, brush arrow
+  {const l=t-3.95,k=out5(p(l,0,.55));
+   const z=lerp(.82,1,k)+.06*io(p(l,.9,1.2));$('c5').style.transform=`scale(${z}) translateY(${(1-k)*160-40*io(p(l,.9,1.2))}px)`;
+   $('win').style.opacity=out(p(l,0,.25));
+   [...$('rows').children].forEach((el,i)=>{const e=out5(p(l,.18+i*.06,.45));el.style.opacity=e;el.style.transform=`translateY(${(1-e)*40}px)`;
+     const hl=i==0?io(p(l,1.05,.3)):0;el.style.background=`rgba(59,135,242,${.08*hl})`;el.style.boxShadow=`inset 0 0 0 ${2*hl}px rgba(59,135,242,${.5*hl})`});
+   dash($('arr'),io(p(l,1.15,.4)));dash($('arrh'),io(p(l,1.5,.15)));
+   const n=out5(p(l,1.3,.4));$('note').style.opacity=n;$('note').style.transform=`translateY(${(1-n)*20}px)`;
+   [...$('s5').querySelectorAll('.lbl')][0].style.opacity=out(p(l,.3,.3));}
+  // S6
+  {const l=t-6.05,k=out5(p(l,0,.4));$('s6').firstElementChild.style.transform=`scale(${1.04+.05*l})`;
+   $('w6').style.cssText+=`;opacity:${k};filter:blur(${(1-k)*14}px);transform:translateY(${(1-k)*30}px)`;
+   dash($('und'),io(p(l,.3,.35)));$('l6').style.opacity=out(p(l,.5,.3));}
 };
 window.render(0);
 </script></body></html>
