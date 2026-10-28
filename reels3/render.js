@@ -5,13 +5,13 @@ const { chromium } = require('playwright');
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs');
 const OUT = path.join(__dirname, 'out'); fs.mkdirSync(OUT, { recursive: true });
-const mode = process.argv[2] === 'reel' ? 'reel' : 'test';
-const meta = mode === 'reel' ? JSON.parse(fs.readFileSync(path.join(__dirname, 'build', 'timeline.json'))) : { total: 7, name: 'test' };
+const mode = process.argv[2] === 'reel' ? 'reel' : (process.argv[2] === 'test2' ? 'test2' : 'test');
+const meta = mode === 'reel' ? JSON.parse(fs.readFileSync(path.join(__dirname, 'build', 'timeline.json'))) : (mode === 'test2' ? { total: 10, name: 'test2' } : { total: 7, name: 'test' });
 const FPS = 60, SUB = 4, SHUTTER = 0.5, si = process.argv.indexOf('--stills');
 (async () => {
   const b = await chromium.launch();
   const page = await b.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
-  await page.goto('file://' + path.join(__dirname, mode === 'reel' ? 'reel.html' : 'test.html'));
+  await page.goto('file://' + path.join(__dirname, mode + '.html'));
   await page.evaluate(() => document.fonts.ready);
   if (mode === 'reel') await page.evaluate(m => setup(m), meta);
   if (si > 0) {

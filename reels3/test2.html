@@ -1,0 +1,115 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+:root{--ink:#1D1F20;--blue:#3B87F2;--bg2:#EFEFF0;--g:#8C8C91}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#fff;font-family:'Inter Display','Inter',sans-serif;-webkit-font-smoothing:antialiased;color:var(--ink);font-variant-numeric:tabular-nums}
+.sc{position:absolute;inset:0;display:none;overflow:hidden}
+.cam{position:absolute;inset:0;transform-origin:540px 900px}
+.word{position:absolute;left:0;right:0;text-align:center;font-weight:650;letter-spacing:-0.045em;line-height:1.05;white-space:nowrap}
+.dl{position:absolute;border:0 dashed #1D1F2026}
+.hl{left:0;right:0;border-top-width:2px}.vl{top:0;bottom:0;border-left-width:2px}
+.on-blue .dl,.on-dark .dl{border-color:#ffffff3a}
+#sub{position:absolute;left:120px;right:120px;top:1424px;text-align:center;font-size:44px;font-weight:500;letter-spacing:-0.02em;line-height:1.25;color:var(--ink)}
+/* stacked focus list (ref: Identity verification / Max Amount check) */
+.row{position:absolute;left:50%;height:124px;border-radius:30px;display:flex;align-items:center;gap:28px;padding:0 40px;box-sizing:border-box;white-space:nowrap;font-size:42px;font-weight:500;letter-spacing:-0.02em;transform-origin:50% 50%}
+.tile{width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;flex:none}
+/* calendar card (ref: Sep 2024) */
+.cal{position:absolute;left:160px;top:470px;width:760px;border-radius:48px;background:#fff;box-shadow:0 0 0 1.5px #1D1F200d,0 2px 4px #1D1F2008,0 40px 90px -30px #1D1F2033;overflow:hidden}
+.ch{background:#F6F6F7;padding:44px 48px 36px;border-bottom:1.5px solid #EDEDEE}
+.ch h3{margin:0 0 30px;font-size:46px;font-weight:600;letter-spacing:-0.03em}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;row-gap:14px}
+.wk i{font-style:normal;font-size:26px;color:var(--g);font-weight:500}
+.wk b{font-size:38px;font-weight:500;height:76px;line-height:76px;position:relative}
+.wk b:after{content:'';position:absolute;left:50%;bottom:-6px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:#C4C4C8;opacity:var(--d,0)}
+#sel{position:absolute;width:76px;height:76px;border-radius:50%;background:#fff;box-shadow:0 2px 8px #1D1F201f,0 0 0 1px #1D1F200d}
+.ev{padding:30px 48px;border-bottom:1.5px solid #EFEFF0;position:relative}
+.ev h4{margin:0;font-size:34px;font-weight:600;letter-spacing:-0.02em}.ev p{margin:8px 0 0;font-size:30px;color:var(--g);font-weight:500}
+.ev .tag{position:absolute;right:48px;top:36px;font-size:24px;font-weight:600;padding:8px 18px;border-radius:999px;background:#EAF2FE;color:var(--blue)}
+.cur{position:absolute;width:44px;height:56px}
+</style></head><body>
+
+<!-- 1 kinetic: Tu agenda / medio vacía (no subtitles) -->
+<div class="sc" id="s1"><div class="cam">
+  <div class="dl hl" style="top:700px"></div><div class="dl hl" style="top:1140px"></div><div class="dl vl" style="left:100px"></div><div class="dl vl" style="left:980px"></div>
+  <div class="word" id="k1" style="top:740px;font-size:150px">Tu agenda</div>
+  <div class="word" id="k2" style="top:930px;font-size:150px;color:var(--blue)">medio vacía</div>
+  <div id="blob" style="position:absolute;border-radius:50%;background:var(--blue)"></div>
+</div></div>
+<!-- 2 blue bg kinetic -->
+<div class="sc on-blue" id="s2" style="background:var(--blue);color:#fff"><div class="cam">
+  <div class="dl hl" style="top:760px"></div><div class="dl hl" style="top:1060px"></div><div class="dl vl" style="left:140px"></div><div class="dl vl" style="left:940px"></div>
+  <div class="word" id="k3" style="top:810px;font-size:170px">¿por qué?</div>
+</div></div>
+<!-- 3 focus list (elements -> subtitles on) -->
+<div class="sc" id="s3" style="background:var(--bg2)"><div class="cam">
+  <div class="dl hl" style="top:430px"></div><div class="dl hl" style="top:1330px"></div><div class="dl vl" style="left:110px"></div><div class="dl vl" style="left:970px"></div>
+  <div id="list"></div>
+</div></div>
+<!-- 4 calendar -->
+<div class="sc" id="s4" style="background:var(--bg2)"><div class="cam">
+  <div class="dl hl" style="top:430px"></div><div class="dl hl" style="top:1330px"></div><div class="dl vl" style="left:120px"></div><div class="dl vl" style="left:960px"></div>
+  <div class="cal" id="cal">
+    <div class="ch"><h3>Octubre 2026</h3><div class="wk" id="wk"></div></div>
+    <div id="evs"></div>
+  </div>
+  <svg class="cur" id="cur" viewBox="0 0 22 28"><path d="M2 2v20l5.5-5 3.5 8 3.5-1.6-3.5-7.8H18z" fill="#1D1F20" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+</div></div>
+<!-- 5 dark kinetic end (no subtitles) -->
+<div class="sc on-dark" id="s5" style="background:var(--ink);color:#fff"><div class="cam">
+  <div class="dl hl" style="top:740px"></div><div class="dl hl" style="top:1080px"></div><div class="dl vl" style="left:140px"></div><div class="dl vl" style="left:940px"></div>
+  <div class="word" id="k4" style="top:790px;font-size:96px;font-weight:600;color:#ffffffa6">Más pacientes no.</div>
+  <div class="word" id="k5" style="top:910px;font-size:140px">Más <span style="color:var(--blue)">citas.</span></div>
+</div></div>
+<div id="sub"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),p=(t,a,d)=>cl((t-a)/d);
+const out=x=>1-Math.pow(1-x,3),out5=x=>1-Math.pow(1-x,5),io=x=>x<.5?4*x**3:1-Math.pow(-2*x+2,3)/2;
+const spr=x=>x>=1?1:1-Math.exp(-6.5*x)*Math.cos(8*x),lerp=(a,b,k)=>a+(b-a)*k;
+function rise(el,t,a,o={}){const k=out5(p(t,a,o.d??.4));el.style.opacity=k;el.style.filter=k<1?`blur(${(1-k)*(o.bl??14)}px)`:'none';
+  el.style.transform=`translateY(${(1-k)*(o.dy??36)}px) scale(${lerp(o.s??.96,1,k)})`;return k}
+const SC=[['s1',0,2.2],['s2',2.2,3.3],['s3',3.3,6.3],['s4',6.3,8.7],['s5',8.7,10.1]];
+// icons (single stroke family, 24 grid)
+const IC={ad:'<path d="M4 10v4h3l6 4V6L7 10z M16.5 9.5a4 4 0 0 1 0 5" />',msg:'<path d="M5 5h14v10H9l-4 4z"/>',bolt:'<path d="M13 3L5 13h6l-1 8 8-10h-6z"/>',loop:'<path d="M5 12a7 7 0 0 1 12-5l2 2M19 12a7 7 0 0 1-12 5l-2-2M19 5v4h-4M5 19v-4h4"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-5 8-5s6.5 1 8 5"/>'};
+const svg=k=>`<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#3B87F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg>`;
+const L=[['ad','Anuncios activos'],['msg','Mensajes recibidos'],['bolt','Respuesta en 5 min'],['loop','Seguimiento'],['cal','Cita confirmada'],['user','Paciente en consulta']];
+$('list').innerHTML=L.map(r=>`<div class="row"><div class="tile" style="background:#EAF2FE">${svg(r[0])}</div><span>${r[1]}</span></div>`).join('');
+const D=[['L',12],['M',13],['X',14],['J',15],['V',16],['S',17],['D',18]];
+$('wk').innerHTML=D.map(d=>`<i>${d[0]}</i>`).join('')+D.map(d=>`<b>${d[1]}</b>`).join('');
+const E=[['Laura M.','Valoración capilar · 10:00 – 10:30'],['Carlos R.','Primera consulta · 11:15 – 11:45'],['Marta G.','Valoración capilar · 12:30 – 13:00']];
+$('evs').innerHTML=E.map(e=>`<div class="ev"><h4>${e[0]}</h4><p>${e[1]}</p><span class="tag">Confirmada</span></div>`).join('');
+$('wk').insertAdjacentHTML('beforeend','<div id="sel"></div>');
+function sub(txt,t,a,b){const el=$('sub');el.textContent=txt;const k=out5(p(t,a,.3))*(1-p(t,b-.2,.2));el.style.opacity=k;el.style.transform=`translateY(${(1-k)*10}px)`}
+
+window.render=function(t){
+  let cur;for(const s of SC){const on=t>=s[1]&&t<s[2];$(s[0]).style.display=on?'block':'none';if(on)cur=s}
+  const [id,a,b]=cur,l=t-a;$(id).querySelector('.cam').style.transform=`scale(${1+.03*l})`;$('sub').style.opacity=0;
+  if(id=='s1'){rise($('k1'),t,.05,{d:.45,dy:50});rise($('k2'),t,.6,{d:.45,dy:50});
+    // blue blob grows from the accent word, becomes next background
+    const k=io(p(t,1.6,.6)),r=k*1300;Object.assign($('blob').style,{width:2*r+'px',height:2*r+'px',left:540-r+'px',top:1010-r+'px'})}
+  if(id=='s2'){rise($('k3'),t,a+.05,{d:.4,dy:0,s:.8,bl:18})}
+  if(id=='s3'){// focus moves down the list; focused row pops forward, neighbours recede and blur
+    const f=lerp(1,2,io(p(t,a+.9,.45)))+io(p(t,a+2.0,.45))*2;
+    [...$('list').children].forEach((el,i)=>{const d=i-f,ad=Math.abs(d),e=out5(p(t,a+.05+i*.05,.5));
+      const foc=Math.max(0,1-ad);el.style.top=(880+d*150-62)+'px';
+      el.style.width=lerp(640,740,foc)+'px';el.style.marginLeft=-lerp(640,740,foc)/2+'px';
+      el.style.background=`rgba(255,255,255,${lerp(.55,1,foc)})`;
+      el.style.boxShadow=`0 0 0 1.5px rgba(29,31,32,${.04+.03*foc}),0 ${30*foc}px ${70*foc}px -20px rgba(29,31,32,${.28*foc})`;
+      el.style.opacity=e*cl(1-(ad-1.2)*.55,0,1)*lerp(.55,1,cl(1-ad+.4));el.style.filter=`blur(${cl(ad-1.4,0,2)*3+(1-e)*10}px)`;
+      el.style.transform=`scale(${lerp(.92,1.04,foc)}) translateY(${(1-e)*40}px)`;el.style.zIndex=Math.round(10-ad);
+      el.querySelector('span').style.fontWeight=foc>.5?600:500});
+    sub('Lo que pasa después de que te escriben',t,a+.2,b)}
+  if(id=='s4'){const c=spr(p(t,a,.7));$('cal').style.opacity=out(p(t,a,.25));$('cal').style.transform=`translateY(${(1-c)*140}px) scale(${lerp(.94,1,c)})`;
+    // selected day slides to Thursday, dots appear
+    const bs=[...$('wk').querySelectorAll('b')],x0=bs[0].offsetLeft,x3=bs[3].offsetLeft,y0=bs[0].offsetTop,k=io(p(t,a+.7,.4));
+    Object.assign($('sel').style,{left:lerp(x0,x3,k)+(bs[0].offsetWidth-76)/2+'px',top:y0+'px'});
+    bs.forEach((el,i)=>{el.style.setProperty('--d',[1,3,4].includes(i)?out(p(t,a+.4+i*.05,.3)):0);el.style.zIndex=1;el.style.fontWeight=i==3&&k>.5?650:500});
+    [...$('evs').children].forEach((el,i)=>{const e=out5(p(t,a+1.15+i*.12,.45));el.style.opacity=e;el.style.transform=`translateY(${(1-e)*24}px)`;
+      el.querySelector('.tag').style.transform=`scale(${spr(p(t,a+1.5+i*.12,.5))})`});
+    // cursor glides in and taps Thursday
+    const cx=$('cal').offsetLeft+48+x3+60,cy=$('cal').offsetTop+44+y0+120,m=io(p(t,a+.25,.45)),tap=Math.sin(Math.PI*p(t,a+.7,.18));
+    Object.assign($('cur').style,{left:lerp(940,cx,m)+'px',top:lerp(1300,cy,m)+'px',opacity:out(p(t,a+.2,.15))*(1-p(t,a+1.3,.25)),transform:`scale(${1-.12*tap})`});
+    sub('Citas que sí llegan a tu agenda',t,a+.3,b)}
+  if(id=='s5'){rise($('k4'),t,a+.05,{d:.4});rise($('k5'),t,a+.55,{d:.45,dy:50})}
+};
+window.render(0);
+</script></body></html>
