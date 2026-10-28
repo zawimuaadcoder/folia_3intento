@@ -1,0 +1,90 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#fff;font-family:'Inter Display','Inter',sans-serif;-webkit-font-smoothing:antialiased;color:#1D1F20}
+#grid{position:absolute;inset:0;background-image:linear-gradient(#1D1F2010 1.5px,transparent 1.5px),linear-gradient(90deg,#1D1F2010 1.5px,transparent 1.5px);background-size:135px 135px;background-position:-1px 60px}
+#cam{position:absolute;inset:0;top:170px;transform-origin:540px 960px}
+.a{position:absolute;left:0;top:0;will-change:transform,filter,opacity}
+.w{position:absolute;font-weight:700;letter-spacing:-0.04em;white-space:nowrap;transform-origin:center}
+.b{color:#3B87F2}
+.n{position:absolute;left:150px;width:780px;height:150px;border-radius:40px;background:#fff;box-shadow:0 2px 6px #1D1F2012,0 24px 60px #1D1F201a;display:flex;align-items:center;gap:28px;padding:0 34px;box-sizing:border-box}
+.ic{width:86px;height:86px;border-radius:24px;background:#1D1F20;flex:none;display:flex;align-items:center;justify-content:center}
+.ic i{width:40px;height:34px;border-radius:17px;background:#fff;display:block;position:relative}
+.ic i:after{content:'';position:absolute;left:4px;bottom:-7px;border:8px solid transparent;border-top-color:#fff;border-left-color:#fff;transform:rotate(10deg)}
+.n h4{margin:0;font-size:34px;font-weight:650;letter-spacing:-0.02em}
+.n p{margin:4px 0 0;font-size:30px;color:#1D1F2099;font-weight:500;letter-spacing:-0.01em}
+.n .t{position:absolute;right:36px;top:30px;font-size:24px;color:#1D1F2066;font-weight:500}
+.bar{position:absolute;height:112px;border-radius:30px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;box-sizing:border-box;font-size:40px;font-weight:650;letter-spacing:-0.02em;overflow:hidden;white-space:nowrap}
+#wipe{position:absolute;border-radius:50%;background:#1D1F20;width:10px;height:10px}
+</style></head><body>
+<div id="grid"></div>
+<div id="cam">
+  <div class="w" id="t1" style="font-size:84px;top:470px">Tu clínica recibe</div>
+  <div class="w b" id="num" style="font-size:300px;top:560px">0</div>
+  <div class="w" id="t2" style="font-size:84px;top:880px">mensajes al mes.</div>
+  <div id="notes"></div>
+  <div class="w" id="q" style="font-size:96px;top:420px">¿Cuántas acaban</div>
+  <div class="w" id="q2" style="font-size:96px;top:530px">en <span class="b" id="cita">cita</span>?</div>
+  <div id="bars"></div>
+</div>
+<div id="wipe"></div>
+<div class="w" id="f1" style="font-size:96px;top:820px;color:#fff">Eso lo arreglamos.</div>
+<div class="w" id="f2" style="font-size:64px;top:960px;color:#fff;font-weight:600">folia<span class="b">.</span></div>
+<script>
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const p=(t,a,d)=>cl((t-a)/d);
+const out=x=>1-Math.pow(1-x,4);                       // long ease-out
+const io=x=>x<.5?8*x**4:1-Math.pow(-2*x+2,4)/2;
+const spr=x=>x>=1?1:1-Math.exp(-7*x)*Math.cos(9*x);   // low-bounce spring
+const lerp=(a,b,k)=>a+(b-a)*k;
+// center helper for absolutely positioned words
+function center(el){el.style.left=(540-el.offsetWidth/2)+'px'}
+// blur-rise entry / blur exit
+function blurIn(el,t,a,b,dy=40){const k=out(p(t,a,.45)),o=b==null?0:io(p(t,b,.35));
+  el.style.opacity=k*(1-o);el.style.filter=`blur(${(1-k)*18+o*18}px)`;
+  el.style.transform=`translateY(${(1-k)*dy-o*30}px) scale(${lerp(.94,1,k)+o*.04})`}
+// per-word build for t1
+function splitWords(el){const ws=el.textContent.split(' ');el.innerHTML=ws.map(w=>`<span style="display:inline-block">${w}</span>`).join(' ');return [...el.children]}
+const W1=splitWords($('t1')),W2=splitWords($('t2'));
+const NOTES=[['Laura','Hola, ¿precio del injerto?','ahora'],['Carlos','¿Hacéis FUE sin rapar?','1 min'],['Marta','Me interesa, ¿cuándo?','3 min'],['Javi','¿Me dolerá mucho?','5 min']];
+$('notes').innerHTML=NOTES.map(n=>`<div class="n a"><div class="ic"><i></i></div><div><h4>${n[0]}</h4><p>${n[1]}</p></div><span class="t">${n[2]}</span></div>`).join('');
+const BARS=[['Mensajes',30,780],['Respondidos',12,520],['Citas',4,300]];
+$('bars').innerHTML=BARS.map(b=>`<div class="bar a"><span>${b[0]}</span><span class="v">0</span></div>`).join('');
+['t1','t2','q','q2','f1','f2'].forEach(i=>center($(i)));
+
+window.render=function(t){
+  // camera: slow push + scene drift
+  const cz=1+0.04*out(p(t,0,7))+0.06*io(p(t,1.9,1.4))-0.06*io(p(t,3.6,.6));
+  $('cam').style.transform=`scale(${cz}) translateY(${-60*io(p(t,1.9,1.4))+60*io(p(t,3.6,.6))}px)`;
+  $('grid').style.opacity=.9*out(p(t,0,.8));
+  // S1 words stagger
+  W1.forEach((w,i)=>blurIn(w,t,.1+i*.12,1.75));
+  W2.forEach((w,i)=>blurIn(w,t,.85+i*.12,1.75));
+  const nm=$('num');blurIn(nm,t,.45,1.75,60);
+  nm.textContent=Math.round(30*out(p(t,.45,1.1)));center(nm);
+  nm.style.transform+=` scale(${spr(p(t,.45,.7))})`;
+  // S2 notifications stacking in (spring), pushed down as new ones arrive
+  [...$('notes').children].forEach((el,i)=>{
+    const a=1.95+i*.28,k=spr(p(t,a,.6)),e=out(p(t,a,.3));
+    const below=NOTES.length-1-i, pushed=[0,1,2,3].filter(j=>j>i&&t>1.95+j*.28).length;
+    const y=640+pushed*175*1+0;const ext=io(p(t,3.45+i*.04,.35));
+    el.style.top=(lerp(y-120,y,k))+'px';el.style.opacity=e*(1-ext);
+    el.style.filter=`blur(${(1-e)*14+ext*16}px)`;
+    el.style.transform=`scale(${lerp(.85,1,k)-ext*.06})`;
+  });
+  // S3 funnel
+  blurIn($('q'),t,3.65,null);blurIn($('q2'),t,3.77,null);
+  [...$('bars').children].forEach((el,i)=>{const b=BARS[i],a=4.05+i*.22,k=spr(p(t,a,.7)),e=out(p(t,a,.3));
+    const w=lerp(130,b[2],out(p(t,a,.6)));
+    el.style.width=w+'px';el.style.left=(540-w/2)+'px';el.style.top=(820+i*150)+'px';
+    el.style.opacity=e;el.style.transform=`scale(${lerp(.9,1,k)})`;
+    el.style.background=i==2?'#3B87F2':(i==1?'#1D1F20':'#F1F2F3');el.style.color=i==0?'#1D1F20':'#fff';
+    el.querySelector('.v').textContent=Math.round(b[1]*out(p(t,a+.1,.6)));
+    el.firstChild.style.opacity=out(p(t,a+.25,.3));});
+  // S4 circle wipe from "cita"
+  const k=io(p(t,5.35,.7)),r=k*2400,c=$('cita').getBoundingClientRect(),wp=$('wipe');
+  const cx=c.left+c.width/2,cy=c.top+c.height/2;
+  wp.style.width=wp.style.height=2*r+'px';wp.style.left=(cx-r)+'px';wp.style.top=(cy-r)+'px';
+  blurIn($('f1'),t,5.85,null);blurIn($('f2'),t,6.15,null,20);
+};
+window.render(0);
+</script></body></html>
