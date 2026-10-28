@@ -1,0 +1,237 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* tokens: 8px grid · radii 12/16/24/32/pill · one accent · soft layered shadows */
+:root{--ink:#1D1F20;--blue:#3B87F2;--g1:#F5F5F7;--g2:#8A8A8E;--sh:0 1px 2px #1D1F200d,0 12px 40px -8px #1D1F2024}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#fff;font-family:'Inter Display','Inter',sans-serif;-webkit-font-smoothing:antialiased;color:var(--ink);font-variant-numeric:tabular-nums}
+.sc{position:absolute;inset:0;display:none;overflow:hidden;background:#fff}
+.dark{background:var(--ink);color:#fff}
+.cam{position:absolute;inset:0;transform-origin:540px 860px}
+.word{position:absolute;left:0;right:0;text-align:center;font-weight:650;letter-spacing:-0.045em;line-height:1.05;white-space:nowrap}
+.lbl{position:absolute;font-size:28px;font-weight:500;letter-spacing:-0.01em;white-space:nowrap;color:#1D1F2099}
+.dark .lbl{color:#ffffff8c}
+.dl{position:absolute;border:0 dashed #1D1F202e}
+.dark .dl{border-color:#ffffff30}
+.hl{left:0;right:0;border-top-width:2px}.vl{top:0;bottom:0;border-left-width:2px}
+svg.ov{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.b{color:var(--blue)}
+/* subtitles */
+#sub{position:absolute;left:96px;right:96px;top:1424px;text-align:center;font-size:44px;font-weight:500;letter-spacing:-0.02em;line-height:1.25;z-index:9}
+#sub span{display:inline-block;margin:0 6px;transition:none}
+/* iPhone */
+.phone{position:absolute;left:296px;top:300px;width:488px;height:1000px;border-radius:84px;background:#1D1F20;box-shadow:0 0 0 2px #2c2e30,0 40px 100px -30px #1D1F2059}
+.scr{position:absolute;inset:11px;border-radius:73px;overflow:hidden;background:#fff}
+.ios{position:absolute;left:0;top:0;width:393px;height:826px;transform:scale(1.1858);transform-origin:0 0;font-family:'Inter',sans-serif;letter-spacing:-0.02em;color:#000}
+.isl{position:absolute;left:50%;top:22px;width:148px;height:44px;margin-left:-74px;border-radius:22px;background:#000;z-index:5}
+.ios svg{position:static}
+.sb{height:54px;position:relative}.sb b{position:absolute;left:44px;top:19px;font-size:16px;font-weight:600}
+.sig{position:absolute;right:56px;top:23px;display:flex;gap:2px;align-items:flex-end}.sig s{display:block;width:3px;background:#000;border-radius:1px}
+.sig s:nth-child(1){height:4px}.sig s:nth-child(2){height:6px}.sig s:nth-child(3){height:8px}.sig s:nth-child(4){height:10px}
+.bat{position:absolute;right:26px;top:22px;width:23px;height:11px;border-radius:3.5px;background:#000}
+.nav{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:var(--blue);font-size:17px}
+.lt{font-size:34px;font-weight:700;letter-spacing:-0.025em;padding:0 16px 8px}
+.srch{margin:0 16px 8px;height:36px;border-radius:10px;background:rgba(118,118,128,.12);display:flex;align-items:center;gap:6px;padding:0 8px;color:var(--g2);font-size:17px}
+.m{position:relative;height:76px}
+.m .ud{position:absolute;left:6px;top:31px;width:10px;height:10px;border-radius:50%;background:var(--blue)}
+.av{border-radius:50%;background:linear-gradient(#A6ABB8,#858A95);color:#fff;font-weight:500;display:flex;align-items:center;justify-content:center;letter-spacing:0}
+.m .av{position:absolute;left:22px;top:12px;width:44px;height:44px;font-size:18px}
+.m h6{position:absolute;left:78px;top:10px;margin:0;font-size:17px;font-weight:600}
+.m .tm{position:absolute;right:16px;top:12px;font-size:15px;color:var(--g2)}
+.m p{position:absolute;left:78px;right:20px;top:34px;margin:0;font-size:15px;line-height:20px;color:var(--g2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m:after{content:'';position:absolute;left:78px;right:0;bottom:0;height:.5px;background:#C6C6C8}
+.ban{position:absolute;left:8px;right:8px;top:50px;height:70px;border-radius:24px;background:rgba(246,246,248,.97);box-shadow:0 8px 28px rgba(0,0,0,.13);display:flex;align-items:center;gap:10px;padding:0 14px;transform-origin:50% 0}
+.bi{width:38px;height:38px;border-radius:9px;background:var(--ink);display:flex;align-items:center;justify-content:center;flex:none}
+.bt{flex:1;position:relative;min-width:0}.bt b{font-size:15px;font-weight:600}.bt span{position:absolute;right:0;top:1px;font-size:13px;color:var(--g2)}
+.bt p{margin:1px 0 0;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* chat */
+.ch{height:96px;display:flex;flex-direction:column;align-items:center;gap:4px;border-bottom:.5px solid #D1D1D6;background:#F9F9F9;margin-top:-54px;padding-top:58px}
+.ch .av{width:50px;height:50px;font-size:20px}.ch small{font-size:12px}
+.bub{position:absolute;max-width:260px;padding:9px 14px;border-radius:19px;font-size:17px;line-height:22px}
+.in{left:16px;background:#E9E9EB;color:#000}.outb{right:16px;background:var(--blue);color:#fff}
+.meta{position:absolute;font-size:12px;color:var(--g2)}
+.la{position:absolute;left:50%;top:6px;height:44px;border-radius:22px;background:#000;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:15px;font-weight:600;box-sizing:border-box;z-index:6;overflow:hidden;white-space:nowrap}
+/* cards */
+.card{position:absolute;background:#fff;border-radius:32px;box-shadow:var(--sh),0 0 0 1px #1D1F200a}
+.bar{position:absolute;left:40px;height:72px;border-radius:16px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;box-sizing:border-box;font-size:30px;font-weight:600;letter-spacing:-0.02em;white-space:nowrap;overflow:hidden}
+.pillbtn{position:absolute;left:50%;height:112px;border-radius:56px;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:600;letter-spacing:-0.025em;white-space:nowrap;padding:0 56px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><filter id="brush" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter></svg>
+
+<!-- A1 Tu clínica -->
+<div class="sc dark" id="a1"><div class="cam">
+  <div class="dl hl" style="top:760px"></div><div class="dl hl" style="top:1000px"></div><div class="dl vl" style="left:120px"></div><div class="dl vl" style="left:960px"></div>
+  <div class="word" id="a1w" style="top:810px;font-size:150px">Tu clínica</div>
+  <div class="lbl" style="left:140px;top:712px">capilar</div><div class="lbl" style="right:140px;top:1016px">recibe…</div>
+</div></div>
+<!-- A2 mensajes echo -->
+<div class="sc" id="a2"><div class="cam">
+  <div class="dl vl" style="left:120px"></div><div class="dl vl" style="left:960px"></div>
+  <div id="stack"></div>
+  <div class="word" id="a2r" style="top:470px;font-size:60px;font-weight:600">recibe</div>
+  <div class="word" id="a2c" style="top:1240px;font-size:60px;font-weight:600">cada <span class="b">día</span></div>
+</div></div>
+<!-- B phone inbox + banners -->
+<div class="sc" id="bb"><div class="cam" id="bcam">
+  <div class="dl hl" style="top:300px"></div><div class="dl hl" style="top:1300px"></div><div class="dl vl" style="left:200px"></div><div class="dl vl" style="left:880px"></div>
+  <div class="phone" id="bph"><div class="scr"><div class="ios">
+    <div class="sb"><b>9:41</b><i class="sig"><s></s><s></s><s></s><s></s></i><i class="bat"></i></div>
+    <div class="nav"><span>Editar</span><svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 20h4l11-11-4-4L4 16z M14 6l4 4" fill="none" stroke="#3B87F2" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+    <div class="lt" style="padding-top:20px">Mensajes</div>
+    <div class="srch"><svg viewBox="0 0 16 16" width="15" height="15"><circle cx="6.5" cy="6.5" r="5" fill="none" stroke="#8A8A8E" stroke-width="1.8"/><path d="M10.3 10.3L14.5 14.5" stroke="#8A8A8E" stroke-width="1.8" stroke-linecap="round"/></svg>Buscar</div>
+    <div id="msgs"></div><div id="bans"></div>
+  </div></div><div class="isl"></div></div>
+  <div class="lbl" id="bl" style="left:200px;top:252px">bandeja de entrada · hoy</div>
+</div></div>
+<!-- C ¿cuántos -->
+<div class="sc dark" id="cc"><div class="cam">
+  <div class="dl hl" style="top:770px"></div><div class="dl hl" style="top:950px"></div><div class="dl vl" style="left:220px"></div><div class="dl vl" style="left:860px"></div>
+  <div id="cbox" style="position:absolute;background:#fff;border-radius:12px"></div>
+  <div class="word" id="cw" style="top:790px;font-size:130px;color:var(--ink)">¿cuántos</div>
+  <div class="lbl" style="left:240px;top:722px">pacientes</div>
+</div></div>
+<!-- D acaban en cita -->
+<div class="sc" id="dd"><div class="cam">
+  <div class="dl vl" style="left:540px"></div>
+  <div class="word" id="dw1" style="top:600px;font-size:104px">acaban en</div>
+  <div class="word" id="dw2" style="top:760px;font-size:220px">cita<span class="b">?</span></div>
+  <svg class="ov" width="1080" height="1920"><path id="circ" d="M300 790 C 340 715, 760 705, 830 785 C 900 875, 840 995, 560 1010 C 330 1020, 210 945, 245 845 C 262 800, 330 765, 410 755" fill="none" stroke="#3B87F2" stroke-width="16" stroke-linecap="round" filter="url(#brush)"/></svg>
+</div></div>
+<!-- E la mayoría se pierde: funnel card -->
+<div class="sc" id="ee"><div class="cam">
+  <div class="dl hl" style="top:600px"></div><div class="dl vl" style="left:120px"></div><div class="dl vl" style="left:960px"></div>
+  <div class="word" id="ew" style="top:400px;font-size:96px">La mayoría <span class="b">se pierde</span></div>
+  <div class="card" id="ecard" style="left:120px;top:680px;width:840px;height:520px">
+    <div class="lbl" style="left:40px;top:40px;color:var(--ink);font-weight:600;font-size:32px">Este mes</div><div class="lbl" style="right:40px;top:44px;font-size:26px">pacientes nuevos</div>
+    <div id="bars"></div>
+  </div>
+</div></div>
+<!-- F nadie contesta a tiempo -->
+<div class="sc dark" id="ff"><div class="cam">
+  <div class="dl hl" style="top:760px"></div><div class="dl hl" style="top:980px"></div>
+  <svg class="ov" width="1080" height="1920"><circle id="fc" cx="540" cy="560" r="150" fill="none" stroke="#ffffff40" stroke-width="2" stroke-dasharray="8 10"/><line id="fh" x1="540" y1="560" x2="540" y2="450" stroke="#3B87F2" stroke-width="6" stroke-linecap="round"/></svg>
+  <div class="word" id="fw" style="top:840px;font-size:150px"></div>
+</div></div>
+<!-- G chat: 3 hours, lost -->
+<div class="sc" id="gg"><div class="cam" id="gcam">
+  <div class="dl hl" style="top:300px"></div><div class="dl hl" style="top:1300px"></div><div class="dl vl" style="left:200px"></div><div class="dl vl" style="left:880px"></div>
+  <div class="phone"><div class="scr"><div class="ios">
+    <div class="sb"><b>9:41</b><i class="sig"><s></s><s></s><s></s><s></s></i><i class="bat"></i></div>
+    <div class="ch" style="margin-top:0;padding-top:4px;height:84px"><div class="av">L</div><small>Laura M. ›</small></div>
+    <div class="meta" style="left:0;right:0;text-align:center;top:160px">Hoy 09:12</div>
+    <div class="bub in" id="g1" style="top:184px">Hola, ¿cuánto cuesta el injerto FUE?</div>
+    <div class="bub in" id="g2" style="top:254px">¿Y hacéis financiación?</div>
+    <div class="meta" id="gm" style="left:0;right:0;text-align:center;top:330px">Hoy 12:14</div>
+    <div class="bub in" id="g3" style="top:354px">Gracias, al final he reservado en otra clínica.</div>
+  </div></div><div class="isl" id="gisl"></div><div class="la" id="gla"><span id="glt">Sin responder</span><span id="gt" style="color:#3B87F2">0:00</span></div></div>
+  <svg class="ov" width="1080" height="1920"><path id="gx1" d="M330 820 L 760 1000" fill="none" stroke="#3B87F2" stroke-width="15" stroke-linecap="round" filter="url(#brush)"/></svg>
+  <div class="lbl" id="gl" style="left:200px;top:252px">3 horas después</div>
+</div></div>
+<!-- H 5 minutes + chart -->
+<div class="sc" id="hh"><div class="cam">
+  <div class="dl hl" style="top:640px"></div><div class="dl hl" style="top:1000px"></div><div class="dl vl" style="left:120px"></div><div class="dl vl" style="left:960px"></div>
+  <div class="word" id="hw" style="top:480px;font-size:72px;font-weight:600">Contestar en menos de</div>
+  <div class="word b" id="hn" style="top:660px;font-size:300px;letter-spacing:-0.06em">5 min</div>
+  <div class="card" id="hcard" style="left:120px;top:560px;width:840px;height:640px">
+    <div class="lbl" style="left:40px;top:40px;color:var(--ink);font-weight:600;font-size:32px">Citas por semana</div><div class="lbl" style="right:40px;top:44px;font-size:26px">respuesta &lt; 5 min</div>
+    <div id="cols"></div>
+  </div>
+</div></div>
+<!-- I brand + CTA -->
+<div class="sc dark" id="ii"><div class="cam">
+  <div class="dl hl" style="top:560px"></div><div class="dl hl" style="top:1000px"></div><div class="dl vl" style="left:120px"></div><div class="dl vl" style="left:960px"></div>
+  <div class="word" id="iw" style="top:420px;font-size:64px;font-weight:600;color:#ffffffb3">Eso es lo que hacemos</div>
+  <div class="word" id="ib1" style="top:620px;font-size:118px">Marketing Health</div>
+  <div class="word" id="ib2" style="top:760px;font-size:118px">for Clinics<span class="b">.</span></div>
+  <div class="pillbtn" id="icta">Escríbenos&nbsp;<span class="b">CITAS</span></div>
+  <div class="word" id="iurl" style="top:1240px;font-size:36px;font-weight:500;color:#ffffff99">mhfcleads.com</div>
+</div></div>
+<div id="sub"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), p=(t,a,d)=>cl((t-a)/d);
+// motion system: ease-out cubic for entries, quint for hero entries, in-out for state changes, low-bounce spring for physical UI
+const out=x=>1-Math.pow(1-x,3), out5=x=>1-Math.pow(1-x,5), inn=x=>x*x*x;
+const io=x=>x<.5?4*x**3:1-Math.pow(-2*x+2,3)/2;
+const spr=x=>x>=1?1:1-Math.exp(-6.5*x)*Math.cos(8*x);
+const lerp=(a,b,k)=>a+(b-a)*k;
+const dash=(el,k)=>{const L=el.getTotalLength();el.style.strokeDasharray=L;el.style.strokeDashoffset=L*(1-k)};
+function rise(el,t,a,o={}){const d=o.d??.4,k=out5(p(t,a,d)),dy=o.dy??36,bl=o.bl??14;
+  el.style.opacity=k;el.style.filter=k<1?`blur(${(1-k)*bl}px)`:'none';el.style.transform=`translateY(${(1-k)*dy}px) scale(${lerp(o.s??.96,1,k)})`;return k}
+let W=[],TOTAL=25,SC=[];const w=i=>W[i].t;
+// ---------- static content ----------
+const ICON={wa:'<path d="M12 4C7 4 3 7.4 3 11.5c0 2.3 1.3 4.4 3.3 5.8L5.6 20l3.3-1.8c1 .3 2 .4 3.1.4 5 0 9-3.4 9-7.5S17 4 12 4z" fill="#fff"/>',
+ ig:'<rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17" cy="7" r="1.2" fill="#fff"/>',
+ fm:'<rect x="6" y="3.5" width="12" height="17" rx="2.5" fill="none" stroke="#fff" stroke-width="2"/><path d="M9 9h6M9 12.5h6M9 16h4" stroke="#fff" stroke-width="2" stroke-linecap="round"/>',
+ ph:'<path d="M7 4h3l1.5 4-2 1.3a10 10 0 0 0 5.2 5.2l1.3-2 4 1.5v3a2 2 0 0 1-2 2A15 15 0 0 1 5 6a2 2 0 0 1 2-2z" fill="#fff"/>'};
+const BANS=[['wa','WhatsApp','Laura M.','Hola, ¿precio del injerto FUE?'],['ig','Instagram','carlos.rm','¿Se nota mucho después?'],['fm','Formulario web','Marta G.','Solicita valoración gratuita'],['ph','Llamada perdida','+34 612 48 90 23','Hace 1 min']];
+$('bans').innerHTML=BANS.map(b=>`<div class="ban"><div class="bi"><svg viewBox="0 0 24 24" width="22" height="22">${ICON[b[0]]}</svg></div><div class="bt"><b>${b[1]} · ${b[2]}</b><span>ahora</span><p>${b[3]}</p></div></div>`).join('');
+const M=[['L','Laura M.','¿Precio del injerto FUE?','09:12',1],['C','Carlos R.','¿Se nota mucho después de la operación?','08:47',1],['M','Marta G.','Vale, nos vemos el jueves a las 10:30','Ayer',0],['J','Javi P.','¿Hacéis financiación?','Ayer',1],['A','Ana S.','¿Cuánto dura la recuperación?','Lunes',1],['P','Pablo T.','Hola, quería información sobre el…','Lunes',1],['R','Raúl D.','¿Tenéis hueco este mes?','Domingo',1],['S','Sergio L.','¿Cuántos injertos necesito?','Domingo',1]];
+$('msgs').innerHTML=M.map(m=>`<div class="m">${m[4]?'<i class="ud"></i>':''}<div class="av">${m[0]}</div><h6>${m[1]}</h6><span class="tm">${m[3]} ›</span><p>${m[2]}</p></div>`).join('');
+$('stack').innerHTML=[0,1,2,3,4].map(i=>`<div class="word" style="font-size:150px;top:${600+i*120}px">mensajes</div>`).join('');
+const BARS=[['Mensajes',30,760,'#F2F2F4','#1D1F20'],['Respondidos a tiempo',9,520,'#1D1F20','#fff'],['Citas',4,300,'#3B87F2','#fff']];
+$('bars').innerHTML=BARS.map((b,i)=>`<div class="bar" style="top:${136+i*112}px;background:${b[3]};color:${b[4]}"><span>${b[0]}</span><span class="v">0</span></div>`).join('')+'<div class="lbl" id="elost" style="left:40px;top:470px;font-size:28px">26 pacientes perdidos</div>';
+const COLS=[3,4,3,5,9,11,13,14];
+$('cols').innerHTML=COLS.map((v,i)=>`<div style="position:absolute;left:${56+i*96}px;bottom:72px;width:64px;border-radius:12px;background:${i>=4?'#3B87F2':'#E8E8EC'}"></div><div class="lbl" style="left:${56+i*96}px;width:64px;text-align:center;bottom:24px;top:auto;font-size:22px">S${i+1}</div>`).join('')+'<div class="lbl" style="left:440px;top:100px;font-size:24px;color:#3B87F2;font-weight:600">desde aquí</div>';
+// ---------- subtitles: chunks split on punctuation ----------
+let CH=[];
+function buildSubs(){let cur=[];W.forEach((x,i)=>{cur.push(i);if(/[.,:?!…]$/.test(x.w)||cur.length>=5){CH.push(cur);cur=[]}});if(cur.length)CH.push(cur)}
+window.setup=function(meta){W=meta.words;TOTAL=meta.total;buildSubs();
+  SC=[['a1',0,w(2)-.05],['a2',w(2)-.05,w(6)-.12],['bb',w(6)-.12,w(11)-.1],['cc',w(11)-.1,w(12)-.08],['dd',w(12)-.08,w(15)-.1],['ee',w(15)-.1,w(22)-.1],
+      ['ff',w(22)-.1,w(26)-.1],['gg',w(26)-.1,w(39)-.12],['hh',w(39)-.12,w(48)-.12],['ii',w(48)-.12,TOTAL+1]];};
+function subs(t,dark){const el=$('sub');let c=CH.find(c=>t>=W[c[0]].t-.12&&t<(W[c[c.length-1]].e+.25));
+  if(!c){el.innerHTML='';return}
+  const key=c.join(',');if(el.dataset.k!==key){el.dataset.k=key;el.innerHTML=c.map(i=>`<span>${W[i].w}</span>`).join('')}
+  const ink=dark?'255,255,255':'29,31,32';[...el.children].forEach((s,j)=>{const i=c[j],k=out(p(t,W[i].t-.06,.18));s.style.color=`rgba(${ink},${.28+.72*k})`});
+  const k0=out5(p(t,W[c[0]].t-.12,.25));el.style.opacity=k0;el.style.transform=`translateY(${(1-k0)*12}px)`}
+// ---------- render ----------
+window.render=function(t){
+  let cur;for(const s of SC){const on=t>=s[1]&&t<s[2];$(s[0]).style.display=on?'block':'none';if(on)cur=s}
+  const [id,a]=cur,l=t-a,cam=$(id).querySelector('.cam');
+  cam.style.transform=`scale(${1+.035*l})`;           // every shot keeps drifting
+  subs(t,$(id).classList.contains('dark'));
+  if(id=='a1'){rise($('a1w'),t,w(0)-.1,{d:.5,dy:60});[...$('a1').querySelectorAll('.lbl')].forEach((e,i)=>e.style.opacity=out(p(t,.5+i*.15,.3)))}
+  if(id=='a2'){cam.style.transform=`scale(${1.08-.04*l})`;rise($('a2r'),t,a,{d:.3});
+    [...$('stack').children].forEach((el,i)=>{const d=i-2,k=out5(p(t,a+.05+Math.abs(d)*.08,.5));el.style.transform=`translateY(${-d*120*(1-k)}px)`;
+      el.style.opacity=d==0?1:(.12+.1*(2-Math.abs(d)))*k;el.style.clipPath=d==0?'none':`inset(${d<0?0:55}% 0 ${d<0?45:0}% 0)`});
+    rise($('a2c'),t,w(4)-.05,{d:.35})}
+  if(id=='bb'){const k=spr(p(t,a,.8)),e=out5(p(t,a,.45));
+    $('bph').style.transform=`translateY(${(1-k)*620}px) perspective(1600px) rotateX(${(1-e)*16}deg)`;
+    cam.style.transform=`scale(${1+.03*l})`;$('bl').style.opacity=out(p(t,a+.4,.3));
+    [...$('msgs').children].forEach((el,i)=>{const r=out5(p(t,a+.2+i*.05,.4));el.style.opacity=r;el.style.transform=`translateY(${(1-r)*20}px)`});
+    // banners stack: newest on top, older ones slide down and recede
+    const arr=[w(6),w(7),w(8),w(9)];
+    [...$('bans').children].forEach((el,i)=>{const s=spr(p(t,arr[i]-.12,.55)),o=out(p(t,arr[i]-.12,.15));
+      const above=arr.filter((x,j)=>j>i&&t>x-.12).length,push=arr.slice(i+1).reduce((acc,x)=>acc+io(p(t,x-.12,.35)),0);
+      el.style.opacity=o*(above>=3?0:1-.0*above);el.style.zIndex=10+i;
+      el.style.transform=`translateY(${(1-s)*-120+push*78}px) scale(${lerp(.9,1,s)})`});}
+  if(id=='cc'){const k=out5(p(t,a,.3)),s=1+.12*l;$('cw').style.transform=`scale(${.9+.1*k+.06*l})`;
+    const W_=lerp(200,600,k)*s,H=lerp(110,170,k)*s;Object.assign($('cbox').style,{left:540-W_/2+'px',top:860-H/2+'px',width:W_+'px',height:H+'px'});
+    $('cc').querySelector('.lbl').style.opacity=out(p(t,a+.2,.2))}
+  if(id=='dd'){cam.style.transform=`scale(${1+.05*l}) rotate(${-.5+.6*l}deg)`;rise($('dw1'),t,a,{d:.35});rise($('dw2'),t,w(14)-.15,{d:.4,dy:0,s:.8,bl:18});dash($('circ'),io(p(t,w(14)+.2,.5)))}
+  if(id=='ee'){rise($('ew'),t,a,{d:.4});const c=spr(p(t,w(16),.7));$('ecard').style.opacity=out(p(t,w(16),.25));$('ecard').style.transform=`translateY(${(1-c)*120}px) scale(${lerp(.94,1,c)})`;
+    [...$('bars').children].slice(0,3).forEach((el,i)=>{const b=BARS[i],s=w(17)+i*.08,k=out5(p(t,s,.6));el.style.width=lerp(160,b[2],k)+'px';el.style.opacity=out(p(t,s,.2));
+      el.querySelector('.v').textContent=Math.round(b[1]*out(p(t,s+.1,.6)));el.firstChild.style.opacity=out(p(t,s+.2,.3))});
+    rise($('elost'),t,w(21),{d:.35,dy:16});$('elost').style.color='#3B87F2'}
+  if(id=='ff'){const words=[[22,'nadie'],[23,'contesta'],[24,'a tiempo.']];let cw=words[0];words.forEach(x=>{if(t>=w(x[0])-.08)cw=x});
+    const fw=$('fw');fw.textContent=cw[1];rise(fw,t,w(cw[0])-.08,{d:.3,dy:30,bl:12});
+    $('fh').setAttribute('transform',`rotate(${l*240} 540 560)`);dash($('fc'),out(p(t,a,.8)))}
+  if(id=='gg'){const k=out5(p(t,a,.5));$('gcam').style.transform=`scale(${lerp(.94,1,k)+.03*l}) translateY(${(1-k)*80}px)`;
+    rise($('g1'),t,a+.1,{d:.3,dy:16});rise($('g2'),t,a+.25,{d:.3,dy:16});
+    // live activity grows out of the island, timer runs to 3 h
+    const la=spr(p(t,w(29)-.2,.6)),wdt=lerp(148,420,la);Object.assign($('gla').style,{width:wdt+'px',marginLeft:-wdt/2+'px',top:'22px',opacity:p(t,w(29)-.2,.05)});
+    $('glt').style.opacity=$('gt').style.opacity=out(p(t,w(29)+.1,.2));
+    const mins=Math.round(180*io(p(t,w(29),w(31)-w(29)+.2)));$('gt').textContent=`${Math.floor(mins/60)}:${String(mins%60).padStart(2,'0')} h`;
+    rise($('gl'),t,w(30),{d:.3,dy:10});rise($('gm'),t,w(36)-.1,{d:.3,dy:10});rise($('g3'),t,w(36),{d:.35,dy:20});
+    dash($('gx1'),io(p(t,w(38),.35)))}
+  if(id=='hh'){rise($('hw'),t,a,{d:.35});const ks=p(t,w(43)-.1,.01);
+    const hn=$('hn'),hk=rise(hn,t,w(43)-.1,{d:.4,dy:0,s:.85,bl:16});
+    const ex=io(p(t,w(45)-.15,.3));hn.style.opacity=hk*(1-ex);$('hw').style.opacity=1-ex;
+    const c=spr(p(t,w(45)-.05,.7));$('hcard').style.opacity=out(p(t,w(45)-.05,.25));$('hcard').style.transform=`translateY(${(1-c)*140}px) scale(${lerp(.92,1,c)})`;
+    [...$('cols').children].filter(e=>!e.classList.contains('lbl')).forEach((el,i)=>{const k=out5(p(t,w(45)+.1+i*.05,.6));el.style.height=COLS[i]*28*k+'px'})}
+  if(id=='ii'){[...'012'].forEach(()=>{});rise($('iw'),t,a,{d:.4});
+    const b1=rise($('ib1'),t,w(54)-.1,{d:.45,dy:50}),b2=rise($('ib2'),t,w(56)-.05,{d:.45,dy:50});
+    const ex=io(p(t,w(48)+.0,.01));
+    const c=spr(p(t,w(58)-.1,.6)),press=Math.sin(Math.PI*p(t,w(59)+.25,.25));
+    const cta=$('icta');cta.style.top='1040px';cta.style.opacity=out(p(t,w(58)-.1,.2));cta.style.transform=`translateX(-50%) translateY(${(1-c)*60}px) scale(${lerp(.9,1,c)-.04*press})`;
+    rise($('iurl'),t,w(60),{d:.4,dy:14})}
+};
+</script></body></html>
