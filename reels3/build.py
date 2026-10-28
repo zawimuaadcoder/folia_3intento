@@ -19,7 +19,21 @@ for i, w in enumerate(raw_w):
     if PAUSE and i < len(raw_w)-1 and re.search(r'[.?:…]$', w['text']):
         gap = raw_w[i+1]['start'] - w['end']; add = max(0, PAUSE - gap)
         if add:
-            cut = int((w['end'] + gap/2)*SR); segs += [v[cur:cut], np.zeros(int(add*SR))]; cur = cut; shift += add
+            # Scribe word ends run early: splice only inside real silence — the longest quiet run near the boundary
+            env = np.sqrt(np.convolve(v**2, np.ones(441)/441, 'same')); thr = 0.02*np.sqrt((v**2).mean())
+            lo, hi = int((w['end']-0.12)*SR), int((raw_w[i+1]['start']+0.12)*SR)
+            q = env[lo:hi] < thr; best, run, bs = (0, 0), 0, 0
+            for j, x in enumerate(q):
+                run = run+1 if x else 0
+                if run > best[0]: best = (run, j-run+1)
+            if best[0] >= int(0.02*SR): cut = lo + best[1] + best[0]//2
+            elif env[lo:hi].min() < 0.05*np.sqrt((v**2).mean()): cut = lo + int(np.argmin(env[lo:hi]))   # near-silent dip between linked words
+            else: continue                                                                               # voice never drops: leave it
+            f = int(0.012*SR)
+            a_ = v[cur:cut].copy(); a_[-f:] *= np.linspace(1, 0, f)
+            v[cut:cut+f] *= np.linspace(0, 1, f)
+            segs += [a_, np.zeros(int(add*SR))]; cur = cut; shift += add
+            words[-1]['cut'] = cut/SR
 segs.append(v[cur:]); v = np.concatenate(segs)
 total = round(LEAD + len(v)/SR + TAIL, 3); N = int(total*SR)
 voice = np.zeros(N); a = int(LEAD*SR); voice[a:a+len(v)] = v[:N-a]
