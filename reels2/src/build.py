@@ -9,6 +9,10 @@ REELS = {
  'reel-5-medianoche': dict(prefix='r5', scenes=["23:47", "Otra vez la *coronilla*", "Escribe a una *clínica*", "Sin *respuesta*", "Otra clínica *sí* contesta", "Cita *reservada*", "Demasiado *tarde*", "Contesta *rápido*"]),
  'reel-6-tinder': dict(prefix='r6', scenes=["¡*Match*!", "Opción *A*", "Te deja en *visto*", "Opción *B*", "Primera *cita*", "Ahora sí, el *precio*", "¿*A* o *B*?"]),
  'reel-7-cabeza': dict(prefix='r7', scenes=["Dentro de su *cabeza*", "¿Se nota *mucho*?", "¿Me *dolerá*?", "¿Y si sale *mal*?", "Tiene *miedo*", "Quítale el *miedo*", "Y entonces *escribe*"]),
+ 'reel-9-mito-o-realidad': dict(prefix='r9', scenes=["¿Mito o *realidad*?", "«Ya *volverá*»", "«Solo importa el *precio*»", "«Responder rápido *vende*»", "¿Cuál te *creías*?"]),
+ 'reel-10-tipos-de-pacientes': dict(prefix='r10', scenes=["4 tipos de *pacientes*", "1 · El del *precio*", "2 · El *miedoso*", "3 · El que *compara*", "4 · El *decidido*", "A todos, *rápido*", "¿Cuál te escribe *más*?"]),
+ 'reel-11-dejo-de-contestar': dict(prefix='r11', scenes=["Dani *pregunta*", "Y de repente… *silencio*", "La clínica se *rinde*", "Dani estaba *liado*", "Otra clínica *insiste*", "Un mensaje *más*"]),
+ 'reel-12-tranquilidad': dict(prefix='r12', scenes=["Lo que tú *crees*", "Lo que de verdad *pasa*", "Le *escucha*", "Le *explica*", "Le *contesta*", "Vendes *tranquilidad*", "¿Tu clínica lo *transmite*?"]),
  'reel-8-a-vs-b': dict(prefix='r8', scenes=["Clínica A vs *B*", "Ronda 1 · *Responder*", "Ronda 2 · *Preguntar*", "Ronda 3 · *Insistir*", "Gana la *B*", "¿Eres A o *B*?"]),
 }
 LEAD, TAIL, LAST_TAIL = 0.3, 0.45, 1.2
