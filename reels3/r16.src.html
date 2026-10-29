@@ -1,0 +1,114 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css"></head><body>
+<!-- A · free slots (pin: Connect calendar) -->
+<div class="sc" id="A"><div class="st" data-z="2.2">{{C:Grid}}</div></div>
+<div class="sc" id="B"><div class="kt" id="kB"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk black" id="C"><div class="kt" id="kC"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div class="sc" id="D"><div class="kt" id="kD"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<!-- E · leaks (pin: Max Amount Check stack) -->
+<div class="sc" id="E"><div class="st" data-z="2.1">{{C:Stack}}</div></div>
+<div class="sc dk blue" id="F"><div class="kt" id="kF"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div><div id="drop" style="position:absolute;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#fff"></div></div></div>
+<div class="sc" id="G"><div class="kt" id="kG"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<!-- H · controls (pin: 71% / Generate) -->
+<div class="sc" id="H"><div class="st" data-z="2.0">{{C:Controls}}</div></div>
+<div class="sc dk black" id="I"><div class="kt" id="kI"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<!-- J · follow-up switch (pin: Auto-Do) -->
+<div class="sc" id="J"><div class="st" data-z="1.9">{{C:AutoDo}}</div></div>
+<div class="sc dk black" id="K"><div class="kt" id="kK"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div id="sub"></div>
+<script src="engine.js"></script>
+<script>
+const FREE = [0, 1, 9, 15, 16, 17];
+let SL = [];
+const nums = s => (s.match(/[\d.]+/g) || []).map(Number);
+const alphaOf = bg => { if (!bg || bg.startsWith('#')) return 1; const n = nums(bg); return n.length > 3 ? n[3] : 1 };
+window.setup = function (meta) {
+  W = meta.words; TOTAL = meta.total; buildSubs(); const c = i => w(i) - .12;
+  SC = [['A', 0, c(at('y', 2)), 1], ['B', c(at('y', 2)), c(at('pero')), 0], ['C', c(at('pero')), c(at('el', 2)), 0], ['D', c(at('el', 2)), c(at('uno')), 0],
+  ['E', c(at('uno')), c(at('tu')), 1], ['F', c(at('tu')), c(at('y', 6)), 0], ['G', c(at('y', 6)), c(at('más', 3)), 0], ['H', c(at('más', 3)), c(at('pero', 2)), 1],
+  ['I', c(at('pero', 2)), c(at('primero')), 0], ['J', c(at('primero')), c(at('así')), 1], ['K', c(at('así')), TOTAL + 1, 0]];
+  // leak stack: read the seven designed rows as seven slots (centre = 3)
+  SL = [...document.querySelectorAll('#sk .sk')].map(r => {
+    const s = r.style, ic = r.firstElementChild.style;
+    return { l: parseFloat(s.left), t: parseFloat(s.top), w: parseFloat(s.width), h: parseFloat(s.height), r: parseFloat(s.borderRadius), fs: parseFloat(s.fontSize), op: s.opacity === '' ? 1 : +s.opacity,
+      bl: s.filter ? nums(s.filter)[0] : 0, a: alphaOf(s.background || s.backgroundColor), iw: parseFloat(ic.width), ir: parseFloat(ic.borderRadius), ib: getComputedStyle(r.firstElementChild).backgroundColor, col: getComputedStyle(r).color }
+  });
+  // the auto-do switch starts OFF: keep the designed gradient as an overlay that fades in
+  const tg = $('adTg'); tg.dataset.bg = tg.style.background; tg.insertAdjacentHTML('afterbegin', `<b id="adOn" style="position:absolute;inset:0;border-radius:inherit;background:${tg.style.background}"></b>`); tg.style.background = '#D6D6DA';
+};
+const rgb = s => nums(s).slice(0, 3);
+const mixRGB = (a, b, k) => { const A = rgb(a), B = rgb(b); return `rgb(${A.map((v, i) => Math.round(lerp(v, B[i], k))).join(',')})` };
+HOOKS.A = (t, a) => {
+  popIn($('gd'), t, a, { d: .6, s: .9, dy: 50 }); popIn($('gdT'), t, a + .35, { s: .96, dy: 14 }); popIn($('gdS'), t, a + .45, { s: .96, dy: 14 });
+  const cells = [...$('gdCells').children].slice(0, 18), pill = $('gdPill');
+  cells.forEach((el, i) => { popIn(el, t, a + .25 + i * .025, { s: .6, dy: 0, bl: 4 }) });
+  popIn(pill, t, a + .6, { s: .5, dy: 0 }); pill.style.opacity = 1 - io(p(t, T('huecos.') - .1, .3)) * .0;
+  const free = FREE.filter((x, j) => t > a + .6 + j * .12).length; $('gdN').textContent = free + ' libres';
+  const h1 = Math.sin(Math.PI * cl(p(t, T('libre.') - .1, .9))), h2 = Math.sin(Math.PI * cl(p(t, T('libre.', 2) - .1, .9)));
+  FREE.forEach(i => { const h = i < 2 ? h1 : i > 10 ? h2 : 0; cells[i].style.boxShadow = `0 0 0 ${1.5 + h}px ${mix('#E3E3E6', '#3B87F2', h)} inset`; cells[i].style.background = mix('#FFFFFF', '#EAF2FE', h) });
+  pill.style.transform += ` scale(${1 + .08 * Math.sin(Math.PI * cl(p(t, T('huecos.'), .35)))})`;
+};
+HOOKS.B = t => {
+  line($('kB'), 'b1', t, [[T('y', 2), 'Y', '#8A8A8E'], [T('piensas:'), 'piensas:', '#8A8A8E']], 66, 650, { w: 600 });
+  rise($('kB'), 'b2', t, T('necesito'), 'necesito', 110, 760);
+  letters($('kB'), 'b3', t, T('más'), 'más pacientes.', 120, 900, { color: '#3B87F2', wave: 1 });
+};
+HOOKS.C = (t, a) => {
+  const i = at('pero'); dots($('kC'), 'cd', t, a, w(i) + .45, 860, '#fff');
+  rise($('kC'), 'c1', t, w(i) + .3, 'Pero a lo mejor', 80, 680); rise($('kC'), 'c2', t, w(i + 4), 'el problema no es', 80, 800);
+  rise($('kC'), 'c3', t, w(i + 8), 'que no <span style="color:#3B87F2">lleguen.</span>', 100, 920);
+};
+HOOKS.D = t => {
+  swap($('kD'), 'd1', t, [[T('el', 2), 'El problema']], 110, 700, { end: T('se') - .05 });
+  echo($('kD'), 'd2', t, T('se') - .05, 'se te escapan', 120, 820);
+  line($('kD'), 'd3', t, [[T('por', 3), 'por', '#8A8A8E'], [T('el', 3), 'el', '#8A8A8E'], [T('camino.'), 'camino.', '#8A8A8E']], 66, 980, { w: 600 });
+};
+// E — the focus walks down the leaks, one per sentence
+HOOKS.E = (t, a) => {
+  const f = 1 + soft(p(t, T('otro') - .15, .5)) + soft(p(t, T('otro', 2) - .15, .5));
+  [...document.querySelectorAll('#sk .sk')].forEach((el, i) => {
+    const s = cl(i - f + 3, -1, 7), lo = Math.floor(cl(s, 0, 6)), hi = Math.min(6, lo + 1), k = cl(s, 0, 6) - lo, A = SL[lo], B = SL[hi], L = x => lerp(A[x], B[x], k);
+    const edge = s < 0 ? -s : s > 6 ? s - 6 : 0, foc = Math.max(0, 1 - Math.abs(s - 3)), e = out5(p(t, a + .05 + Math.abs(i - 1) * .06, .45)), kk = pop(p(t, a + .05 + Math.abs(i - 1) * .06, .5));
+    Object.assign(el.style, { left: L('l') + 'px', top: (L('t') + (1 - kk) * 26) + 'px', width: L('w') + 'px', height: L('h') + 'px', borderRadius: L('r') + 'px', fontSize: L('fs') + 'px',
+      opacity: e * L('op') * (1 - edge), filter: `blur(${L('bl') + edge * 3 + (1 - e) * 6}px)`, background: `rgba(255,255,255,${L('a')})`, color: mixRGB(A.col, B.col, k), zIndex: Math.round(10 - Math.abs(s - 3) * 2),
+      boxShadow: foc > 0 ? `0 1px 2px rgba(29,31,32,${.05 * foc}), 0 22px 44px -16px rgba(29,31,32,${.22 * foc}), 0 6px 14px -8px rgba(29,31,32,${.1 * foc})` : '0 1px 0 rgba(255,255,255,.8) inset' });
+    const ic = el.firstElementChild; Object.assign(ic.style, { width: L('iw') + 'px', height: L('iw') + 'px', borderRadius: L('ir') + 'px', background: mixRGB(A.ib, B.ib, k) })
+  });
+};
+HOOKS.F = t => {
+  swap($('kF'), 'f1', t, [[T('tu'), 'Tu agenda'], [T('no', 4), 'no está vacía.']], 120, 760, { end: T('está', 2) - .1 });
+  letters($('kF'), 'f2', t, T('está', 2), 'Está goteando.', 120, 860, { wave: 1 });
+  const g = $('kF').querySelector('[data-k="f2"]'), d = $('drop'), dt = t - T('goteando.') - .3, cyc = ((dt % .9) + .9) % .9;
+  if (g && dt > 0) { d.style.display = 'block'; d.style.left = (g.offsetLeft + g.offsetWidth * .62) + 'px'; d.style.top = (990 + cyc * cyc * 260) + 'px'; d.style.opacity = 1 - cyc / .9 } else d.style.display = 'none';
+};
+HOOKS.G = t => {
+  line($('kG'), 'g1', t, [[T('y', 6), 'Y', '#8A8A8E'], [T('casi'), 'casi', '#8A8A8E'], [T('toda'), 'toda', '#8A8A8E'], [T('clínica'), 'clínica', '#8A8A8E']], 66, 660, { w: 600 });
+  line($('kG'), 'g2', t, [[T('hace', 2), 'hace', '#8A8A8E'], [T('lo', 2), 'lo', '#8A8A8E'], [T('mismo:'), 'mismo:', '#8A8A8E']], 66, 760, { w: 600 });
+  letters($('kG'), 'g3', t, T('echar'), 'echar más agua.', 112, 890, { blueFrom: 6, wave: 1 });
+};
+// H — more ads, more campaigns, more budget
+HOOKS.H = (t, a) => {
+  [...document.querySelectorAll('#ct .cr')].forEach((r, i) => popIn(r, t, a + .05 + i * .07, { s: .9, dy: 24 }));
+  const on = pop(p(t, a + .5, .45)); $('ctKn').style.left = lerp(6, 54, on) + 'px'; $('ctTg').style.background = mix('#D6D6DA', '#3B87F2', cl(on));
+  const g1 = Math.sin(Math.PI * p(t, T('anuncios,'), .3)); $('ctGo').style.transform += ` scale(${1 - .06 * g1})`; $('ctGo').style.boxShadow = `0 1px 0 rgba(255,255,255,.25) inset, 0 8px ${18 + 20 * g1}px -8px rgba(59,135,242,${.7 + .3 * g1})`;
+  const n = 5 + (t > T('campañas,') ? 1 : 0) + (t > T('campañas,') + .3 ? 1 : 0); $('ctN').textContent = n;
+  $('ctN').style.transform = `scale(${1 + .15 * Math.sin(Math.PI * p(t, T('campañas,'), .25)) + .15 * Math.sin(Math.PI * p(t, T('campañas,') + .3, .25))})`;
+  const b = io(p(t, T('presupuesto.') - .1, .8)); $('ctBud').textContent = String(Math.round(lerp(3000, 4500, b) / 50) * 50).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' €';
+  $('ctPctT').textContent = Math.round(lerp(140, 180, b)) + '%'; $('ctRing').setAttribute('stroke-dashoffset', lerp(20, 4, b));
+};
+HOOKS.I = t => {
+  const o1 = T('mucha') - .3; rise($('kI'), 'i1', t, T('pero', 2), 'Pero si el cubo', 80, 690, { out: o1 }); rise($('kI'), 'i2', t, T('tiene'), 'tiene agujeros,', 80, 800, { out: o1, color: '#3B87F2' });
+  line($('kI'), 'i3', t, [[T('por', 4), 'por'], [T('mucha'), 'mucha'], [T('agua'), 'agua'], [T('que', 3), 'que'], [T('eches,'), 'eches,']], 64, 720, { w: 600 });
+  letters($('kI'), 'i4', t, T('nunca'), 'nunca se llena.', 110, 850, { color: '#3B87F2' });
+};
+// J — plug the holes first: switch follow-up on
+HOOKS.J = (t, a) => {
+  popIn($('ad'), t, a, { d: .6, s: .9, dy: 60 }); const on = pop(p(t, T('tapan') - .05, .5)), c = cl(on);
+  $('adKn').style.left = lerp(-6, 54, on) + 'px'; $('adOn').style.opacity = c; $('adT').style.color = mix('#9A9AA0', '#3B87F2', c);
+  $('adKn').firstChild.style.transform = `rotate(${on * 360}deg)`;
+  popIn($('adP1'), t, T('agujeros.') - .1, { s: .7, dy: 20 }); popIn($('adP2'), t, T('grifo.') - .25, { s: .7, dy: 20 });
+};
+HOOKS.K = t => {
+  line($('kK'), 'k1', t, [[T('así'), 'Así'], [T('trabajamos'), 'trabajamos'], [T('en'), 'en']], 60, 700, { w: 600 });
+  letters($('kK'), 'k2', t, T('marketing'), 'Marketing Health', 118, 810); letters($('kK'), 'k3', t, T('for'), 'for Clinics.', 118, 950, { blueFrom: 4 });
+};
+</script></body></html>

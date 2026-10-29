@@ -11,7 +11,12 @@ def load(p):
     raw = subprocess.run(['ffmpeg','-v','error','-i',p,'-ac','1','-ar',str(SR),'-f','f32le','-'],capture_output=True,check=True).stdout
     return np.frombuffer(raw, np.float32).copy()
 v = load(os.path.join(ROOT, 'audio', PREFIX+'.mp3'))
-raw_w = [w for w in json.load(open(os.path.join(ROOT, 'audio', PREFIX+'-words.json')))['words'] if w['type']=='word' and w['end'] > 0.16]
+raw_w, inside = [], False                                     # drop the spoken-direction tag "[warm, ...]"
+for w in json.load(open(os.path.join(ROOT, 'audio', PREFIX+'-words.json')))['words']:
+    if w['type'] != 'word': continue
+    if w['text'].startswith('['): inside = True
+    if not inside: raw_w.append(w)
+    if w['text'].endswith(']'): inside = False
 # stretch sentence gaps: cut mid-gap and splice in silence so every sentence end breathes at least PAUSE
 segs, shift, cur, words = [], 0.0, 0, []
 for i, w in enumerate(raw_w):

@@ -1,0 +1,123 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css"></head><body>
+<!-- A · lead card (pin: task card) -->
+<div class="sc" id="A"><div class="st" data-z="2.3">{{C:Main}}</div></div>
+<!-- B · white letters -->
+<div class="sc" id="B"><div class="kt" id="kB"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<!-- C · black, masked lines -->
+<div class="sc dk black" id="C"><div class="kt" id="kC"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<!-- D · white swap + strike -->
+<div class="sc" id="D"><div class="kt" id="kD"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div>
+  <svg style="position:absolute;left:0;top:0;overflow:visible;z-index:5" width="1080" height="1920"><path id="dS" d="M0 0" fill="none" stroke="#3B87F2" stroke-width="12" stroke-linecap="round"/></svg></div></div>
+<!-- E · blue echo -->
+<div class="sc dk blue" id="E"><div class="kt" id="kE"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<!-- F · chips (pin: in ChatGPT) -->
+<div class="sc" id="F"><div class="st" data-z="2.8">{{C:Chips}}</div></div>
+<!-- G · white letters wave -->
+<div class="sc" id="G"><div class="kt" id="kG"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<!-- H · menu on gradient (pin: Google Drive) -->
+<div class="sc" id="H"><div class="st" data-z="2.2">{{C:Menu}}</div></div>
+<!-- I · black -->
+<div class="sc dk black" id="I"><div class="kt" id="kI"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<!-- J · white triplet -->
+<div class="sc" id="J"><div class="kt" id="kJ"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<!-- K · stepper (pin: Choose Wallet) -->
+<div class="sc" id="K"><div class="st">{{C:Stepper}}</div></div>
+<!-- L · blue brand -->
+<div class="sc dk blue" id="L"><div class="kt" id="kL"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div id="sub"></div>
+<script src="engine.js"></script>
+<script>
+window.setup = function (meta) {
+  W = meta.words; TOTAL = meta.total; buildSubs(); const c = i => w(i) - .12;
+  SC = [['A', 0, c(at('y', 2)), 1], ['B', c(at('y', 2)), c(at('pero')), 0], ['C', c(at('pero')), c(at('el', 2)), 0], ['D', c(at('el', 2)), c(at('compara', 2)), 0],
+  ['E', c(at('compara', 2)), c(at('tiene')), 0], ['F', c(at('tiene')), c(at('¿y')), 1], ['G', c(at('¿y')), c(at('bajar')), 0], ['H', c(at('bajar')), c(at('es')), 1],
+  ['I', c(at('es')), c(at('más', 2)), 0], ['J', c(at('más', 2)), c(at('contestar')), 0], ['K', c(at('contestar')), c(at('eso')), 1], ['L', c(at('eso')), TOTAL + 1, 0]];
+  // chips: four clinics in the carousel, cloned from the designed focused chip
+  const src = document.querySelectorAll('#chL .ch')[1];
+  $('chL').innerHTML = ['Tu clínica', 'Clínica Norte', 'Clínica Sur', 'Clínica Centro'].map(n => src.outerHTML.replace('Tu clínica', n)).join('');
+  // menu hover highlight + cursor
+  $('mn').insertAdjacentHTML('afterbegin', '<div id="mnH" style="position:absolute;left:14px;right:14px;height:62px;border-radius:16px;background:#F1F1F3"></div>');
+  [...document.querySelectorAll('#mn .mi')].forEach(e => e.style.position = 'relative');
+};
+// A — the lead arrives, gets answered 14 h later, goes cold
+HOOKS.A = (t, a) => {
+  popIn($('ld'), t, a, { d: .6, s: .9, dy: 60 }); popIn($('ldChip'), t, a + .3, { s: .6, dy: 0 }); popIn($('ldDate'), t, T('martes') - .1, { s: .8, dy: 8 });
+  ['ldT', 'ldD', 'ldTags'].forEach((id, i) => popIn($(id), t, a + .35 + i * .08, { s: .97, dy: 12 }));
+  const ans = io(p(t, T('contestas'), T('mediodía.') - T('contestas') + .3)); $('ldRing').setAttribute('stroke-dashoffset', 44 * (1 - ans));
+  const lost = io(p(t, T('responde.') - .1, .4));
+  $('ldStT').textContent = t < T('contestas') ? 'Sin responder' : t < T('responde.') - .1 ? `Respondido · ${Math.round(14 * ans)} h` : 'Sin respuesta';
+  if (t > T('le') - .05) $('ldDate').lastChild.textContent = 'Miércoles · 12:30';
+  $('ldDate').style.color = t > T('le') - .05 ? '#3B87F2' : '';
+  const ch = $('ldChip'); ch.lastChild.textContent = lost > .5 ? 'Lead perdido' : 'Nuevo lead'; ch.style.background = mix('#EAF2FE', '#F0F0F2', lost); ch.style.color = mix('#2F79E6', '#8A8A8E', lost);
+  $('ld').style.filter = `grayscale(${lost}) blur(${lost * 1.2}px)`; $('ld').style.opacity = 1 - lost * .35;
+};
+HOOKS.B = t => {
+  line($('kB'), 'b1', t, [[T('y', 2), 'Y', '#8A8A8E'], [T('piensas:'), 'piensas:', '#8A8A8E']], 66, 640, { w: 600 });
+  letters($('kB'), 'b2', t, T('se'), 'se habrá ido a una', 80, 780);
+  letters($('kB'), 'b3', t, T('más'), 'más barata.', 150, 900, { color: '#3B87F2', wave: 1 });
+};
+HOOKS.C = t => {
+  const i = at('pero'); rise($('kC'), 'c1', t, w(i), 'Pero te voy a contar algo', 64, 720);
+  rise($('kC'), 'c2', t, w(i + 6), 'que casi <span style="color:#3B87F2">nadie te dice.</span>', 88, 840);
+};
+HOOKS.D = (t, a, b) => {
+  const i = at('el', 2); swap($('kD'), 'd1', t, [[w(i), 'El paciente'], [w(i + 2), 'no compara'], [w(i + 4), 'precios.']], 128, 820, { end: b + 1 });
+  const el = $('kD').querySelector('[data-k="d1"]').children[2], k = io(p(t, w(i + 4) + .4, .3)), x0 = el.offsetLeft - 24, x1 = el.offsetLeft + el.offsetWidth + 24, y = 890;
+  $('dS').setAttribute('d', `M${x0} ${y + 8} C ${lerp(x0, x1, .3)} ${y - 6}, ${lerp(x0, x1, .7)} ${y + 6}, ${x1} ${y - 6}`); dash($('dS'), k);
+};
+HOOKS.E = t => {
+  const i = at('compara', 2); line($('kE'), 'e1', t, [[w(i), 'Compara'], [w(i + 1), 'quién'], [w(i + 2), 'le'], [w(i + 3), 'hace'], [w(i + 4), 'caso']], 64, 720, { w: 600 });
+  echo($('kE'), 'e2', t, T('primero.') - .05, 'primero.', 190, 850, { trail: 'rgba(255,255,255,.55)' });
+};
+// F — patient writes to every clinic at once; the first one to answer keeps them
+HOOKS.F = (t, a) => {
+  const f = io(p(t, T('tres'), .4)) + io(p(t, T('clínicas'), .4)) - io(p(t, T('primera') - .1, .45));
+  [...$('chL').children].forEach((el, i) => {
+    const d = Math.abs(i - f), dd = Math.min(d, 1.6), e = out5(p(t, a + .1 + i * .07, .4));
+    el.style.top = (280 + (i - f) * 78) + 'px'; el.style.opacity = e * Math.max(0, 1 - .62 * dd); el.style.filter = `blur(${dd * 1.1 + (1 - e) * 8}px)`;
+    el.style.transform = `scale(${lerp(1, .92, Math.min(d, 1))})`; el.style.background = mix('#E2E2E5', '#E8E8EA', Math.min(d, 1));
+    const won = i === 1 ? pop(p(t, T('contesta,') - .05, .45)) : 0, dot = el.firstChild;
+    dot.style.background = won > .02 ? '#3B87F2' : mix('#3B87F2', '#9DBDF0', Math.min(d * 2, 1)); dot.firstChild.style.opacity = i === 1 ? won : 0; dot.style.transform = `scale(${1 + .25 * Math.sin(Math.PI * cl(won))})`
+  });
+  const tx = $('chT'); tx.textContent = t < T('primera') - .1 ? 'a la vez' : 'se lo queda.';
+  popIn(tx, t, t < T('primera') - .1 ? T('vez.') - .2 : T('queda.') - .25, { s: .8, dx: -20, dy: 0 });
+};
+HOOKS.G = t => {
+  const i = at('¿y'); letters($('kG'), 'g1', t, w(i), '¿Y qué hace', 112, 760, { wave: 1 });
+  letters($('kG'), 'g2', t, w(i + 3), 'casi toda clínica?', 92, 900, { wave: 1, blueFrom: 10 });
+};
+// H — the usual moves, one by one
+HOOKS.H = (t, a) => {
+  popIn($('mn'), t, a, { d: .6, s: .9, dy: 60 }); const items = [...document.querySelectorAll('#mn .mi')];
+  items.forEach((e, i) => popIn(e, t, a + .15 + i * .06, { s: .95, dy: 10 }));
+  const ts = [T('bajar'), T('regalar'), T('sacar')], k = io(p(t, ts[1] - .1, .25)) + io(p(t, ts[2] - .1, .25)), on = out(p(t, ts[0] - .1, .2));
+  const hl = $('mnH'); hl.style.top = (18 + k * 62) + 'px'; hl.style.opacity = on * (1 - io(p(t, T('promoción.') + .5, .25)));
+  items.forEach((e, i) => { e.style.transform += ` scale(${1 - .03 * Math.sin(Math.PI * p(t, ts[i] ?? 1e9, .22))})` });
+  const last = items[3], g = Math.sin(Math.PI * p(t, T('promoción.') + .5, .6)); last.style.background = `rgba(59,135,242,${.1 * cl(p(t, T('promoción.') + .5, .25))})`; last.style.transform += ` scale(${1 + .04 * g})`;
+};
+HOOKS.I = t => {
+  const i = at('es'), out1 = T('dejar') - .3;
+  line($('kI'), 'i1', t, [[w(i), 'Es'], [w(i + 1), 'como'], [w(i + 2), 'abrir'], [w(i + 3), 'una']], 70, 700, { w: 600, out: out1 });
+  letters($('kI'), 'i2', t, T('tienda'), 'tienda preciosa…', 100, 820, { wave: 1, out: out1 });
+  rise($('kI'), 'i3', t, T('dejar') - .1, 'y dejar la puerta', 70, 720);
+  letters($('kI'), 'i4', t, T('cerrada'), 'cerrada con llave.', 92, 840, { color: '#3B87F2' });
+};
+HOOKS.J = (t, a, b) => {
+  const i = at('más', 2); swap($('kJ'), 'j1', t, [[w(i), 'Más descuento.'], [T('menos'), 'Menos margen.']], 112, 840, { end: T('mismo') - .15 });
+  line($('kJ'), 'j2', t, [[T('mismo') - .15, 'El'], [T('mismo'), 'mismo'], [T('paciente', 3), 'paciente']], 90, 760);
+  letters($('kJ'), 'j3', t, T('perdido.'), 'perdido.', 160, 880, { color: '#3B87F2', wave: 1 });
+};
+// K — answering first beats every discount
+HOOKS.K = (t, a) => {
+  popIn($('sp'), t, a, { d: .6, s: .92, dx: 160, dy: 0 }); const rows = [...document.querySelectorAll('#sp .sr')];
+  rows.forEach((r, i) => popIn(r, t, a + .2 + i * .1, { s: .9, dx: 30, dy: 0 }));
+  const c0 = rows[0].firstChild; c0.style.transform = `scale(${lerp(.6, 1, pop(p(t, T('primero') - .1, .5)))})`;
+  $('spBar').style.height = lerp(0, 186, io(p(t, T('más', 4) - .2, .5))) + 'px';
+  const fade = io(p(t, T('barato.') - .1, .4)); rows.slice(1).forEach(r => { r.style.opacity = 1 - .55 * fade; r.style.filter = `blur(${fade * 1.5}px)` });
+};
+HOOKS.L = t => {
+  const i = at('eso'); line($('kL'), 'l1', t, [[w(i), 'Eso'], [w(i + 1), 'es'], [w(i + 2), 'lo'], [w(i + 3), 'que'], [w(i + 4), 'hacemos']], 60, 700, { w: 600 });
+  letters($('kL'), 'l2', t, T('marketing'), 'Marketing Health', 118, 810);
+  letters($('kL'), 'l3', t, T('for'), 'for Clinics.', 118, 950);
+};
+</script></body></html>

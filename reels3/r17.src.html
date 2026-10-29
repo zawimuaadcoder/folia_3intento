@@ -1,0 +1,109 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css"></head><body>
+<div class="sc" id="A"><div class="kt" id="kA"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<!-- B · composer (pin: Make it more clear) -->
+<div class="sc" id="B"><div class="st" data-z="1.9">{{C:Composer}}</div></div>
+<div class="sc dk black" id="C"><div class="kt" id="kC"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div class="sc" id="D"><div class="kt" id="kD"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk blue" id="E"><div class="kt" id="kE"><div class="dl hl" style="top:560px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<!-- F · 5 min / 3 h liquid segmented (pin: Dates / Months) -->
+<div class="sc" id="F"><div class="st" data-z="1.75">{{C:Seg}}</div></div>
+<!-- G · wheel (pin: Analyze data) -->
+<div class="sc" id="G"><div class="st" data-z="2.1">{{C:Wheel}}</div></div>
+<!-- H · live message (pin: Live Transcribe) -->
+<div class="sc" id="H"><div class="st" data-z="1.8">{{C:Live}}</div></div>
+<div class="sc dk black" id="I"><div class="kt" id="kI"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div class="sc" id="J"><div class="kt" id="kJ"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk blue" id="K"><div class="kt" id="kK"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div id="sub"></div>
+<script src="engine.js"></script>
+<script>
+const MSG = 'Hola, ¿cuánto cuesta el injerto?';
+const WH = ['3 horas después', 'Cierra la app', 'Ve otra clínica', 'Ve otra más', 'Se olvida de ti'];
+const LIVE = 'Gracias por todo, pero al final he reservado en otra clínica.';
+window.setup = function (meta) {
+  W = meta.words; TOTAL = meta.total; buildSubs(); const c = i => w(i) - .12;
+  SC = [['A', 0, c(at('un')), 0], ['B', c(at('un')), c(at('y', 2)), 1], ['C', c(at('y', 2)), c(at('porque')), 0], ['D', c(at('porque')), c(at('los')), 0],
+  ['E', c(at('los')), c(at('en', 2)), 0], ['F', c(at('en', 2)), c(at('ya')), 1], ['G', c(at('ya')), c(at('pagas')), 1], ['H', c(at('pagas')), c(at('es')), 1],
+  ['I', c(at('es')), c(at('mismo')), 0], ['J', c(at('mismo')), c(at('eso')), 0], ['K', c(at('eso')), TOTAL + 1, 0]];
+  // composer: a real input — text scrolls inside a fixed field, placeholder until the patient types
+  const tx = $('cpTx'); tx.innerHTML = '<span id="cpIn2" style="display:inline-block"></span>' + tx.querySelector('#cpCur').outerHTML;
+  tx.style.cssText += ';overflow:hidden;width:400px;display:flex;align-items:center';
+  // wheel: one span per item, placed on the arc each frame
+  $('whW').innerHTML = WH.map(x => `<span class="wh" style="position:absolute;left:160px;font-size:30px;letter-spacing:-0.01em;color:#A2A2A8;transform-origin:left center;white-space:nowrap">${x}</span>`).join('');
+  $('whL').innerHTML = WH.map(x => `<span style="position:absolute;white-space:nowrap">${x}</span>`).join(''); $('whL').style.position = 'relative'; $('whL').style.height = '40px'; $('whL').style.flex = '1';
+  $('lvTx').innerHTML = LIVE.split(' ').map(x => `<span style="display:inline-block;margin-right:.26em">${x}</span>`).join('');
+};
+HOOKS.A = t => {
+  line($('kA'), 'a1', t, [[T('son'), 'Son', '#8A8A8E'], [T('las'), 'las', '#8A8A8E']], 70, 600, { w: 600 });
+  rise($('kA'), 'a2', t, T('once') - .05, '11:00', 280, 700);
+  line($('kA'), 'a3', t, [[T('de'), 'de', '#8A8A8E'], [T('la'), 'la', '#8A8A8E'], [T('mañana.'), 'mañana.', '#3B87F2']], 70, 1060, { w: 600 });
+};
+HOOKS.B = (t, a) => {
+  $('cpP').style.transform = `translateY(${(1 - soft(p(t, a, .7))) * -320}px)`; popIn($('cpIn'), t, a + .25, { d: .6, s: .9, dy: 30 }); popIn($('cpDn'), t, a + .4, { s: .5, dy: 0 });
+  const n = Math.round(MSG.length * cl(p(t, T('hola,') - .1, T('injerto?') - T('hola,') + .45))), s = $('cpIn2');
+  s.textContent = n ? MSG.slice(0, n) : 'Escribe un mensaje…'; s.style.color = n ? '#1D1F20' : '#8A8A8E';
+  s.style.transform = `translateX(${-Math.max(0, s.offsetWidth - 385)}px)`; $('cpCur').style.opacity = (Math.floor(t * 2.2) % 2 === 0 || (n > 0 && n < MSG.length)) ? 1 : 0;
+  const pr = Math.sin(Math.PI * p(t, T('enviar'), .3)); $('cpDn').style.transform += ` scale(${1 - .12 * pr})`; $('cpDn').style.background = `rgba(255,255,255,${.45 + .4 * pr})`;
+  const g = Math.sin(Math.PI * p(t, T('injerto?') + .3, .7)); $('cpIn').style.boxShadow = `0 0 0 1px rgba(255,255,255,.7) inset, 0 0 ${40 + 30 * g}px ${6 + 8 * g}px rgba(150,170,250,${.45 + .3 * g}), 0 16px 30px -16px rgba(60,70,150,.3)`;
+};
+HOOKS.C = t => {
+  swap($('kC'), 'c1', t, [[T('y', 2), 'Y aquí'], [T('empieza'), 'empieza todo.']], 130, 780, { end: T('o') - .5 });
+  dots($('kC'), 'cd', t, T('todo.') + .35, T('o') + .05, 860, '#fff');
+  letters($('kC'), 'c2', t, T('o'), 'O se acaba.', 150, 800, { color: '#3B87F2', wave: 1 });
+};
+HOOKS.D = t => {
+  const i = at('porque');
+  line($('kD'), 'd1', t, [[w(i), 'Porque'], [w(i + 1), 'te'], [w(i + 2), 'voy'], [w(i + 3), 'a'], [w(i + 4), 'decir'], [w(i + 5), 'algo']], 64, 680, { w: 600 });
+  line($('kD'), 'd2', t, [[w(i + 6), 'que'], [w(i + 7), 'a'], [w(i + 8), 'lo'], [w(i + 9), 'mejor']], 64, 780, { w: 600 });
+  letters($('kD'), 'd3', t, T('no') - .05, 'no esperas.', 130, 900, { color: '#3B87F2', wave: 1 });
+};
+HOOKS.E = t => {
+  line($('kE'), 'e1', t, [[T('los'), 'Los'], [T('primeros'), 'primeros']], 66, 620, { w: 600 });
+  echo($('kE'), 'e2', t, T('cinco') - .05, '5 minutos', 190, 740, { trail: 'rgba(255,255,255,.55)' });
+  const i = at('valen'); line($('kE'), 'e3', t, [[w(i), 'valen'], [w(i + 1), 'más'], [w(i + 2), 'que'], [w(i + 3), 'todo'], [T('anuncio.'), 'el anuncio.']], 60, 1000, { w: 600 });
+};
+// F — still at 5 min… then the liquid knob slides to 3 h
+HOOKS.F = (t, a) => {
+  popIn($('sgT'), t, a, { d: .6, s: .9, dy: 40 }); const k = soft(p(t, T('tres') - .1, .7)), v = Math.sin(Math.PI * cl(p(t, T('tres') - .1, .45)));
+  const K = $('sgK'); K.style.left = lerp(14, 252, k) + 'px'; K.style.width = (214 + v * 40) + 'px'; K.style.marginLeft = (-v * 20) + 'px'; K.style.transform = `scaleY(${1 - .06 * v})`;
+  const L = [...document.querySelectorAll('#sgT .sgL')]; L[0].style.color = mix('#1D1F20', '#3A3B3D', k); L[1].style.color = mix('#3A3B3D', '#1D1F20', k);
+  L[0].style.fontWeight = k < .5 ? 500 : 400; L[1].style.fontWeight = k < .5 ? 400 : 500;
+  const caps = [[a, 'Tiempo de respuesta'], [T('móvil') - .1, 'Móvil en la mano'], [T('ganas.') - .15, 'Con ganas'], [T('fresca.') - .25, 'Con la duda fresca'], [T('tres') - .1, '3 horas después']];
+  let cur = caps[0]; caps.forEach(x => { if (t >= x[0]) cur = x }); const cp = $('sgC'); cp.textContent = cur[1]; popIn(cp, t, cur[0], { s: .9, dy: 12, d: .45 }); cp.style.color = cur[1] === 'Tiempo de respuesta' ? '' : '#1D1F20';
+};
+// G — the wheel turns through what happens in those 3 hours
+HOOKS.G = (t, a) => {
+  popIn($('whP'), t, a, { d: .55, s: .9, dy: 0 }); const ts = [T('cerrado'), T('visto'), T('dos'), T('olvidado')];
+  const f = ts.reduce((s, x) => s + soft(p(t, x - .15, .5)), 0);
+  [...$('whW').children].forEach((el, i) => {
+    const o = i - f, ao = Math.abs(o), e = out5(p(t, a + .1 + i * .05, .4));
+    el.style.top = (300 - 20 + o * 66 + Math.sign(o) * 24) + 'px'; el.style.transform = `rotate(${o * 8}deg)`; el.style.left = (160 - Math.min(ao, 2.5) * 6) + 'px';
+    el.style.opacity = e * (ao < .5 ? 0 : Math.max(0, 1 - (ao - .5) * .35)); el.style.filter = `blur(${Math.max(0, ao - 1.5) * 1.2}px)`; el.style.color = ao > 1.5 ? '#B2B2B8' : '#A2A2A8'
+  });
+  [...$('whL').children].forEach((el, i) => { const d = i - f, ad = Math.abs(d); el.style.top = (2 + d * 34) + 'px'; el.style.opacity = Math.max(0, 1 - ad * 1.6); el.style.filter = `blur(${ad * 6}px)` });
+  $('whB').style.transform = `scale(${1 + .1 * Math.sin(t * 3)}) rotate(${f * 40}deg)`;
+};
+// H — the patient's last message arrives
+HOOKS.H = (t, a) => {
+  popIn($('lv'), t, a, { d: .6, s: .88, dy: 40 }); const ws = [...$('lvTx').children], n = ws.length;
+  ws.forEach((s, i) => { const k = out5(p(t, a + .35 + i * .14, .3)); s.style.opacity = k * (i >= n - 2 ? lerp(1, .55, cl(p(t, a + .35 + (n + 2) * .14, .5))) : 1); s.style.filter = k < 1 ? `blur(${(1 - k) * 6}px)` : 'none' });
+  const st = $('lvSt'), r = (t * 1.6) % 1; st.style.boxShadow = `0 0 0 ${4 + r * 10}px rgba(59,135,242,${.3 * (1 - r)})`;
+  popIn($('lvC'), t, a + .3, { s: .9, dy: 8 });
+};
+HOOKS.I = t => {
+  const o1 = T('no', 2) - .3;
+  line($('kI'), 'i1', t, [[T('es'), 'Es'], [T('como'), 'como'], [T('invitar'), 'invitar']], 70, 700, { w: 600, out: o1 });
+  letters($('kI'), 'i2', t, T('a', 4) - .05, 'a alguien a casa…', 96, 810, { wave: 1, out: o1 });
+  rise($('kI'), 'i3', t, T('no', 2) - .1, 'y no abrirle', 70, 720);
+  letters($('kI'), 'i4', t, T('la', 5), 'la puerta.', 150, 840, { color: '#3B87F2', wave: 1 });
+};
+HOOKS.J = t => {
+  swap($('kJ'), 'j1', t, [[T('mismo'), 'Mismo anuncio.'], [T('mismo', 2), 'Mismo paciente.']], 104, 700, { end: T('y', 6) - .1 });
+  line($('kJ'), 'j2', t, [[T('y', 6), 'y'], [T('una'), 'una'], [T('cita'), 'cita'], [T('que', 5), 'que'], [T('se', 3), 'se'], [T('va'), 'va']], 70, 760, { w: 600 });
+  letters($('kJ'), 'j3', t, T('a', 6) - .05, 'a otra clínica.', 120, 880, { color: '#3B87F2' });
+};
+HOOKS.K = t => {
+  const i = at('eso'); line($('kK'), 'k1', t, [[w(i), 'Eso'], [w(i + 1), 'es'], [w(i + 2), 'lo'], [w(i + 3), 'que'], [w(i + 4), 'arreglamos']], 60, 700, { w: 600 });
+  letters($('kK'), 'k2', t, T('marketing'), 'Marketing Health', 118, 810); letters($('kK'), 'k3', t, T('for'), 'for Clinics.', 118, 950);
+};
+</script></body></html>
