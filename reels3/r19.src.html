@@ -1,0 +1,81 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css"></head><body>
+<!-- A · appointment card (pin: profile menu) -->
+<div class="sc" id="A"><div class="st" data-z="2.1">{{C:Profile}}</div></div>
+<div class="sc dk black" id="B"><div class="kt" id="kB"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div class="sc" id="C"><div class="kt" id="kC"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk blue" id="D"><div class="kt" id="kD"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div class="sc" id="E"><div class="kt" id="kE"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk black" id="F"><div class="kt" id="kF"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<!-- G · appointment menu (pin: Deep research) -->
+<div class="sc" id="G"><div class="st" data-z="2.1">{{C:BlueMenu}}</div></div>
+<div class="sc" id="H"><div class="kt" id="kH"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk black" id="I"><div class="kt" id="kI"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<!-- J · reminder composer (pin: Let's do some magic) -->
+<div class="sc" id="J"><div class="st" data-z="1.75">{{C:DarkInput}}</div></div>
+<div class="sc" id="K"><div class="kt" id="kK"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div id="sub"></div>
+<script src="engine.js"></script>
+<script>
+const L = (a, b) => Array.from({ length: b - a + 1 }, (_, k) => [w(a + k), W[a + k].w]);
+const REM = 'Hola Marta, te esperamos mañana a las 10:00';
+window.setup = function (meta) {
+  W = meta.words; TOTAL = meta.total; buildSubs(); const c = i => w(i) - .12;
+  SC = [['A', 0, c(11), 1], ['B', c(11), c(18), 0], ['C', c(18), c(23), 0], ['D', c(23), c(34), 0], ['E', c(34), c(47), 0], ['F', c(47), c(62), 0],
+  ['G', c(62), c(78), 1], ['H', c(78), c(89), 0], ['I', c(89), c(97), 0], ['J', c(97), c(106), 1], ['K', c(106), TOTAL + 1, 0]];
+  $('bm').insertAdjacentHTML('afterbegin', '<div id="bmH" style="position:absolute;left:8px;right:8px;height:48px;border-radius:14px;background:rgba(29,31,32,.06)"></div>');
+  [...document.querySelectorAll('#bm .bi')].forEach(e => e.style.position = 'relative');
+  const tx = $('diTx'); tx.innerHTML = '<span id="diIn" style="display:inline-block"></span>';
+};
+// A — the agenda is full, Tuesday 10:00 confirmed
+HOOKS.A = (t, a) => {
+  popIn($('pf'), t, a, { d: .6, s: .9, dy: 50 }); [...document.querySelectorAll('#pf .pr')].forEach((r, i) => popIn(r, t, a + .2 + i * .06, { s: .95, dy: 12 }));
+  popIn($('pfAv'), t, a + .3, { s: .5, dy: 0 }); const r0 = document.querySelector('#pf .pr'), k = Math.sin(Math.PI * p(t, w(10) - .1, .5));
+  r0.style.transform += ` scale(${1 + .04 * k})`; r0.style.background = mix('#F2F2F4', '#DCE8FC', cl(p(t, w(10) - .1, .25)));
+};
+HOOKS.B = t => {
+  line($('kB'), 'b1', t, L(11, 13), 66, 640, { w: 600, out: w(17) - .25 }); rise($('kB'), 'b2', t, w(14), '10:15', 250, 720, { out: w(17) - .2 });
+  letters($('kB'), 'b3', t, w(17), 'nadie.', 190, 820, { color: '#3B87F2', wave: 1 });
+};
+HOOKS.C = t => { line($('kC'), 'c1', t, [[w(18), 'Y', '#8A8A8E'], [w(19), 'piensas:', '#8A8A8E']], 66, 690, { w: 600 }); letters($('kC'), 'c2', t, w(20), 'qué mala suerte.', 108, 820, { wave: 1 }) };
+HOOKS.D = (t, a) => {
+  dots($('kD'), 'dd', t, a, w(23) + .45, 860, '#fff');
+  rise($('kD'), 'd1', t, w(23) + .3, 'Pero te voy a contar algo', 64, 690); rise($('kD'), 'd2', t, w(29), 'que casi nadie', 64, 800);
+  letters($('kD'), 'd3', t, w(32), 'te dice.', 140, 910, { wave: 1 });
+};
+HOOKS.E = t => {
+  swap($('kE'), 'e1', t, [[w(34), 'Un hueco vacío'], [w(37), 'no es mala suerte.']], 92, 700, { end: w(41) - .1 });
+  echo($('kE'), 'e2', t, w(43) - .05, 'recordatorio', 140, 760);
+  line($('kE'), 'e3', t, [[w(44), 'que', '#3B87F2'], [w(45), 'nadie', '#3B87F2'], [w(46), 'envió.', '#3B87F2']], 72, 930, { w: 600 });
+};
+HOOKS.F = t => {
+  swap($('kF'), 'f1', t, [[w(47), 'No se olvida'], [w(52), 'porque no le importe.']], 84, 720, { end: w(56) - .1 });
+  line($('kF'), 'f2', t, [[w(56), 'Se'], [w(57), 'olvida'], [w(58), 'porque']], 70, 720, { w: 600 });
+  letters($('kF'), 'f3', t, w(59), 'tiene una vida.', 120, 840, { color: '#3B87F2', wave: 1 });
+};
+// G — confirm, write it down… and the reminder is never sent
+HOOKS.G = (t, a) => {
+  popIn($('bm'), t, a, { d: .6, s: .9, dy: 50 }); const items = [...document.querySelectorAll('#bm .bi')]; items.forEach((e, i) => popIn(e, t, a + .15 + i * .05, { s: .96, dy: 10 }));
+  const tops = [8, 59, 107, 155, 203, 251], k1 = io(p(t, w(73) - .1, .3)), y = lerp(tops[0], tops[4], k1), h = $('bmH');
+  h.style.top = y + 'px'; h.style.opacity = out(p(t, w(68) - .1, .2));
+  const cur = $('bmCur'), m = io(p(t, w(68) - .2, .4)); cur.style.left = lerp(430, 404, m) + 'px'; cur.style.top = (lerp(320, 150, m) + (y - 8) * k1 * 0) + 'px';
+  cur.style.top = (lerp(320, 140, m) + lerp(0, tops[4] - tops[0], k1)) + 'px'; cur.style.opacity = out(p(t, w(68) - .2, .2)) * (1 - io(p(t, w(75), .3)));
+  const r = items[1], g = cl(p(t, w(75), .3)); r.style.boxShadow = `0 0 0 ${2 * g}px rgba(59,135,242,${.6 * g}) inset`; r.style.color = mix('#1D1F20', '#2F79E6', g);
+};
+HOOKS.H = t => {
+  const o1 = w(85) - .25; line($('kH'), 'h1', t, L(78, 81), 64, 700, { w: 600, out: o1 }); letters($('kH'), 'h2', t, w(82), 'invitación de boda…', 86, 810, { wave: 1, out: o1 });
+  rise($('kH'), 'h3', t, w(85) - .1, 'sin decir', 80, 720); letters($('kH'), 'h4', t, w(87), 'la fecha.', 160, 840, { color: '#3B87F2', wave: 1 });
+};
+HOOKS.I = t => {
+  swap($('kI'), 'i1', t, [[w(89), 'Una cita.'], [w(91), 'Cero recordatorios.']], 88, 760, { end: w(93) - .1 });
+  letters($('kI'), 'i2', t, w(93), 'Y una silla vacía.', 100, 800, { blueFrom: 5 });
+};
+// J — the reminder that fills the agenda
+HOOKS.J = (t, a) => {
+  popIn($('di'), t, a, { d: .6, s: .95, dx: 120, dy: 0 }); const n = Math.round(REM.length * cl(p(t, a + .3, w(100) - a - .2))), s = $('diIn');
+  s.textContent = n ? REM.slice(0, n) : 'Escribe un recordatorio…'; s.style.color = n ? '#F5F5F7' : '#6B6B70'; s.style.transform = `translateX(${-Math.max(0, s.offsetWidth - 440)}px)`;
+  $('diOrb').style.transform = `scale(${1 + .06 * Math.sin(t * 5)})`; $('diBar').style.opacity = Math.floor(t * 2.2) % 2 ? .3 : 1;
+  const pr = Math.sin(Math.PI * p(t, w(100), .3)), on = cl(p(t, w(100), .2)), b = $('diSend');
+  b.style.transform = `scale(${1 - .06 * pr})`; b.style.background = mix('#1A1A1C', '#3B87F2', on); b.style.color = on > .5 ? '#fff' : '#D5D5DA';
+};
+HOOKS.K = t => { line($('kK'), 'k1', t, L(106, 108), 60, 700, { w: 600 }); letters($('kK'), 'k2', t, w(109), 'Marketing Health', 118, 810); letters($('kK'), 'k3', t, w(111), 'for Clinics.', 118, 950, { blueFrom: 4 }) };
+</script></body></html>

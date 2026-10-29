@@ -1,0 +1,122 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css"></head><body>
+<!-- A · appointment card (pin: profile menu) -->
+<div class="sc" id="A"><div class="st" data-z="2.1"><div style="width: 600px; height: 600px; background: #F1F1F2; font-family: Inter, sans-serif; color: #1D1F20; position: relative; overflow: hidden">
+  <div style="position: absolute; left: 154px; top: 60px; width: 292px; height: 600px; border-radius: 34px 34px 0 0; background: #F5F5F6; box-shadow: 0 0 0 1px rgba(29,31,32,0.04)"></div>
+  <div id="pf" style="position: absolute; left: 166px; top: 72px; width: 268px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(29,31,32,0.06), 0 20px 40px -18px rgba(29,31,32,0.25); padding: 8px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 12px; border-radius: 18px; box-shadow: 0 0 0 1px #EEEEF0 inset">
+      <div><div style="font-size: 16px; font-weight: 600; letter-spacing: -0.01em">Marta G.</div><div id="pfSub" style="font-size: 13.5px; color: #6E6E73; margin-top: 2px">Martes · 10:00</div></div>
+      <span id="pfAv" style="width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #DCE8FF 0%, #8FB6F7 45%, #3B87F2 100%); box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #BCD3F8; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; color: #fff">M</span>
+    </div>
+    <div class="pr" style="margin-top: 6px; height: 42px; border-radius: 13px; background: #F2F2F4; display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 15px; font-weight: 500"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l2.4 1.8 3-.2.9 2.9 2.5 1.7-1 2.8 1 2.8-2.5 1.7-.9 2.9-3-.2L12 22l-2.4-1.8-3 .2-.9-2.9-2.5-1.7 1-2.8-1-2.8 2.5-1.7.9-2.9 3 .2z" fill="#1D1F20"></path><path d="M8.5 12.3l2.3 2.3 4.7-4.7" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Valoración confirmada</div>
+    <div class="pr" style="height: 42px; border-radius: 13px; display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 15px"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1D1F20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg>Recordatorio<span id="pfBadge" style="margin-left: auto; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 7px; background: #EDEDF0; color: #6E6E73">Sin enviar</span></div>
+    <div class="pr" style="height: 42px; border-radius: 13px; display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 15px"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1D1F20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="3"></rect><path d="M4 10h16M9 3v4M15 3v4"></path></svg>Reprogramar<span style="margin-left: auto; width: 20px; height: 20px; border-radius: 50%; box-shadow: 0 0 0 1px #E0E0E3 inset; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #6E6E73">+</span></div>
+    <div class="pr" style="height: 42px; border-radius: 13px; display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 15px"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1D1F20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="10" rx="5"></rect><circle cx="8" cy="12" r="2.5"></circle></svg>Confirmar 24 h antes<span id="pfTg" style="margin-left: auto; width: 34px; height: 20px; border-radius: 999px; background: #E3E3E6; position: relative"><i id="pfKn" style="position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2)"></i></span></div>
+    <div style="height: 1px; background: #EEEEF0; margin: 6px 4px"></div>
+    <div class="pr" style="height: 42px; border-radius: 13px; display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 15px"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1D1F20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h3l1.5 4-2 1.3a10 10 0 0 0 5.2 5.2l1.3-2 4 1.5v3a2 2 0 0 1-2 2A15 15 0 0 1 5 6a2 2 0 0 1 2-2z"></path></svg>Llamar</div>
+    <div class="pr" id="pfNo" style="height: 42px; border-radius: 13px; display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 15px"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1D1F20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M6 6l12 12"></path></svg>No se ha presentado</div>
+  </div>
+</div>
+</div></div>
+<div class="sc dk black" id="B"><div class="kt" id="kB"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div class="sc" id="C"><div class="kt" id="kC"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk blue" id="D"><div class="kt" id="kD"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div class="sc" id="E"><div class="kt" id="kE"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk black" id="F"><div class="kt" id="kF"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<!-- G · appointment menu (pin: Deep research) -->
+<div class="sc" id="G"><div class="st" data-z="2.1"><div style="width: 600px; height: 600px; font-family: Inter, sans-serif; color: #1D1F20; position: relative; overflow: hidden; background: radial-gradient(70% 60% at 15% 25%, rgba(214,206,250,0.9), rgba(214,206,250,0) 60%), radial-gradient(80% 70% at 85% 90%, rgba(120,206,250,0.9), rgba(120,206,250,0) 65%), linear-gradient(160deg, #6FB4F5 0%, #4C9BEF 45%, #7CCBF6 100%)">
+  <div id="bm" style="position: absolute; left: 142px; top: 128px; width: 316px; border-radius: 26px; background: rgba(245,248,253,0.97); box-shadow: 0 0 0 1px rgba(255,255,255,0.8) inset, 0 24px 50px -20px rgba(10,50,120,0.4); padding: 8px; box-sizing: border-box">
+    <div class="bi" style="height: 48px; border-radius: 14px; display: flex; align-items: center; gap: 14px; padding: 0 14px; font-size: 18px"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1D1F20" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l3 3 5-6"></path></svg>Confirmar cita</div>
+    <div style="height: 1px; background: #E4E7ED; margin: 2px 12px"></div>
+    <div class="bi" style="height: 48px; border-radius: 14px; display: flex; align-items: center; gap: 14px; padding: 0 14px; font-size: 18px"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1D1F20" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg>Enviar recordatorio</div>
+    <div class="bi" style="height: 48px; border-radius: 14px; display: flex; align-items: center; gap: 14px; padding: 0 14px; font-size: 18px"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1D1F20" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v4l3 2"></path></svg>Recordar 24 h antes</div>
+    <div class="bi" style="height: 48px; border-radius: 14px; display: flex; align-items: center; gap: 14px; padding: 0 14px; font-size: 18px"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1D1F20" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14v10H9l-4 4z"></path></svg>Mensaje de WhatsApp</div>
+    <div class="bi" style="height: 48px; border-radius: 14px; display: flex; align-items: center; gap: 14px; padding: 0 14px; font-size: 18px"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1D1F20" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="3"></rect><path d="M4 10h16M9 3v4M15 3v4"></path></svg>Reprogramar</div>
+    <div class="bi" style="height: 48px; border-radius: 14px; display: flex; align-items: center; gap: 14px; padding: 0 14px; font-size: 18px"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="#1D1F20"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>Más<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1D1F20" stroke-width="2" stroke-linecap="round" style="margin-left: auto"><path d="M9 6l6 6-6 6"></path></svg></div>
+  </div>
+  <svg id="bmCur" aria-hidden="true" viewBox="0 0 22 28" width="30" height="38" style="position: absolute; left: 404px; top: 210px"><path d="M2 2v20l5.5-5 3.5 8 3.5-1.6-3.5-7.8H18z" fill="#1D1F20" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+</div>
+</div></div>
+<div class="sc" id="H"><div class="kt" id="kH"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk black" id="I"><div class="kt" id="kI"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<!-- J · reminder composer (pin: Let's do some magic) -->
+<div class="sc" id="J"><div class="st" data-z="1.75"><div style="width: 600px; height: 600px; background: #D9D9DA; font-family: Inter, sans-serif; color: #FFFFFF; position: relative; overflow: hidden">
+  <div id="di" style="position: absolute; left: 34px; top: 150px; width: 640px; height: 300px; border-radius: 0 0 0 64px; background: #0C0C0D; box-shadow: 0 0 0 4px #1A1A1C, 0 30px 60px -20px rgba(0,0,0,0.5)">
+    <div style="position: absolute; left: 0; right: 0; top: 0; height: 168px; border-bottom: 1px solid #1E1E21; background: linear-gradient(180deg, #121214, #0C0C0D)"></div>
+    <span id="diOrb" style="position: absolute; left: 40px; top: 52px; width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle at 50% 30%, #DCE8FF 0%, #6FA6F5 35%, #2F6FD8 60%, #0D2550 100%); box-shadow: 0 0 22px 4px rgba(59,135,242,0.45), inset 0 -6px 10px rgba(0,0,0,0.4)"></span>
+    <span id="diBar" style="position: absolute; left: 116px; top: 56px; width: 3px; height: 52px; border-radius: 2px; background: linear-gradient(180deg, #8FB6F7, rgba(143,182,247,0.2))"></span>
+    <div id="diTx" style="position: absolute; left: 132px; top: 62px; right: 20px; font-size: 32px; letter-spacing: -0.025em; color: #6B6B70; white-space: nowrap; overflow: hidden">Escribe un recordatorio…</div>
+    <div style="position: absolute; left: 40px; top: 200px; display: flex; align-items: center; gap: 16px">
+      <span style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(160deg, #B7CFF6, #3B87F2); box-shadow: 0 0 0 3px #1E1E21; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 500">M</span>
+      <span style="width: 52px; height: 52px; border-radius: 50%; background: #1A1A1C; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#9A9AA0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.5l-8.3 8.3a5 5 0 0 1-7-7l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"></path></svg></span>
+      <span id="diSend" style="height: 52px; padding: 0 22px; border-radius: 999px; background: #1A1A1C; display: flex; align-items: center; gap: 12px; font-size: 21px; color: #D5D5DA"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#D5D5DA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg>Recordar mañana</span>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="sc" id="K"><div class="kt" id="kK"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div id="sub"></div>
+<script src="engine.js"></script>
+<script>
+const L = (a, b) => Array.from({ length: b - a + 1 }, (_, k) => [w(a + k), W[a + k].w]);
+const REM = 'Hola Marta, te esperamos mañana a las 10:00';
+window.setup = function (meta) {
+  W = meta.words; TOTAL = meta.total; buildSubs(); const c = i => w(i) - .12;
+  SC = [['A', 0, c(11), 1], ['B', c(11), c(18), 0], ['C', c(18), c(23), 0], ['D', c(23), c(34), 0], ['E', c(34), c(47), 0], ['F', c(47), c(62), 0],
+  ['G', c(62), c(78), 1], ['H', c(78), c(89), 0], ['I', c(89), c(97), 0], ['J', c(97), c(106), 1], ['K', c(106), TOTAL + 1, 0]];
+  $('bm').insertAdjacentHTML('afterbegin', '<div id="bmH" style="position:absolute;left:8px;right:8px;height:48px;border-radius:14px;background:rgba(29,31,32,.06)"></div>');
+  [...document.querySelectorAll('#bm .bi')].forEach(e => e.style.position = 'relative');
+  const tx = $('diTx'); tx.innerHTML = '<span id="diIn" style="display:inline-block"></span>';
+};
+// A — the agenda is full, Tuesday 10:00 confirmed
+HOOKS.A = (t, a) => {
+  popIn($('pf'), t, a, { d: .6, s: .9, dy: 50 }); [...document.querySelectorAll('#pf .pr')].forEach((r, i) => popIn(r, t, a + .2 + i * .06, { s: .95, dy: 12 }));
+  popIn($('pfAv'), t, a + .3, { s: .5, dy: 0 }); const r0 = document.querySelector('#pf .pr'), k = Math.sin(Math.PI * p(t, w(10) - .1, .5));
+  r0.style.transform += ` scale(${1 + .04 * k})`; r0.style.background = mix('#F2F2F4', '#DCE8FC', cl(p(t, w(10) - .1, .25)));
+};
+HOOKS.B = t => {
+  line($('kB'), 'b1', t, L(11, 13), 66, 640, { w: 600, out: w(17) - .25 }); rise($('kB'), 'b2', t, w(14), '10:15', 250, 720, { out: w(17) - .2 });
+  letters($('kB'), 'b3', t, w(17), 'nadie.', 190, 820, { color: '#3B87F2', wave: 1 });
+};
+HOOKS.C = t => { line($('kC'), 'c1', t, [[w(18), 'Y', '#8A8A8E'], [w(19), 'piensas:', '#8A8A8E']], 66, 690, { w: 600 }); letters($('kC'), 'c2', t, w(20), 'qué mala suerte.', 108, 820, { wave: 1 }) };
+HOOKS.D = (t, a) => {
+  dots($('kD'), 'dd', t, a, w(23) + .45, 860, '#fff');
+  rise($('kD'), 'd1', t, w(23) + .3, 'Pero te voy a contar algo', 64, 690); rise($('kD'), 'd2', t, w(29), 'que casi nadie', 64, 800);
+  letters($('kD'), 'd3', t, w(32), 'te dice.', 140, 910, { wave: 1 });
+};
+HOOKS.E = t => {
+  swap($('kE'), 'e1', t, [[w(34), 'Un hueco vacío'], [w(37), 'no es mala suerte.']], 92, 700, { end: w(41) - .1 });
+  echo($('kE'), 'e2', t, w(43) - .05, 'recordatorio', 140, 760);
+  line($('kE'), 'e3', t, [[w(44), 'que', '#3B87F2'], [w(45), 'nadie', '#3B87F2'], [w(46), 'envió.', '#3B87F2']], 72, 930, { w: 600 });
+};
+HOOKS.F = t => {
+  swap($('kF'), 'f1', t, [[w(47), 'No se olvida'], [w(52), 'porque no le importe.']], 84, 720, { end: w(56) - .1 });
+  line($('kF'), 'f2', t, [[w(56), 'Se'], [w(57), 'olvida'], [w(58), 'porque']], 70, 720, { w: 600 });
+  letters($('kF'), 'f3', t, w(59), 'tiene una vida.', 120, 840, { color: '#3B87F2', wave: 1 });
+};
+// G — confirm, write it down… and the reminder is never sent
+HOOKS.G = (t, a) => {
+  popIn($('bm'), t, a, { d: .6, s: .9, dy: 50 }); const items = [...document.querySelectorAll('#bm .bi')]; items.forEach((e, i) => popIn(e, t, a + .15 + i * .05, { s: .96, dy: 10 }));
+  const tops = [8, 59, 107, 155, 203, 251], k1 = io(p(t, w(73) - .1, .3)), y = lerp(tops[0], tops[4], k1), h = $('bmH');
+  h.style.top = y + 'px'; h.style.opacity = out(p(t, w(68) - .1, .2));
+  const cur = $('bmCur'), m = io(p(t, w(68) - .2, .4)); cur.style.left = lerp(430, 404, m) + 'px'; cur.style.top = (lerp(320, 150, m) + (y - 8) * k1 * 0) + 'px';
+  cur.style.top = (lerp(320, 140, m) + lerp(0, tops[4] - tops[0], k1)) + 'px'; cur.style.opacity = out(p(t, w(68) - .2, .2)) * (1 - io(p(t, w(75), .3)));
+  const r = items[1], g = cl(p(t, w(75), .3)); r.style.boxShadow = `0 0 0 ${2 * g}px rgba(59,135,242,${.6 * g}) inset`; r.style.color = mix('#1D1F20', '#2F79E6', g);
+};
+HOOKS.H = t => {
+  const o1 = w(85) - .25; line($('kH'), 'h1', t, L(78, 81), 64, 700, { w: 600, out: o1 }); letters($('kH'), 'h2', t, w(82), 'invitación de boda…', 86, 810, { wave: 1, out: o1 });
+  rise($('kH'), 'h3', t, w(85) - .1, 'sin decir', 80, 720); letters($('kH'), 'h4', t, w(87), 'la fecha.', 160, 840, { color: '#3B87F2', wave: 1 });
+};
+HOOKS.I = t => {
+  swap($('kI'), 'i1', t, [[w(89), 'Una cita.'], [w(91), 'Cero recordatorios.']], 88, 760, { end: w(93) - .1 });
+  letters($('kI'), 'i2', t, w(93), 'Y una silla vacía.', 100, 800, { blueFrom: 5 });
+};
+// J — the reminder that fills the agenda
+HOOKS.J = (t, a) => {
+  popIn($('di'), t, a, { d: .6, s: .95, dx: 120, dy: 0 }); const n = Math.round(REM.length * cl(p(t, a + .3, w(100) - a - .2))), s = $('diIn');
+  s.textContent = n ? REM.slice(0, n) : 'Escribe un recordatorio…'; s.style.color = n ? '#F5F5F7' : '#6B6B70'; s.style.transform = `translateX(${-Math.max(0, s.offsetWidth - 440)}px)`;
+  $('diOrb').style.transform = `scale(${1 + .06 * Math.sin(t * 5)})`; $('diBar').style.opacity = Math.floor(t * 2.2) % 2 ? .3 : 1;
+  const pr = Math.sin(Math.PI * p(t, w(100), .3)), on = cl(p(t, w(100), .2)), b = $('diSend');
+  b.style.transform = `scale(${1 - .06 * pr})`; b.style.background = mix('#1A1A1C', '#3B87F2', on); b.style.color = on > .5 ? '#fff' : '#D5D5DA';
+};
+HOOKS.K = t => { line($('kK'), 'k1', t, L(106, 108), 60, 700, { w: 600 }); letters($('kK'), 'k2', t, w(109), 'Marketing Health', 118, 810); letters($('kK'), 'k3', t, w(111), 'for Clinics.', 118, 950, { blueFrom: 4 }) };
+</script></body></html>

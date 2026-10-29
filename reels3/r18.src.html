@@ -1,0 +1,69 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css"></head><body>
+<div class="sc" id="A"><div class="kt" id="kA"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<!-- B · "me lo pienso" selected (pin: text selection) -->
+<div class="sc" id="B"><div class="st" data-z="1.8">{{C:Main}}</div></div>
+<div class="sc dk black" id="C"><div class="kt" id="kC"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div class="sc" id="D"><div class="kt" id="kD"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk blue" id="E"><div class="kt" id="kE"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<!-- F · yes on the third (pin: Stay Productive) -->
+<div class="sc" id="F"><div class="st" data-z="2.2">{{C:Collab}}</div></div>
+<div class="sc" id="G"><div class="kt" id="kG"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<!-- H · follow-up sequence (pin: audio rows) -->
+<div class="sc" id="H"><div class="st" data-z="2.1">{{C:Rows}}</div></div>
+<div class="sc dk black" id="I"><div class="kt" id="kI"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div class="sc" id="J"><div class="kt" id="kJ"><div class="dl vl" style="left:72px"></div><div class="dl vl" style="left:1008px"></div></div></div>
+<div class="sc dk blue" id="K"><div class="kt" id="kK"><div class="dl hl" style="top:600px"></div><div class="dl hl" style="top:1160px"></div></div></div>
+<div id="sub"></div>
+<script src="engine.js"></script>
+<script>
+const L = (a, b) => Array.from({ length: b - a + 1 }, (_, k) => [w(a + k), W[a + k].w]);
+window.setup = function (meta) {
+  W = meta.words; TOTAL = meta.total; buildSubs(); const c = i => w(i) - .12;
+  SC = [['A', 0, c(8), 0], ['B', c(8), c(14), 1], ['C', c(14), c(22), 0], ['D', c(22), c(27), 0], ['E', c(27), c(39), 0], ['F', c(39), c(59), 1],
+  ['G', c(59), c(70), 0], ['H', c(70), c(83), 1], ['I', c(83), c(94), 0], ['J', c(94), c(107), 0], ['K', c(107), TOTAL + 1, 0]];
+};
+HOOKS.A = t => { line($('kA'), 'a1', t, L(0, 3), 68, 720, { w: 600 }); line($('kA'), 'a2', t, L(4, 7), 68, 830, { w: 600 }) };
+// B — the patient's answer gets selected, the follow-up action appears
+HOOKS.B = (t, a) => {
+  popIn($('slT'), t, w(11) - .15, { s: .9, dy: 30 }); const k = io(p(t, w(13) - .1, .35));
+  $('slBg').style.transform = `scaleX(${k})`; $('slBg').style.transformOrigin = 'left';
+  popIn($('slA'), t, w(13) - .15, { s: .3, dy: 0 }); popIn($('slB'), t, w(13) + .15, { s: .3, dy: 0 });
+  popIn($('slBar'), t, w(13) + .35, { s: .85, dy: 20 }); $('slBar').style.transform = `translateX(-50%) ` + $('slBar').style.transform;
+  $('slF').style.transform = `scale(${1 + .05 * Math.sin(Math.PI * p(t, w(13) + .9, .4))})`;
+};
+HOOKS.C = t => { rise($('kC'), 'c1', t, w(14), 'Y nunca más vuelves', 80, 720); letters($('kC'), 'c2', t, w(18), 'a saber de él.', 120, 850, { color: '#3B87F2' }) };
+HOOKS.D = t => { line($('kD'), 'd1', t, [[w(22), 'Y', '#8A8A8E'], [w(23), 'piensas:', '#8A8A8E']], 66, 690, { w: 600 }); letters($('kD'), 'd2', t, w(24), 'no le interesaba.', 100, 820, { wave: 1, blueFrom: 6 }) };
+HOOKS.E = (t, a) => {
+  dots($('kE'), 'ed', t, a, w(27) + .45, 860, '#fff');
+  rise($('kE'), 'e1', t, w(27) + .3, 'Pero te voy a decir algo', 66, 690); rise($('kE'), 'e2', t, w(33), 'que a lo mejor', 66, 800);
+  letters($('kE'), 'e3', t, w(37), 'no esperas.', 130, 920, { wave: 1 });
+};
+// F — 1st: no · 2nd: maybe · 3rd: yes
+HOOKS.F = (t, a) => {
+  popIn($('cb'), t, a, { d: .65, s: .9, dy: 50 }); popIn($('cbW'), t, a + .2, { s: .95, dy: 30 });
+  popIn($('cbL1'), t, w(46) - .1, { s: .4, dy: 10 }); popIn($('cbL2'), t, w(48), { s: .4, dy: 10 }); popIn($('cbL3'), t, w(54) - .1, { s: .4, dy: 10 });
+  const s = $('cbSel'); s.style.opacity = out(p(t, w(54), .25)); popIn($('cbT'), t, w(54) + .2, { s: .95, dy: 10 }); popIn($('cbD'), t, w(58), { s: .97, dy: 8 });
+  $('cbL3').style.transform += ` scale(${1 + .15 * Math.sin(Math.PI * p(t, w(58), .4))})`;
+};
+HOOKS.G = (t, a, b) => {
+  swap($('kG'), 'g1', t, [[w(59), 'Me lo pienso'], [w(62), 'no es un no.']], 120, 760, { end: w(66) - .05 });
+  letters($('kG'), 'g2', t, w(66), 'Es un todavía no.', 110, 820, { wave: 1, blueFrom: 6 });
+};
+// H — one message, one call… and then silence
+HOOKS.H = (t, a) => {
+  const rows = [...document.querySelectorAll('#rw .rr')]; rows.forEach((r, i) => popIn(r, t, a + .1 + i * .07, { s: .9, dy: 24 }));
+  const b1 = rows[1].querySelector('.rp'), b2 = rows[2].querySelector('.rp');
+  b1.style.transform = `scale(${lerp(.4, 1, pop(p(t, w(77) - .1, .45)))})`; b2.style.transform = `scale(${lerp(.4, 1, pop(p(t, w(79) - .1, .45)))})`;
+  [...rows[2].querySelectorAll('.rwv i')].forEach((b, i) => b.style.transform = `scaleY(${t > w(79) && t < w(82) ? .5 + .5 * Math.abs(Math.sin(t * 9 + i)) : 1})`);
+  const off = io(p(t, w(82) - .1, .5)); rows.slice(3).forEach(r => { r.style.opacity = (+r.style.opacity) * (1 - .55 * off); r.style.filter = `grayscale(1) blur(${off}px)` });
+};
+HOOKS.I = t => {
+  const o1 = w(88) - .25; line($('kI'), 'i1', t, L(83, 85), 70, 700, { w: 600, out: o1 }); letters($('kI'), 'i2', t, w(86), 'una semilla…', 120, 810, { wave: 1, out: o1 });
+  rise($('kI'), 'i3', t, w(88) - .1, 'y no volver a regarla', 70, 720); letters($('kI'), 'i4', t, w(93), 'nunca.', 180, 840, { color: '#3B87F2', wave: 1 });
+};
+HOOKS.J = t => {
+  swap($('kJ'), 'j1', t, [[w(94), 'Una llamada.'], [w(96), 'Cero seguimiento.']], 96, 700, { end: w(98) - .1 });
+  line($('kJ'), 'j2', t, L(98, 103), 60, 760, { w: 600 }); letters($('kJ'), 'j3', t, w(104), 'en otra clínica.', 104, 870, { color: '#3B87F2' });
+};
+HOOKS.K = t => { line($('kK'), 'k1', t, L(107, 111), 60, 700, { w: 600 }); letters($('kK'), 'k2', t, w(113), 'Marketing Health', 118, 810); letters($('kK'), 'k3', t, w(115), 'for Clinics.', 118, 950) };
+</script></body></html>

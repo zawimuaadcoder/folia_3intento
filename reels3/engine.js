@@ -89,21 +89,21 @@ function dots(host, key, t, t0, t1, y, color) {
 }
 // ---------- subtitles (component scenes only) ----------
 function buildSubs() { let cur = []; W.forEach((x, i) => { cur.push(i); if (/[.,:?!…]$/.test(x.w) || cur.length >= 5) { CH.push(cur); cur = [] } }); if (cur.length) CH.push(cur) }
-function subs(t, on) {
+function subs(t, on, dark) {
   const el = $('sub'); if (!on) { el.style.opacity = 0; return }
   let c = CH.find(c => t >= W[c[0]].t - .1 && t < (W[c[c.length - 1]].e + .2)); if (!c) { el.style.opacity = 0; return }
   const key = c.join(','); if (el.dataset.k !== key) { el.dataset.k = key; el.innerHTML = c.map(i => `<span>${W[i].w}</span>`).join('') }
-  [...el.children].forEach((s, j) => { const k = out(p(t, W[c[j]].t - .05, .15)); s.style.color = `rgba(29,31,32,${.25 + .75 * k})` });
+  [...el.children].forEach((s, j) => { const k = out(p(t, W[c[j]].t - .05, .15)); s.style.color = dark ? `rgba(255,255,255,${.3 + .7 * k})` : `rgba(29,31,32,${.25 + .75 * k})` });
   const k0 = out5(p(t, W[c[0]].t - .1, .2)); el.style.opacity = k0; el.style.transform = `translateY(${(1 - k0) * 10}px)`
 }
 // ---------- frame ----------
 const HOOKS = {};
 function frame(t) {
   let cur; for (const s of SC) { const on = t >= s[1] && t < s[2]; $(s[0]).style.display = on ? 'block' : 'none'; if (on) cur = s }
-  const [id, a, b, ui] = cur, l = t - a, sc = $(id); subs(t, ui);
+  const [id, a, b, ui] = cur, l = t - a, sc = $(id); subs(t, ui, sc.querySelector('.st[data-dark]'));
   const ein = soft(p(l, 0, .55)), eout = io(p(t, b - .18, .18)), push = 1 + .022 * Math.min(l, 4);
   const stage = sc.querySelector('.st'), kt = sc.querySelector('.kt');
-  if (stage) { if (!sc.dataset.bg) { const r = stage.firstElementChild; sc.style.background = r.style.background || r.style.backgroundColor; sc.dataset.bg = 1 }
+  if (stage) { if (!sc.dataset.bg) { const r = stage.firstElementChild; sc.style.background = r.style.background || r.style.backgroundColor; if (/gradient/.test(sc.style.background)) r.style.background = 'transparent'; sc.dataset.bg = 1 }
     const s = +(stage.dataset.z || 1.8) * push * lerp(.94, 1, ein); stage.style.transform = `translate(${540 - 300 * s}px,${880 - 300 * s}px) scale(${s})` }
   if (kt) kt.style.transform = `scale(${push})`;
   sc.style.filter = eout ? `blur(${eout * 18}px)` : 'none'; sc.style.opacity = 1 - eout * .6;
