@@ -58,6 +58,8 @@ for name in ['hero-bg', 'ic-chart', 'ic-shiny', 'ic-users']:
 d = absolutize(BASE)
 d = must_replace(d, '<html lang="es">', '<html lang="es" data-vertical="dental">')
 d = must_replace(d, '/assets/styles.css', '/assets/styles-dental.css')
+d = must_replace(d, '/assets/vsl-lead-engine-v3.mp4', '/assets/vsl-dental.mp4')
+d = must_replace(d, '/assets/vsl-poster.jpg', '/assets/vsl-dental-poster.jpg')
 for name in ['ic-chart', 'ic-shiny', 'ic-users']:
     d = d.replace(f'/assets/{name}.svg', f'/assets/{name}-dental.svg')
 
