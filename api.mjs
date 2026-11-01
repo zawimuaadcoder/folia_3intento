@@ -343,6 +343,11 @@ async function createOrUpdateHubSpotContact(
     calc_zone:
       payload.zone || '',
 
+    industry:
+      payload.vertical === 'dental'
+        ? 'Clínica dental'
+        : 'Clínica capilar',
+
     calc_goal:
       payload.goal || '',
 
@@ -490,6 +495,7 @@ async function notifyMake(
             ? String(payload.projection.ticket)
             : '',
         calc_zone: payload.zone || '',
+        vertical: payload.vertical || 'capilar',
         hubspot_contact_id:
           hubspot?.id || '',
         submission_id:
@@ -726,6 +732,11 @@ export async function handleLead(
 
     source:
       'folia-web',
+
+    vertical:
+      body.vertical === 'dental'
+        ? 'dental'
+        : 'capilar',
 
     submitted_at:
       new Date(now).toISOString(),
