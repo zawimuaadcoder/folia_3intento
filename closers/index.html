@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Closer para clínicas | MHFC</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Buscamos closer con experiencia en tickets de más de 4.000 € para captación de clientes en el sector salud.">
+<link rel="icon" href="/assets/logo-mark.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/guide.css">
+<style>
+.c-form{display:grid;gap:18px;margin-top:32px}
+.c-field{display:grid;gap:6px}
+.c-field label{font-weight:600;color:var(--ink);font-size:16px}
+.c-field input,.c-field select,.c-field textarea{font:inherit;font-size:16px;padding:12px 14px;border:1px solid #d6d9de;border-radius:10px;background:#fff;color:var(--ink);width:100%}
+.c-field input:focus,.c-field select:focus,.c-field textarea:focus{outline:2px solid var(--blue);outline-offset:1px}
+.c-two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.c-hp{position:absolute;left:-9999px}
+.c-msg{font-size:16px;margin:0}.c-msg.err{color:#c0352b}.c-msg.ok{color:#1d7a46;font-weight:600}
+.g-button{border:0;cursor:pointer;font-size:16px;justify-self:start}
+.c-req{list-style:none;padding:0;display:grid;gap:8px;margin:20px 0 0}
+.c-req li{padding-left:22px;position:relative}.c-req li:before{content:"✓";position:absolute;left:0;color:var(--blue);font-weight:700}
+@media (max-width:640px){.c-two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="g-header"><a class="g-brand" href="/"><img src="/assets/logo-mark.svg" width="36" height="36" alt=""><span>Marketing Health for Clinics</span></a></header>
+<main class="g-main">
+<h1>Buscamos closer</h1>
+<p class="g-lead">Captación de clientes en el sector salud. Llamadas con leads que ya han agendado, sin llamadas en frío.</p>
+<ul class="c-req">
+<li>Experiencia cerrando tickets de más de 4.000 €</li>
+<li>Se valora experiencia en sector salud o captación de clientes</li>
+<li>Español nativo, 100 % remoto, a comisión</li>
+</ul>
+<form class="c-form" id="closer-form" novalidate>
+<div class="c-field"><label for="name">Nombre y apellidos</label><input id="name" name="name" autocomplete="name" required></div>
+<div class="c-two">
+<div class="c-field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+<div class="c-field"><label for="phone">Teléfono / WhatsApp</label><input id="phone" name="phone" type="tel" autocomplete="tel" required></div>
+</div>
+<div class="c-two">
+<div class="c-field"><label for="years">Años como closer</label><select id="years" name="years" required><option value="">Elige</option><option>Menos de 1</option><option>1 a 2</option><option>3 a 5</option><option>Más de 5</option></select></div>
+<div class="c-field"><label for="ticket">Ticket más alto que has cerrado</label><select id="ticket" name="ticket" required><option value="">Elige</option><option>Menos de 2.000 €</option><option>2.000 a 4.000 €</option><option>4.000 a 10.000 €</option><option>Más de 10.000 €</option></select></div>
+</div>
+<div class="c-two">
+<div class="c-field"><label for="sector">¿Experiencia en salud o captación de clientes?</label><select id="sector" name="sector" required><option value="">Elige</option><option>Sí, en salud</option><option>Sí, en captación de clientes / agencias</option><option>En los dos</option><option>No</option></select></div>
+<div class="c-field"><label for="calls">Llamadas que podrías llevar a la semana</label><select id="calls" name="calls" required><option value="">Elige</option><option>Menos de 5</option><option>5 a 10</option><option>10 a 20</option><option>Más de 20</option></select></div>
+</div>
+<div class="c-field"><label for="linkedin">LinkedIn (opcional)</label><input id="linkedin" name="linkedin" type="url" placeholder="https://linkedin.com/in/..."></div>
+<div class="c-field"><label for="about">Cuéntanos en 2 o 3 frases qué has vendido y con qué resultados</label><textarea id="about" name="about" rows="4" required></textarea></div>
+<input class="c-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+<p class="c-msg" id="msg" role="status"></p>
+<button class="g-button" type="submit" id="send">Enviar candidatura</button>
+</form>
+</main>
+<script>
+const f=document.getElementById('closer-form'),m=document.getElementById('msg'),s=document.getElementById('send');
+f.addEventListener('submit',async e=>{e.preventDefault();m.className='c-msg';m.textContent='';
+const d=Object.fromEntries(new FormData(f));
+for(const k of ['name','email','phone','years','ticket','sector','calls','about']){if(!String(d[k]||'').trim()){m.className='c-msg err';m.textContent='Rellena todos los campos obligatorios.';f.elements[k].focus();return;}}
+s.disabled=true;s.textContent='Enviando…';
+try{const r=await fetch('/api/closer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});const j=await r.json().catch(()=>({}));
+if(!r.ok)throw new Error(j.message||'No hemos podido enviar tu candidatura.');
+f.querySelectorAll('input,select,textarea,button').forEach(x=>x.disabled=true);m.className='c-msg ok';m.textContent='¡Recibido! Te escribimos en los próximos días si encajas.';s.textContent='Enviado';}
+catch(err){m.className='c-msg err';m.textContent=err.message;s.disabled=false;s.textContent='Enviar candidatura';}});
+</script>
+</body>
+</html>

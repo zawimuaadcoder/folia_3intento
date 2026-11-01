@@ -343,6 +343,11 @@ async function createOrUpdateHubSpotContact(
     calc_zone:
       payload.zone || '',
 
+    industry:
+      payload.vertical === 'dental'
+        ? 'Clínica dental'
+        : 'Clínica capilar',
+
     calc_goal:
       payload.goal || '',
 
@@ -430,7 +435,14 @@ async function createOrUpdateHubSpotContact(
       {
         method: 'POST',
         body: JSON.stringify({
-          properties,
+          // Al asignar propietario, HubSpot avisa del lead nuevo
+          // por email y en su app, sin gastar créditos de Make.
+          properties: {
+            ...properties,
+            hubspot_owner_id:
+              env.HUBSPOT_OWNER_ID ||
+              '99940934',
+          },
         }),
       },
       env
@@ -483,6 +495,7 @@ async function notifyMake(
             ? String(payload.projection.ticket)
             : '',
         calc_zone: payload.zone || '',
+        vertical: payload.vertical || 'capilar',
         hubspot_contact_id:
           hubspot?.id || '',
         submission_id:
@@ -495,11 +508,15 @@ async function notifyMake(
       'Make webhook:',
       res.status
     );
+
+    return res.ok;
   } catch (err) {
     console.error(
       'Error avisando a Make:',
       err
     );
+
+    return false;
   } finally {
     clearTimeout(timer);
   }
@@ -716,6 +733,11 @@ export async function handleLead(
     source:
       'folia-web',
 
+    vertical:
+      body.vertical === 'dental'
+        ? 'dental'
+        : 'capilar',
+
     submitted_at:
       new Date(now).toISOString(),
 
@@ -770,6 +792,28 @@ export async function handleLead(
       result,
   };
 
+  // Sin clave de HubSpot, el lead entra solo por Make.
+  if (!String(env.HUBSPOT_SERVICE_KEY || '').trim()) {
+    const sent = await notifyMake(
+      payload,
+      null,
+      env
+    );
+
+    if (sent) {
+      return response(200, {
+        ok: true,
+        simulated: false,
+        result,
+      });
+    }
+
+    return response(502, {
+      message:
+        'No hemos podido guardar tus datos. Tus respuestas siguen aquí; vuelve a intentarlo.',
+    });
+  }
+
   try {
     const hubspot =
       await createOrUpdateHubSpotContact(
@@ -800,6 +844,15 @@ export async function handleLead(
       'Error final HubSpot:',
       err
     );
+
+    // Si HubSpot falla, el lead no se pierde: se envía igualmente a Make.
+    if (await notifyMake(payload, null, env)) {
+      return response(200, {
+        ok: true,
+        simulated: false,
+        result,
+      });
+    }
 
     return response(502, {
       message:
