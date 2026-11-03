@@ -1,5 +1,5 @@
 # PROMPT DE PRODUCCIÓN — «UNA OFERTA QUE VENDE SOLA»
-Reel cinematográfico de 45 s · Motion design 3D/2.5D · Pipeline programático (HyperFrames)
+Reel de marketing de 45 s · Motion design 3D/2.5D · Inter · Azul corporativo · Pipeline programático (HyperFrames)
 
 ---
 
@@ -18,7 +18,7 @@ No se acepta una animación simplemente funcional. Sin efectos genéricos, trans
 movimientos sin intención. La complejidad siempre al servicio de una idea extremadamente clara.
 
 **Idea visual central:** la «oferta» es un objeto físico. Al principio es una caja opaca, borrosa y confusa que nadie entiende.
-A lo largo del vídeo se le añaden tres piezas (Resultado · Plazo · Cero riesgo) hasta convertirse en un objeto
+A lo largo del vídeo se le añaden tres piezas (Resultado · Plazo · Cero riesgo, tres tonos de azul corporativo) hasta convertirse en un objeto
 nítido, luminoso y deseable que «se vende solo». Una única línea de luz (el hilo de la claridad) conecta todo.
 
 ---
@@ -54,35 +54,46 @@ ManvsMachine, Tendril, Giant Ant. Identidad propia.
 
 ---
 
-## 3. DIRECCIÓN DE ARTE — «EL TALLER DE LA OFERTA»
-**Concepto:** las ideas de marketing dejan de ser abstractas y se convierten en objetos físicos sobre un escenario oscuro:
-anuncios, seguidores y contenidos son fichas que caen; la oferta es un objeto que se ensambla.
+## 3. DIRECCIÓN DE ARTE — «EL ESTUDIO DE MARKETING»
+**Concepto:** el universo visual es el de una agencia/consultora de marketing premium. Las ideas abstractas
+se convierten en objetos físicos de su día a día: tarjetas de anuncio (Meta/Google genéricas, sin logos), contadores
+de seguidores, notificaciones de DM, gráficos de conversión, un embudo de ventas, etiquetas de precio y propuestas comerciales.
+La oferta es el objeto central: una «propuesta» que pasa de confusa a irresistible.
+
+**Estilo:** corporativo, limpio y tecnológico (estética SaaS / dashboard premium). Mucho aire, rejilla precisa,
+interfaces 3D con espesor, nada de estética «gurú», billetes, coches ni efectos llamativos.
 
 **Ambiente**
-- Fondo principal: **#0A0A0F** con gradientes volumétricos muy suaves, bruma casi imperceptible, sombras de contacto.
-- Evitar estrellas, partículas excesivas, neón barato y fondos de ciencia ficción.
+- Fondo principal: **azul noche #06102A** con degradado volumétrico muy suave hacia **#0A1A44**.
+- Rejilla de dashboard casi imperceptible en el suelo, bruma ligera, sombras de contacto, reflejos sutiles.
+- Evitar estrellas, partículas excesivas, neón y fondos genéricos de ciencia ficción.
 
-**Paleta**
-- Línea de claridad / positivo: **verde #3DDC84**.
-- Error / confusión: **rojo apagado #E5484D** (solo en ❌ y en el estado «confuso»).
-- Pieza 1 Resultado: **ámbar #FFB224**. Pieza 2 Plazo: **azul #4C9AFF**. Pieza 3 Cero riesgo: **verde #3DDC84**.
-- Texto: blanco cálido **#F5F3EE**.
+**Paleta (azul corporativo dominante)**
+- **Azul corporativo principal: #1F5EFF** — línea de claridad, titulares destacados, botones, estado «positivo».
+- Azul claro de apoyo: **#6E9BFF** · Azul profundo: **#0B2A6F** · Blanco: **#FFFFFF** · Gris texto secundario: **#A9B4CC**.
+- Las tres piezas son tres tonos del mismo azul: 1. Resultado **#1F5EFF** · 2. Plazo **#4F86FF** · 3. Cero riesgo **#8FB4FF** (el sello de garantía en blanco con borde azul).
+- Rojo apagado **#E5484D** solo para la ✕ del contraste. El ✓ va en azul corporativo, no en verde.
+- Ningún otro color sin justificación narrativa.
 
 **Materiales**
-- Tarjetas/fichas: mate premium, espesor visible, bordes redondeados, sombras suaves.
-- Objeto «oferta confusa»: vidrio esmerilado opaco, con ruido y texto ilegible dentro.
-- Objeto «oferta clara»: vidrio pulido, reflejos limpios, interior perfectamente legible.
-- Línea luminosa: núcleo verde controlado, halo bajo, ilumina los objetos cercanos. Nunca un simple trazo 2D con glow.
+- Tarjetas UI: blanco/azul mate premium, espesor visible, esquinas redondeadas (radio 24 px), sombras azuladas suaves.
+- Oferta confusa: vidrio esmerilado gris, texto ilegible y saturado de jerga («soluciones 360», «marketing integral»).
+- Oferta clara: vidrio pulido con tinte azul, reflejos limpios, texto nítido.
+- Línea luminosa: núcleo **#1F5EFF**, halo azul claro muy bajo, ilumina los objetos cercanos. Nunca un trazo 2D con glow.
 
-**Tipografía:** sans geométrica pesada (p. ej. Inter Tight / Satoshi Black) para titulares; peso medio para subtítulos.
-Sin efectos 3D innecesarios sobre las letras. Cada palabra clave entra con una acción física, nunca con fade.
+**Tipografía: Inter (única familia)**
+- Titulares: **Inter Black / ExtraBold**, tracking −2 %, mayúsculas en los 📝 principales.
+- Subtítulos y textos de UI: **Inter Medium / SemiBold**.
+- Cifras (30, 90, 3): Inter con `font-variant-numeric: tabular-nums` para los contadores.
+- Palabra clave de cada titular resaltada en azul corporativo; resto en blanco.
+- Sin efectos 3D sobre las letras. Cada palabra clave entra con acción física, nunca con fade.
 
 ---
 
 ## 4. ILUMINACIÓN
-Key suave que define volumen, fill controlado, rim de separación y la línea verde como luz práctica.
-- Cuando aparece una pieza, el entorno recibe una influencia sutil de su color (ámbar / azul / verde).
-- En el contraste ❌, la ficha roja apaga ligeramente la escena; en ✅ la escena se ilumina.
+Key fría y suave que define volumen, fill controlado, rim azul de separación y la línea azul como luz práctica.
+- Al encajar cada pieza, el entorno sube un paso de luz azul (la escena se «aclara» a medida que la oferta se aclara).
+- En el contraste, la ficha ❌ apaga ligeramente la escena; la ✅ la ilumina en azul.
 - No quemar blancos, no tapar texto con luz, sin destellos de lente en cada transición.
 
 ---
@@ -116,7 +127,7 @@ Si no hay grabación: pieza 100 % motion con voz en off.
 📝 **NO TE FALTAN CLIENTES**
 
 - 0:00 Pantalla casi negra. En el primer fotograma ya hay movimiento (los primeros 0,5 s deben detener el scroll).
-- Decenas de siluetas de «clientes» (pequeñas figuras/avatares minimalistas) avanzan hacia el centro desde la profundidad.
+- Decenas de siluetas de «clientes» (tarjetas de lead/avatares minimalistas en azul y blanco) avanzan hacia el centro desde la profundidad.
 - 0:00–1:20 El titular **NO TE FALTAN CLIENTES** cae palabra a palabra con peso; «CLIENTES» aterriza con golpe subgrave y la cámara recibe un micro-impacto.
 - 1:20 Las figuras se detienen frente a un objeto: una caja de vidrio esmerilado con texto ilegible («la oferta»).
 - 2:00 En «nadie entiende» los clientes ladean la cabeza y aparecen pequeños «?» físicos que rebotan sobre la caja.
@@ -126,28 +137,28 @@ Si no hay grabación: pieza 100 % motion con voz en off.
 🗣️ «Mucha gente piensa que necesita más anuncios, más seguidores, más contenido. Pero si cada vez que alguien te pregunta precio tienes que convencerle, el problema no es cuántas personas te ven. Es lo que les ofreces.»
 📝 **+ anuncios ≠ + clientes**
 
-- La cámara se eleva. Del cielo caen fichas sincronizadas con la voz: «ANUNCIOS» (3:6), «SEGUIDORES» (4:4), «CONTENIDO» (5:2), cada una con su sonido de impacto, apilándose.
-- La pila crece, pero las figuras siguen sin acercarse a la caja: el contador de clientes permanece en 0.
-- 7:00 Aparece una burbuja de chat 3D: «¿Precio?». La caja intenta «convencer»: se infla, tiembla, suda con un esfuerzo cómico y sutil.
+- La cámara se eleva. Del cielo caen tarjetas UI de marketing sincronizadas con la voz: «ANUNCIOS» como tarjeta de anuncio (3:6), «SEGUIDORES» como contador +10K (4:4), «CONTENIDO» como pila de posts (5:2), cada una con su sonido de impacto, apilándose.
+- La pila crece, pero las figuras siguen sin acercarse a la caja: un dashboard de ventas muestra «Clientes: 0» y la gráfica sigue plana.
+- 7:00 Llega una notificación de DM 3D: «¿Precio?». La caja intenta «convencer»: se infla, tiembla, suda con un esfuerzo cómico y sutil.
 - 9:00 Se ensambla la ecuación en tipografía limpia: **+ anuncios ≠ + clientes**. El «≠» entra con un pequeño golpe rojo.
-- 10:50 En «Es lo que les ofreces», la línea verde nace de la base de la caja y la cámara la sigue hacia abajo.
+- 10:50 En «Es lo que les ofreces», la línea azul nace de la base de la caja y la cámara la sigue hacia abajo.
 - Objetivo emocional: «me pasa a mí», cambio de foco.
 
 ### ESCENA 03 — LA ESTRATEGIA · 12:00–30:00
 🗣️ «Una oferta que vende sola tiene tres cosas: Uno: un resultado concreto. No ‘te ayudo con tu marketing’, sino ‘te consigo 30 clientes’. Dos: un plazo. ‘En 90 días’. Tres: quitarle el riesgo. ‘Y si no lo consigo, sigo trabajando gratis hasta que lo consiga.’»
 📝 **1. Resultado concreto · 2. Plazo · 3. Cero riesgo**
 
-Estructura: la caja esmerilada queda en el centro como una base vacía con tres ranuras. La línea verde la rodea.
+Estructura: la caja esmerilada queda en el centro como una base vacía con tres ranuras. La línea azul la rodea.
 
 - **12:00–13:50** Titular «UNA OFERTA QUE VENDE SOLA». Las tres ranuras se iluminan tenuemente.
-- **13:50–21:00 · PIEZA 1 — RESULTADO (ámbar)**
-  - Ficha borrosa «Te ayudo con tu marketing» flota, la cámara la atraviesa y se desintegra en fragmentos mate.
+- **13:50–21:00 · PIEZA 1 — RESULTADO (azul #1F5EFF)**
+  - Tarjeta borrosa en gris «Te ayudo con tu marketing» flota, la cámara la atraviesa y se desintegra en fragmentos mate.
   - Del otro lado se ensambla con encaje magnético: **«30 CLIENTES»** (contador mecánico 0 → 30 en celdas de anchura fija).
-  - La pieza ámbar encaja en la ranura 1 con clic satisfactorio. Etiqueta: **1. Resultado concreto**.
-- **21:00–24:00 · PIEZA 2 — PLAZO (azul)**
+  - La pieza azul encaja en la ranura 1 con clic satisfactorio. Etiqueta: **1. Resultado concreto**.
+- **21:00–24:00 · PIEZA 2 — PLAZO (azul medio)**
   - La línea se curva y forma un calendario/reloj 3D. Las hojas pasan rápidamente hasta **«90 DÍAS»**.
-  - Encaja en la ranura 2. Influencia azul sutil sobre el entorno. Etiqueta: **2. Plazo**.
-- **24:00–30:00 · PIEZA 3 — CERO RIESGO (verde)**
+  - Encaja en la ranura 2. La escena sube un paso de luz. Etiqueta: **2. Plazo**.
+- **24:00–30:00 · PIEZA 3 — CERO RIESGO (azul claro + sello blanco)**
   - Un escudo/sello de garantía se forma con la propia línea.
   - Texto: «Si no lo consigo, sigo trabajando **gratis** hasta que lo consiga». «gratis» se subraya con la línea.
   - Encaja en la ranura 3. **Transformación clave:** el vidrio esmerilado se pule de golpe, se vuelve transparente y nítido; las figuras-clientes del gancho giran la cabeza hacia ella. Etiqueta: **3. Cero riesgo**.
@@ -161,7 +172,7 @@ Estructura: la caja esmerilada queda en el centro como una base vacía con tres 
 - Momento contemplativo: la cámara se calma para que se pueda leer.
 - Dos tarjetas en el espacio. Vertical: una encima de otra. Horizontal: lado a lado.
 - **Tarjeta ❌** (30:50): «Clases de inglés». Mate gris, luz plana, ligeramente hundida. Una ✕ roja se estampa.
-- **Tarjeta ✅** (32:50): «Inglés para tu entrevista en **3 meses** o te **devolvemos el dinero**». Se eleva con las tres piezas de color incrustadas en su borde (ámbar «entrevista», azul «3 meses», verde «devolvemos el dinero»). Un ✓ verde aterriza.
+- **Tarjeta ✅** (32:50): «Inglés para tu entrevista en **3 meses** o te **devolvemos el dinero**». Se eleva con las tres piezas de color incrustadas en su borde (tres tonos de azul: «entrevista», «3 meses», «devolvemos el dinero»). Un ✓ azul corporativo aterriza.
 - 35:50 «Es el mismo servicio»: ambas tarjetas muestran el mismo icono interior (un libro), demostrándolo visualmente.
 - 36:80 «¿cuál compras?»: un cursor/dedo 3D duda un instante sobre ❌ y elige ✅; la tarjeta se presiona y libera una onda de energía.
 - Objetivo emocional: revelación, «ahora lo entiendo».
@@ -173,11 +184,11 @@ Estructura: la caja esmerilada queda en el centro como una base vacía con tres 
 - La onda se convierte en una burbuja de comentario 3D que baja hacia la zona inferior de la pantalla (donde está el botón real de comentarios).
 - Dentro, un campo de texto se escribe solo con ejemplos rotando: «Soy fisio…», «Tengo una academia…», «Hago diseño web…».
 - **Comenta a qué te dedicas 👇**: titular grande; el 👇 rebota dos veces con oscilación amortiguada y apunta a la UI de comentarios.
-- 43:00 La cámara se aleja: se ve la oferta pulida en el centro, rodeada de los clientes, con la línea verde cerrando el círculo.
+- 43:00 La cámara se aleja: se ve la oferta pulida en el centro, rodeada de los clientes, con la línea azul cerrando el círculo.
 - Objetivo emocional: invitación clara, acción inmediata.
 
 ### ESCENA 06 — FIRMA · 45:00–47:00
-Pantalla final minimalista: **[TU NOMBRE / @TU_USUARIO]** + subtítulo opcional «Ofertas que se venden solas».
+Pantalla final minimalista: **[TU NOMBRE / @TU_USUARIO]** + subtítulo opcional «Ofertas que se venden solas» en Inter SemiBold, fondo #06102A, nombre en blanco y @ en azul #1F5EFF.
 Pequeña resonancia musical. Sin animaciones innecesarias.
 
 ---
@@ -201,7 +212,7 @@ ElevenLabs o equivalente (o la voz real del creador si se graba).
 36:80 «¿cuál compras?» · 38:00 «Escríbeme».
 
 **Subtítulos:** además del 📝 principal de cada bloque, subtítulos palabra a palabra (estilo karaoke) en la mitad inferior-central,
-máximo 2 líneas, resaltando en verde las palabras clave (clientes, oferta, resultado, plazo, riesgo, gratis, comentarios).
+máximo 2 líneas, resaltando en azul corporativo las palabras clave (clientes, oferta, resultado, plazo, riesgo, gratis, comentarios).
 
 ---
 
