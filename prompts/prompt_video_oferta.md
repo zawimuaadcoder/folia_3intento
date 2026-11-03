@@ -188,7 +188,7 @@ Estructura: la caja esmerilada queda en el centro como una base vacía con tres 
 - Objetivo emocional: invitación clara, acción inmediata.
 
 ### ESCENA 06 — FIRMA · 45:00–47:00
-Pantalla final minimalista: **[TU NOMBRE / @TU_USUARIO]** + subtítulo opcional «Ofertas que se venden solas» en Inter SemiBold, fondo #06102A, nombre en blanco y @ en azul #1F5EFF.
+Pantalla final minimalista: solo **@mhfcleads**, centrado, en Inter Bold azul #1F5EFF sobre fondo #06102A. Sin nombre de marca, sin subtítulo, sin logo.
 Pequeña resonancia musical. Sin animaciones innecesarias.
 
 ---
