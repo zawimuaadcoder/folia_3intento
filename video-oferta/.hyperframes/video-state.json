@@ -143,15 +143,14 @@
   },
   "checks": {
     "latest": {
-      "revision": "31492956-f72c-4171-b8fa-9235486d2d64",
-      "id": "a3f7bc0a-da6a-44a3-a32e-eeb7d782fa3e"
+      "revision": null,
+      "id": "72d15843-23af-43c5-9bdf-1ab9d449a6a0"
     },
     "revisions": {
       "31492956-f72c-4171-b8fa-9235486d2d64": [
         {
           "id": "e986dd3a-96d5-4e74-a59c-a82f4398959d",
           "scope": "project",
-          "report": "/home/user/folia_3intento/video-oferta/.hyperframes/artifacts/checks/e986dd3a-96d5-4e74-a59c-a82f4398959d.json",
           "metadata": {
             "ok": false,
             "browserSkipped": false,
@@ -173,12 +172,13 @@
           "revision": "31492956-f72c-4171-b8fa-9235486d2d64",
           "inputFingerprint": "070577a952bc6b35f972ffd2db92f3b23828e2fd918694e8f57b340272e8dabd",
           "inputScope": "local-project-files",
-          "attribution": "recorded-revision"
+          "attribution": "recorded-revision",
+          "status": "cleaned",
+          "cleanedAfterRender": "c7572c5a-fcd8-4afc-91c1-a973b45509a6"
         },
         {
           "id": "a3f7bc0a-da6a-44a3-a32e-eeb7d782fa3e",
           "scope": "project",
-          "report": "/home/user/folia_3intento/video-oferta/.hyperframes/artifacts/checks/a3f7bc0a-da6a-44a3-a32e-eeb7d782fa3e.json",
           "metadata": {
             "ok": false,
             "browserSkipped": false,
@@ -200,7 +200,9 @@
           "revision": "31492956-f72c-4171-b8fa-9235486d2d64",
           "inputFingerprint": "070577a952bc6b35f972ffd2db92f3b23828e2fd918694e8f57b340272e8dabd",
           "inputScope": "local-project-files",
-          "attribution": "recorded-revision"
+          "attribution": "recorded-revision",
+          "status": "cleaned",
+          "cleanedAfterRender": "c7572c5a-fcd8-4afc-91c1-a973b45509a6"
         }
       ]
     },
@@ -241,13 +243,15 @@
   },
   "renders": {
     "latest": {
-      "id": "04db5fb8-a5f0-4886-b857-cf7ace249b6b",
-      "completedAt": 1793720230143,
-      "output": "/home/user/folia_3intento/video-oferta/renders/vertical_sinaudio.mp4",
+      "id": "e0424c32-0445-4ebb-bf8d-a953fd42bbaf",
+      "completedAt": 1793725161745,
+      "output": "/home/user/folia_3intento/video-oferta/renders/vertical_sinsubs_sinaudio.mp4",
       "status": "completed",
-      "revision": null
+      "revision": "3a37b183-317c-47cb-a27c-e8bfe539a110"
     },
-    "retainedRevisions": []
+    "retainedRevisions": [
+      "3a37b183-317c-47cb-a27c-e8bfe539a110"
+    ]
   },
   "pendingArtifactCleanup": []
 }
