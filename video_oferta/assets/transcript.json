@@ -1,0 +1,812 @@
+[
+  {
+    "text": "No",
+    "start": 0.02,
+    "end": 0.14,
+    "id": "w0"
+  },
+  {
+    "text": "te",
+    "start": 0.14,
+    "end": 0.26,
+    "id": "w1"
+  },
+  {
+    "text": "faltan",
+    "start": 0.35,
+    "end": 0.7,
+    "id": "w2"
+  },
+  {
+    "text": "clientes.",
+    "start": 0.7,
+    "end": 1.28,
+    "id": "w3"
+  },
+  {
+    "text": "Lo",
+    "start": 1.54,
+    "end": 1.63,
+    "id": "w4"
+  },
+  {
+    "text": "que",
+    "start": 1.63,
+    "end": 1.79,
+    "id": "w5"
+  },
+  {
+    "text": "tienes",
+    "start": 1.86,
+    "end": 2.32,
+    "id": "w6"
+  },
+  {
+    "text": "es",
+    "start": 2.32,
+    "end": 2.47,
+    "id": "w7"
+  },
+  {
+    "text": "una",
+    "start": 2.47,
+    "end": 2.7,
+    "id": "w8"
+  },
+  {
+    "text": "oferta",
+    "start": 2.7,
+    "end": 3.15,
+    "id": "w9"
+  },
+  {
+    "text": "que",
+    "start": 3.15,
+    "end": 3.38,
+    "id": "w10"
+  },
+  {
+    "text": "nadie",
+    "start": 3.38,
+    "end": 3.75,
+    "id": "w11"
+  },
+  {
+    "text": "entiende.",
+    "start": 3.75,
+    "end": 4.64,
+    "id": "w12"
+  },
+  {
+    "text": "Mucha",
+    "start": 4.64,
+    "end": 4.72,
+    "id": "w13"
+  },
+  {
+    "text": "gente",
+    "start": 4.72,
+    "end": 4.95,
+    "id": "w14"
+  },
+  {
+    "text": "piensa",
+    "start": 5.03,
+    "end": 5.28,
+    "id": "w15"
+  },
+  {
+    "text": "que",
+    "start": 5.3,
+    "end": 5.5,
+    "id": "w16"
+  },
+  {
+    "text": "necesita",
+    "start": 5.5,
+    "end": 6.09,
+    "id": "w17"
+  },
+  {
+    "text": "más",
+    "start": 6.09,
+    "end": 6.31,
+    "id": "w18"
+  },
+  {
+    "text": "anuncios,",
+    "start": 6.31,
+    "end": 7.03,
+    "id": "w19"
+  },
+  {
+    "text": "más",
+    "start": 7.03,
+    "end": 7.25,
+    "id": "w20"
+  },
+  {
+    "text": "seguidores,",
+    "start": 7.25,
+    "end": 8.07,
+    "id": "w21"
+  },
+  {
+    "text": "más",
+    "start": 8.14,
+    "end": 8.34,
+    "id": "w22"
+  },
+  {
+    "text": "contenido.",
+    "start": 8.34,
+    "end": 9.22,
+    "id": "w23"
+  },
+  {
+    "text": "Pero",
+    "start": 9.27,
+    "end": 9.3,
+    "id": "w24"
+  },
+  {
+    "text": "si",
+    "start": 9.48,
+    "end": 9.58,
+    "id": "w25"
+  },
+  {
+    "text": "cada",
+    "start": 9.58,
+    "end": 9.79,
+    "id": "w26"
+  },
+  {
+    "text": "vez",
+    "start": 9.79,
+    "end": 9.93,
+    "id": "w27"
+  },
+  {
+    "text": "que",
+    "start": 9.93,
+    "end": 10.08,
+    "id": "w28"
+  },
+  {
+    "text": "alguien",
+    "start": 10.08,
+    "end": 10.43,
+    "id": "w29"
+  },
+  {
+    "text": "te",
+    "start": 10.46,
+    "end": 10.56,
+    "id": "w30"
+  },
+  {
+    "text": "pregunta",
+    "start": 10.56,
+    "end": 11.05,
+    "id": "w31"
+  },
+  {
+    "text": "a",
+    "start": 11.05,
+    "end": 11.12,
+    "id": "w32"
+  },
+  {
+    "text": "precio",
+    "start": 11.12,
+    "end": 11.49,
+    "id": "w33"
+  },
+  {
+    "text": "tienes",
+    "start": 11.49,
+    "end": 11.72,
+    "id": "w34"
+  },
+  {
+    "text": "que",
+    "start": 11.97,
+    "end": 12.04,
+    "id": "w35"
+  },
+  {
+    "text": "convencerle,",
+    "start": 12.04,
+    "end": 12.83,
+    "id": "w36"
+  },
+  {
+    "text": "el",
+    "start": 12.83,
+    "end": 12.95,
+    "id": "w37"
+  },
+  {
+    "text": "problema",
+    "start": 12.95,
+    "end": 13.45,
+    "id": "w38"
+  },
+  {
+    "text": "no",
+    "start": 13.45,
+    "end": 13.57,
+    "id": "w39"
+  },
+  {
+    "text": "es",
+    "start": 13.57,
+    "end": 13.69,
+    "id": "w40"
+  },
+  {
+    "text": "cuántas",
+    "start": 13.69,
+    "end": 14.12,
+    "id": "w41"
+  },
+  {
+    "text": "personas",
+    "start": 14.12,
+    "end": 14.38,
+    "id": "w42"
+  },
+  {
+    "text": "te",
+    "start": 14.62,
+    "end": 14.74,
+    "id": "w43"
+  },
+  {
+    "text": "ven.",
+    "start": 14.95,
+    "end": 15.48,
+    "id": "w44"
+  },
+  {
+    "text": "Es",
+    "start": 15.5,
+    "end": 15.64,
+    "id": "w45"
+  },
+  {
+    "text": "lo",
+    "start": 15.69,
+    "end": 15.84,
+    "id": "w46"
+  },
+  {
+    "text": "que",
+    "start": 15.84,
+    "end": 16.09,
+    "id": "w47"
+  },
+  {
+    "text": "les",
+    "start": 16.14,
+    "end": 16.39,
+    "id": "w48"
+  },
+  {
+    "text": "ofreces.",
+    "start": 16.39,
+    "end": 17.36,
+    "id": "w49"
+  },
+  {
+    "text": "Una",
+    "start": 17.36,
+    "end": 17.58,
+    "id": "w50"
+  },
+  {
+    "text": "oferta",
+    "start": 17.58,
+    "end": 18.01,
+    "id": "w51"
+  },
+  {
+    "text": "que",
+    "start": 18.01,
+    "end": 18.23,
+    "id": "w52"
+  },
+  {
+    "text": "vende",
+    "start": 18.23,
+    "end": 18.59,
+    "id": "w53"
+  },
+  {
+    "text": "sola",
+    "start": 18.59,
+    "end": 18.88,
+    "id": "w54"
+  },
+  {
+    "text": "tiene",
+    "start": 18.88,
+    "end": 19.23,
+    "id": "w55"
+  },
+  {
+    "text": "tres",
+    "start": 19.23,
+    "end": 19.42,
+    "id": "w56"
+  },
+  {
+    "text": "cosas.",
+    "start": 19.75,
+    "end": 20.16,
+    "id": "w57"
+  },
+  {
+    "text": "1.",
+    "start": 20.18,
+    "end": 20.68,
+    "id": "w58"
+  },
+  {
+    "text": "Un",
+    "start": 20.68,
+    "end": 20.85,
+    "id": "w59"
+  },
+  {
+    "text": "resultado",
+    "start": 20.85,
+    "end": 21.41,
+    "id": "w60"
+  },
+  {
+    "text": "concreto.",
+    "start": 21.7,
+    "end": 22.56,
+    "id": "w61"
+  },
+  {
+    "text": "No",
+    "start": 22.59,
+    "end": 22.74,
+    "id": "w62"
+  },
+  {
+    "text": "te",
+    "start": 22.74,
+    "end": 22.91,
+    "id": "w63"
+  },
+  {
+    "text": "ayudo",
+    "start": 22.91,
+    "end": 23.34,
+    "id": "w64"
+  },
+  {
+    "text": "con",
+    "start": 23.34,
+    "end": 23.6,
+    "id": "w65"
+  },
+  {
+    "text": "tu",
+    "start": 23.6,
+    "end": 23.73,
+    "id": "w66"
+  },
+  {
+    "text": "marketing,",
+    "start": 23.8,
+    "end": 24.72,
+    "id": "w67"
+  },
+  {
+    "text": "sino",
+    "start": 24.72,
+    "end": 25.01,
+    "id": "w68"
+  },
+  {
+    "text": "te",
+    "start": 25.06,
+    "end": 25.23,
+    "id": "w69"
+  },
+  {
+    "text": "consigo",
+    "start": 25.23,
+    "end": 25.92,
+    "id": "w70"
+  },
+  {
+    "text": "30",
+    "start": 25.92,
+    "end": 26.44,
+    "id": "w71"
+  },
+  {
+    "text": "clientes.",
+    "start": 26.45,
+    "end": 27.44,
+    "id": "w72"
+  },
+  {
+    "text": "2.",
+    "start": 27.46,
+    "end": 28.01,
+    "id": "w73"
+  },
+  {
+    "text": "Un",
+    "start": 28.01,
+    "end": 28.2,
+    "id": "w74"
+  },
+  {
+    "text": "plazo.",
+    "start": 28.2,
+    "end": 28.71,
+    "id": "w75"
+  },
+  {
+    "text": "En",
+    "start": 28.98,
+    "end": 29.11,
+    "id": "w76"
+  },
+  {
+    "text": "90",
+    "start": 29.16,
+    "end": 29.66,
+    "id": "w77"
+  },
+  {
+    "text": "días.",
+    "start": 29.73,
+    "end": 30.35,
+    "id": "w78"
+  },
+  {
+    "text": "3.",
+    "start": 30.45,
+    "end": 31.22,
+    "id": "w79"
+  },
+  {
+    "text": "Quitarle",
+    "start": 31.22,
+    "end": 31.69,
+    "id": "w80"
+  },
+  {
+    "text": "el",
+    "start": 31.69,
+    "end": 31.8,
+    "id": "w81"
+  },
+  {
+    "text": "riesgo.",
+    "start": 31.95,
+    "end": 32.59,
+    "id": "w82"
+  },
+  {
+    "text": "Ysi",
+    "start": 32.6,
+    "end": 32.88,
+    "id": "w83"
+  },
+  {
+    "text": "no",
+    "start": 32.88,
+    "end": 32.97,
+    "id": "w84"
+  },
+  {
+    "text": "lo",
+    "start": 33.05,
+    "end": 33.08,
+    "id": "w85"
+  },
+  {
+    "text": "consigo,",
+    "start": 33.08,
+    "end": 33.76,
+    "id": "w86"
+  },
+  {
+    "text": "sigo",
+    "start": 33.78,
+    "end": 33.92,
+    "id": "w87"
+  },
+  {
+    "text": "trabajando",
+    "start": 33.97,
+    "end": 34.46,
+    "id": "w88"
+  },
+  {
+    "text": "gratis",
+    "start": 34.46,
+    "end": 34.69,
+    "id": "w89"
+  },
+  {
+    "text": "hasta",
+    "start": 34.76,
+    "end": 35.01,
+    "id": "w90"
+  },
+  {
+    "text": "que",
+    "start": 35.01,
+    "end": 35.07,
+    "id": "w91"
+  },
+  {
+    "text": "lo",
+    "start": 35.07,
+    "end": 35.3,
+    "id": "w92"
+  },
+  {
+    "text": "consiga.",
+    "start": 35.3,
+    "end": 35.8,
+    "id": "w93"
+  },
+  {
+    "text": "Compara.",
+    "start": 35.8,
+    "end": 37.28,
+    "id": "w94"
+  },
+  {
+    "text": "Hacemos",
+    "start": 37.28,
+    "end": 37.7,
+    "id": "w95"
+  },
+  {
+    "text": "clases",
+    "start": 37.83,
+    "end": 38.12,
+    "id": "w96"
+  },
+  {
+    "text": "de",
+    "start": 38.27,
+    "end": 38.31,
+    "id": "w97"
+  },
+  {
+    "text": "inglés",
+    "start": 38.31,
+    "end": 38.88,
+    "id": "w98"
+  },
+  {
+    "text": "o",
+    "start": 38.88,
+    "end": 39.52,
+    "id": "w99"
+  },
+  {
+    "text": "habla",
+    "start": 39.52,
+    "end": 39.87,
+    "id": "w100"
+  },
+  {
+    "text": "inglés",
+    "start": 39.9,
+    "end": 40.14,
+    "id": "w101"
+  },
+  {
+    "text": "en",
+    "start": 40.23,
+    "end": 40.32,
+    "id": "w102"
+  },
+  {
+    "text": "una",
+    "start": 40.32,
+    "end": 40.48,
+    "id": "w103"
+  },
+  {
+    "text": "entrevista",
+    "start": 40.48,
+    "end": 41.03,
+    "id": "w104"
+  },
+  {
+    "text": "de",
+    "start": 41.03,
+    "end": 41.14,
+    "id": "w105"
+  },
+  {
+    "text": "trabajo",
+    "start": 41.41,
+    "end": 41.53,
+    "id": "w106"
+  },
+  {
+    "text": "en",
+    "start": 41.53,
+    "end": 41.64,
+    "id": "w107"
+  },
+  {
+    "text": "tres",
+    "start": 41.64,
+    "end": 41.86,
+    "id": "w108"
+  },
+  {
+    "text": "meses",
+    "start": 41.86,
+    "end": 42.1,
+    "id": "w109"
+  },
+  {
+    "text": "o",
+    "start": 42.17,
+    "end": 42.18,
+    "id": "w110"
+  },
+  {
+    "text": "te",
+    "start": 42.18,
+    "end": 42.28,
+    "id": "w111"
+  },
+  {
+    "text": "devolvemos",
+    "start": 42.31,
+    "end": 42.79,
+    "id": "w112"
+  },
+  {
+    "text": "el",
+    "start": 42.88,
+    "end": 42.94,
+    "id": "w113"
+  },
+  {
+    "text": "dinero.",
+    "start": 42.94,
+    "end": 43.45,
+    "id": "w114"
+  },
+  {
+    "text": "Es",
+    "start": 43.52,
+    "end": 43.82,
+    "id": "w115"
+  },
+  {
+    "text": "el",
+    "start": 44.15,
+    "end": 44.28,
+    "id": "w116"
+  },
+  {
+    "text": "mismo",
+    "start": 44.39,
+    "end": 44.56,
+    "id": "w117"
+  },
+  {
+    "text": "servicio,",
+    "start": 44.58,
+    "end": 45.49,
+    "id": "w118"
+  },
+  {
+    "text": "pero…¿cuál",
+    "start": 45.49,
+    "end": 46.59,
+    "id": "w119"
+  },
+  {
+    "text": "compras?",
+    "start": 46.59,
+    "end": 47.47,
+    "id": "w120"
+  },
+  {
+    "text": "Escríbeme",
+    "start": 47.57,
+    "end": 47.98,
+    "id": "w121"
+  },
+  {
+    "text": "en",
+    "start": 47.98,
+    "end": 48.08,
+    "id": "w122"
+  },
+  {
+    "text": "comentarios",
+    "start": 48.08,
+    "end": 48.5,
+    "id": "w123"
+  },
+  {
+    "text": "a",
+    "start": 48.62,
+    "end": 48.65,
+    "id": "w124"
+  },
+  {
+    "text": "qué",
+    "start": 48.67,
+    "end": 48.82,
+    "id": "w125"
+  },
+  {
+    "text": "te",
+    "start": 48.83,
+    "end": 48.96,
+    "id": "w126"
+  },
+  {
+    "text": "dedicas",
+    "start": 49.07,
+    "end": 49.51,
+    "id": "w127"
+  },
+  {
+    "text": "y",
+    "start": 49.59,
+    "end": 49.64,
+    "id": "w128"
+  },
+  {
+    "text": "te",
+    "start": 49.64,
+    "end": 49.79,
+    "id": "w129"
+  },
+  {
+    "text": "digo",
+    "start": 49.82,
+    "end": 50.04,
+    "id": "w130"
+  },
+  {
+    "text": "cómo",
+    "start": 50.06,
+    "end": 50.29,
+    "id": "w131"
+  },
+  {
+    "text": "reformularía",
+    "start": 50.29,
+    "end": 50.97,
+    "id": "w132"
+  },
+  {
+    "text": "tu",
+    "start": 51.04,
+    "end": 51.15,
+    "id": "w133"
+  },
+  {
+    "text": "oferta.",
+    "start": 51.16,
+    "end": 51.76,
+    "id": "w134"
+  }
+]

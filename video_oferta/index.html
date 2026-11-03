@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #06102a;
+        --ground2: #0a1a44;
+        --blue: #1f5eff;
+        --blue2: #4f86ff;
+        --blue3: #8fb4ff;
+        --deep: #0b2a6f;
+        --ink: #ffffff;
+        --muted: #a9b4cc;
+        --red: #e5484d;
+        --font-display: "Inter";
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font-display); color: var(--ink); overflow: hidden; }
+      #bg { position: absolute; inset: 0; background: radial-gradient(120% 70% at 50% 35%, var(--ground2) 0%, var(--ground) 62%); }
+      #grid { position: absolute; left: -200px; right: -200px; bottom: -200px; height: 1100px;
+        background-image: linear-gradient(rgba(79,134,255,.10) 2px, transparent 2px), linear-gradient(90deg, rgba(79,134,255,.10) 2px, transparent 2px);
+        background-size: 90px 90px; transform: perspective(900px) rotateX(62deg); transform-origin: 50% 100%;
+        -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,.9), transparent 85%); mask-image: linear-gradient(to top, rgba(0,0,0,.9), transparent 85%); }
+      #glow { position: absolute; width: 900px; height: 900px; left: 90px; top: 300px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(31,94,255,.28), rgba(31,94,255,0) 65%); }
+      #world { position: absolute; inset: 0; }
+      .scene { position: absolute; inset: 0; }
+      .h1 { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 900; letter-spacing: -0.03em; line-height: .95; text-transform: uppercase; }
+      .blue { color: var(--blue); }
+      .lb { color: var(--blue3); }
+      .card { position: absolute; border-radius: 28px; background: linear-gradient(160deg, #ffffff, #e8eefc); color: #0a1633;
+        box-shadow: 0 30px 60px rgba(0,8,40,.55), 0 0 0 1px rgba(255,255,255,.6) inset, 0 -8px 0 rgba(11,42,111,.18) inset; }
+      .dcard { position: absolute; border-radius: 28px; background: linear-gradient(160deg, #13245a, #0c1a42); border: 2px solid rgba(79,134,255,.35);
+        box-shadow: 0 30px 60px rgba(0,8,40,.6); }
+      .small { font-size: 26px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+      /* captions */
+      #caps { position: absolute; left: 0; right: 0; top: 1330px; height: 200px; }
+      .cap { position: absolute; left: 70px; right: 70px; top: 0; text-align: center; font-weight: 900; font-size: 64px; line-height: 1.12; letter-spacing: -0.02em;
+        text-shadow: 0 6px 24px rgba(0,0,0,.6); }
+      .w { display: inline-block; }
+      .w.k { color: var(--blue2); }
+      /* scene 1 */
+      .lead { position: absolute; width: 150px; height: 190px; border-radius: 26px; background: linear-gradient(160deg,#fff,#dfe7fb); box-shadow: 0 20px 40px rgba(0,8,40,.5); }
+      .lead .av { position: absolute; left: 45px; top: 26px; width: 60px; height: 60px; border-radius: 50%; background: var(--blue2); }
+      .lead .b1 { position: absolute; left: 25px; top: 108px; width: 100px; height: 14px; border-radius: 7px; background: #c4d2f3; }
+      .lead .b2 { position: absolute; left: 40px; top: 134px; width: 70px; height: 14px; border-radius: 7px; background: #dbe4f7; }
+      .q { position: absolute; width: 70px; height: 70px; border-radius: 50%; background: var(--red); color: #fff; font-weight: 900; font-size: 46px; text-align: center; line-height: 70px; }
+      #offer { position: absolute; left: 290px; top: 640px; width: 500px; height: 380px; border-radius: 36px; }
+      #offer-frost { position: absolute; inset: 0; border-radius: 36px; background: linear-gradient(160deg, rgba(200,210,235,.32), rgba(120,135,170,.22));
+        border: 2px solid rgba(255,255,255,.25); box-shadow: 0 40px 80px rgba(0,0,0,.5); }
+      #offer-jargon { position: absolute; inset: 40px; font-size: 34px; font-weight: 700; color: rgba(255,255,255,.75); filter: blur(7px); line-height: 1.3; text-align: center; padding-top: 30px; }
+      #offer-tag { position: absolute; left: 0; right: 0; bottom: -64px; text-align: center; }
+      /* scene 2 */
+      .ui { width: 420px; height: 150px; left: 70px; padding: 26px 30px; }
+      .ui .t { font-size: 24px; font-weight: 700; color: #5a6a90; text-transform: uppercase; letter-spacing: .08em; }
+      .ui .v { font-size: 54px; font-weight: 900; color: #0a1633; margin-top: 6px; }
+      #dash { left: 560px; top: 520px; width: 450px; height: 470px; padding: 34px; }
+      #dash .v { font-size: 150px; font-weight: 900; color: var(--ink); line-height: 1; margin-top: 10px; }
+      #dm { left: 140px; top: 280px; width: 800px; height: 150px; padding: 28px 34px; }
+      #dm .av { position: absolute; left: 30px; top: 35px; width: 80px; height: 80px; border-radius: 50%; background: var(--blue); }
+      #eq { top: 640px; font-size: 118px; }
+      /* scene 3 */
+      #s3-title { top: 290px; font-size: 92px; }
+      #base { position: absolute; left: 140px; top: 600px; width: 800px; height: 330px; border-radius: 40px; }
+      #base-frost { position: absolute; inset: 0; border-radius: 40px; background: linear-gradient(160deg, rgba(200,210,235,.30), rgba(120,135,170,.18)); border: 2px solid rgba(255,255,255,.25); }
+      #base-clear { position: absolute; inset: 0; border-radius: 40px; background: linear-gradient(160deg, rgba(31,94,255,.35), rgba(11,42,111,.55)); border: 3px solid var(--blue2);
+        box-shadow: 0 0 80px rgba(31,94,255,.45), 0 40px 80px rgba(0,0,0,.5); }
+      .slot { position: absolute; top: 45px; width: 220px; height: 240px; border-radius: 26px; border: 3px dashed rgba(255,255,255,.35); }
+      .piece { position: absolute; top: 45px; width: 220px; height: 240px; border-radius: 26px; color: #fff; text-align: center; font-weight: 900; padding-top: 52px;
+        box-shadow: 0 20px 40px rgba(0,0,0,.45), 0 -8px 0 rgba(0,0,0,.18) inset; }
+      .piece .n { font-size: 84px; line-height: 1; }
+      .piece .u { font-size: 30px; letter-spacing: .06em; margin-top: 6px; }
+      .lbl { position: absolute; left: 60px; right: 60px; top: 1010px; text-align: center; font-size: 56px; font-weight: 900; letter-spacing: -0.02em; text-transform: uppercase; }
+      .lbl .i { display: inline-block; width: 74px; height: 74px; border-radius: 50%; background: var(--blue); line-height: 74px; margin-right: 18px; font-size: 44px; }
+      #bad { left: 190px; top: 1110px; width: 700px; height: 130px; text-align: center; font-size: 46px; font-weight: 700; line-height: 130px; color: #6b7590; background: linear-gradient(160deg,#d9dee8,#c4cad6); }
+      #big30 { top: 1095px; font-size: 150px; }
+      #seal { position: absolute; left: 425px; top: 1080px; width: 230px; height: 230px; border-radius: 50%; background: #fff; border: 12px solid var(--blue);
+        color: var(--blue); text-align: center; font-weight: 900; font-size: 28px; padding-top: 62px; line-height: 1.15; box-shadow: 0 0 60px rgba(31,94,255,.5); }
+      #sum { top: 1030px; font-size: 40px; font-weight: 700; text-transform: none; letter-spacing: 0; color: var(--blue3); }
+      /* scene 4 */
+      .cmp { left: 90px; width: 900px; padding: 40px 50px 40px 150px; font-size: 52px; font-weight: 900; line-height: 1.12; letter-spacing: -0.02em; }
+      #cx { top: 330px; height: 200px; background: linear-gradient(160deg,#d9dee8,#c4cad6); color: #5d6680; padding-top: 66px; }
+      #cv { top: 640px; height: 380px; }
+      .mark { position: absolute; left: 34px; width: 90px; height: 90px; border-radius: 50%; color: #fff; text-align: center; line-height: 90px; font-size: 56px; font-weight: 900; }
+      #mx { top: 55px; background: var(--red); }
+      #mv { top: 145px; background: var(--blue); }
+      .hl { color: var(--blue); }
+      #same { position: absolute; left: 340px; top: 555px; width: 400px; height: 64px; border-radius: 32px; background: var(--deep); border: 2px solid var(--blue2); text-align: center; line-height: 60px; font-size: 28px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--blue3); }
+      #which { top: 1100px; font-size: 104px; }
+      #cursor { position: absolute; left: 700px; top: 1150px; width: 70px; height: 90px; }
+      /* scene 5 */
+      #cta-title { top: 300px; font-size: 104px; }
+      #bubble { left: 110px; top: 700px; width: 860px; height: 300px; padding: 40px 46px; }
+      #bubble .av { position: absolute; left: 40px; top: 40px; width: 84px; height: 84px; border-radius: 50%; background: var(--blue); }
+      #bubble .nm { position: absolute; left: 150px; top: 46px; font-size: 30px; font-weight: 700; color: #5a6a90; }
+      #bubble .tx { position: absolute; left: 150px; top: 100px; right: 40px; font-size: 54px; font-weight: 900; color: #0a1633; }
+      #bubble .ex { position: absolute; left: 0; top: 0; white-space: nowrap; }
+      #arrow { position: absolute; left: 470px; top: 1060px; width: 140px; height: 160px; }
+      /* scene 6 */
+      #handle { top: 900px; font-size: 104px; text-transform: none; color: var(--blue); font-weight: 700; letter-spacing: -0.02em; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="54.6" data-width="1080" data-height="1920">
+      <div id="bg" class="clip" data-start="0" data-duration="54.6" data-track-index="0"></div>
+      <div id="world" class="clip" data-start="0" data-duration="54.6" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap>
+        <div id="grid"></div>
+        <div id="glow"></div>
+      </div>
+
+      <!-- S1 GANCHO -->
+      <div id="s1" class="clip scene" data-start="0" data-duration="4.5" data-track-index="2" data-track-kind="graphics" data-layout-allow-overlap>
+        <div id="s1-t1" class="h1" style="top:300px;font-size:124px">No te faltan</div>
+        <div id="s1-t2" class="h1 blue" style="top:425px;font-size:150px">clientes</div>
+        <div id="lead1" class="lead" style="left:60px;top:1060px"><div class="av"></div><div class="b1"></div><div class="b2"></div></div>
+        <div id="lead2" class="lead" style="left:250px;top:1110px"><div class="av"></div><div class="b1"></div><div class="b2"></div></div>
+        <div id="lead3" class="lead" style="left:680px;top:1110px"><div class="av"></div><div class="b1"></div><div class="b2"></div></div>
+        <div id="lead4" class="lead" style="left:870px;top:1060px"><div class="av"></div><div class="b1"></div><div class="b2"></div></div>
+        <div id="q1" class="q" style="left:100px;top:960px">?</div>
+        <div id="q2" class="q" style="left:910px;top:960px">?</div>
+        <div id="q3" class="q" style="left:290px;top:1010px">?</div>
+        <div id="offer">
+          <div id="offer-frost"></div>
+          <div id="offer-jargon">Soluciones 360º<br />Marketing integral<br />Estrategia digital</div>
+          <div id="offer-tag" class="small">Tu oferta</div>
+        </div>
+      </div>
+
+      <!-- S2 PROBLEMA -->
+      <div id="s2" class="clip scene" data-start="4.5" data-duration="12.7" data-track-index="2" data-track-kind="graphics" data-layout-allow-overlap>
+        <div id="ui1" class="card ui" style="top:520px"><div class="t">Anuncio · Patrocinado</div><div class="v">+ Anuncios</div></div>
+        <div id="ui2" class="card ui" style="top:690px"><div class="t">Seguidores</div><div class="v">+10K</div></div>
+        <div id="ui3" class="card ui" style="top:860px"><div class="t">Publicaciones</div><div class="v">+120 posts</div></div>
+        <div id="dash" class="dcard">
+          <div class="small">Clientes nuevos</div>
+          <div class="v">0</div>
+          <svg width="380" height="140" viewBox="0 0 380 140" style="margin-top:30px"><path d="M0 120 L380 120" stroke="#4f86ff" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M0 120 L380 120 L380 140 L0 140Z" fill="rgba(79,134,255,.15)"/></svg>
+        </div>
+        <div id="dm" class="card"><div class="av"></div>
+          <div style="position:absolute;left:140px;top:30px;font-size:24px;font-weight:700;color:#5a6a90;letter-spacing:.06em;text-transform:uppercase">Nuevo mensaje</div>
+          <div style="position:absolute;left:140px;top:62px;font-size:54px;font-weight:900">¿Precio?</div></div>
+        <div id="eq" class="h1">+ anuncios<br /><span style="color:var(--red)">≠</span><br /><span class="blue">+ clientes</span></div>
+        <div id="ofreces" class="h1" style="top:1060px;font-size:76px">Es lo que <span class="blue">les ofreces</span></div>
+      </div>
+
+      <!-- S3 ESTRATEGIA -->
+      <div id="s3" class="clip scene" data-start="17.2" data-duration="18.5" data-track-index="2" data-track-kind="graphics" data-layout-allow-overlap>
+        <div id="s3-title" class="h1">Una oferta que<br /><span class="blue">vende sola</span></div>
+        <div id="base">
+          <div id="base-frost"></div>
+          <div id="base-clear"></div>
+          <div class="slot" style="left:35px"></div><div class="slot" style="left:290px"></div><div class="slot" style="left:545px"></div>
+          <div id="p1" class="piece" style="left:35px;background:linear-gradient(160deg,#3a73ff,#1f5eff)"><div class="n">30</div><div class="u">CLIENTES</div></div>
+          <div id="p2" class="piece" style="left:290px;background:linear-gradient(160deg,#6a99ff,#4f86ff)"><div class="n">90</div><div class="u">DÍAS</div></div>
+          <div id="p3" class="piece" style="left:545px;background:linear-gradient(160deg,#a9c6ff,#8fb4ff);color:#0b2a6f"><div class="n">0</div><div class="u">RIESGO</div></div>
+        </div>
+        <div id="l1" class="lbl"><span class="i">1</span>Resultado concreto</div>
+        <div id="l2" class="lbl"><span class="i">2</span>Plazo</div>
+        <div id="l3" class="lbl"><span class="i">3</span>Cero riesgo</div>
+        <div id="bad" class="card">“Te ayudo con tu marketing”</div>
+        <div id="big30" class="h1 blue">30 clientes</div>
+        <div id="big90" class="h1 lb" style="top:1095px;font-size:150px">90 días</div>
+        <div id="seal">GRATIS<br />hasta<br />conseguirlo</div>
+        
+      </div>
+
+      <!-- S4 CONTRASTE -->
+      <div id="s4" class="clip scene" data-start="35.7" data-duration="11.7" data-track-index="2" data-track-kind="graphics" data-layout-allow-overlap>
+        <div id="cx" class="card cmp"><div id="mx" class="mark">✕</div>“Clases de inglés”</div>
+        <div id="same">Mismo servicio</div>
+        <div id="cv" class="card cmp"><div id="mv" class="mark">✓</div>“Inglés para tu <span class="hl">entrevista</span> en <span class="hl">3 meses</span> o te <span class="hl">devolvemos el dinero</span>”</div>
+        <div id="which" class="h1">¿Cuál <span class="blue">compras?</span></div>
+        <svg id="cursor" viewBox="0 0 70 90"><path d="M6 4 L6 72 L22 58 L34 86 L46 80 L34 54 L56 54 Z" fill="#fff" stroke="#0a1633" stroke-width="5" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- S5 CTA -->
+      <div id="s5" class="clip scene" data-start="47.4" data-duration="4.9" data-track-index="2" data-track-kind="graphics" data-layout-allow-overlap>
+        <div id="cta-title" class="h1">Comenta a qué<br /><span class="blue">te dedicas</span></div>
+        <div id="bubble" class="card"><div class="av"></div><div class="nm">Tu comentario</div>
+          <div class="tx"><span id="ex1" class="ex">Tengo una clínica dental…</span><span id="ex2" class="ex">Soy fisioterapeuta…</span><span id="ex3" class="ex">Llevo un centro estético…</span></div></div>
+        <svg id="arrow" viewBox="0 0 140 160"><path d="M70 10 L70 130 M20 85 L70 140 L120 85" stroke="#1f5eff" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- S6 FIRMA -->
+      <div id="s6" class="clip scene" data-start="52.3" data-duration="2.3" data-track-index="2" data-track-kind="graphics">
+        <div id="handle" class="h1">@mhfcleads</div>
+      </div>
+
+      <div id="caps" class="clip" data-start="0" data-duration="52.3" data-track-index="8" data-track-kind="captions">
+      <div id="cap0" class="clip cap" data-start="-0.03" data-duration="1.52" data-track-index="9"><span id="w0_0" class="w">No</span> <span id="w0_1" class="w">te</span> <span id="w0_2" class="w">faltan</span> <span id="w0_3" class="w k">clientes.</span></div>
+      <div id="cap1" class="clip cap" data-start="1.49" data-duration="0.93" data-track-index="9"><span id="w1_0" class="w">Lo</span> <span id="w1_1" class="w">que</span> <span id="w1_2" class="w">tienes</span> <span id="w1_3" class="w">es</span></div>
+      <div id="cap2" class="clip cap" data-start="2.42" data-duration="1.28" data-track-index="9"><span id="w2_0" class="w">una</span> <span id="w2_1" class="w k">oferta</span> <span id="w2_2" class="w">que</span> <span id="w2_3" class="w">nadie</span></div>
+      <div id="cap3" class="clip cap" data-start="3.70" data-duration="0.89" data-track-index="9"><span id="w3_0" class="w">entiende.</span></div>
+      <div id="cap4" class="clip cap" data-start="4.59" data-duration="0.86" data-track-index="9"><span id="w4_0" class="w">Mucha</span> <span id="w4_1" class="w">gente</span> <span id="w4_2" class="w">piensa</span> <span id="w4_3" class="w">que</span></div>
+      <div id="cap5" class="clip cap" data-start="5.45" data-duration="1.53" data-track-index="9"><span id="w5_0" class="w">necesita</span> <span id="w5_1" class="w">más</span> <span id="w5_2" class="w k">anuncios,</span></div>
+      <div id="cap6" class="clip cap" data-start="6.98" data-duration="1.11" data-track-index="9"><span id="w6_0" class="w">más</span> <span id="w6_1" class="w k">seguidores,</span></div>
+      <div id="cap7" class="clip cap" data-start="8.09" data-duration="1.13" data-track-index="9"><span id="w7_0" class="w">más</span> <span id="w7_1" class="w k">contenido.</span></div>
+      <div id="cap8" class="clip cap" data-start="9.22" data-duration="0.66" data-track-index="9"><span id="w8_0" class="w">Pero</span> <span id="w8_1" class="w">si</span> <span id="w8_2" class="w">cada</span> <span id="w8_3" class="w">vez</span></div>
+      <div id="cap9" class="clip cap" data-start="9.88" data-duration="1.12" data-track-index="9"><span id="w9_0" class="w">que</span> <span id="w9_1" class="w">alguien</span> <span id="w9_2" class="w">te</span> <span id="w9_3" class="w">pregunta</span></div>
+      <div id="cap10" class="clip cap" data-start="11.00" data-duration="0.99" data-track-index="9"><span id="w10_0" class="w">a</span> <span id="w10_1" class="w k">precio</span> <span id="w10_2" class="w">tienes</span> <span id="w10_3" class="w">que</span></div>
+      <div id="cap11" class="clip cap" data-start="11.99" data-duration="0.79" data-track-index="9"><span id="w11_0" class="w">convencerle,</span></div>
+      <div id="cap12" class="clip cap" data-start="12.78" data-duration="0.86" data-track-index="9"><span id="w12_0" class="w">el</span> <span id="w12_1" class="w">problema</span> <span id="w12_2" class="w">no</span> <span id="w12_3" class="w">es</span></div>
+      <div id="cap13" class="clip cap" data-start="13.64" data-duration="1.81" data-track-index="9"><span id="w13_0" class="w">cuántas</span> <span id="w13_1" class="w">personas</span> <span id="w13_2" class="w">te</span> <span id="w13_3" class="w">ven.</span></div>
+      <div id="cap14" class="clip cap" data-start="15.45" data-duration="0.89" data-track-index="9"><span id="w14_0" class="w">Es</span> <span id="w14_1" class="w">lo</span> <span id="w14_2" class="w">que</span> <span id="w14_3" class="w">les</span></div>
+      <div id="cap15" class="clip cap" data-start="16.34" data-duration="0.97" data-track-index="9"><span id="w15_0" class="w">ofreces.</span></div>
+      <div id="cap16" class="clip cap" data-start="17.31" data-duration="1.23" data-track-index="9"><span id="w16_0" class="w">Una</span> <span id="w16_1" class="w k">oferta</span> <span id="w16_2" class="w">que</span> <span id="w16_3" class="w">vende</span></div>
+      <div id="cap17" class="clip cap" data-start="18.54" data-duration="1.59" data-track-index="9"><span id="w17_0" class="w">sola</span> <span id="w17_1" class="w">tiene</span> <span id="w17_2" class="w">tres</span> <span id="w17_3" class="w">cosas.</span></div>
+      <div id="cap18" class="clip cap" data-start="20.13" data-duration="0.50" data-track-index="9"><span id="w18_0" class="w">Uno:</span></div>
+      <div id="cap19" class="clip cap" data-start="20.63" data-duration="1.91" data-track-index="9"><span id="w19_0" class="w">Un</span> <span id="w19_1" class="w k">resultado</span> <span id="w19_2" class="w k">concreto.</span></div>
+      <div id="cap20" class="clip cap" data-start="22.54" data-duration="1.01" data-track-index="9"><span id="w20_0" class="w">No</span> <span id="w20_1" class="w">te</span> <span id="w20_2" class="w">ayudo</span> <span id="w20_3" class="w">con</span></div>
+      <div id="cap21" class="clip cap" data-start="23.55" data-duration="1.12" data-track-index="9"><span id="w21_0" class="w">tu</span> <span id="w21_1" class="w">marketing,</span></div>
+      <div id="cap22" class="clip cap" data-start="24.67" data-duration="1.73" data-track-index="9"><span id="w22_0" class="w">sino</span> <span id="w22_1" class="w">te</span> <span id="w22_2" class="w">consigo</span> <span id="w22_3" class="w k">30</span></div>
+      <div id="cap23" class="clip cap" data-start="26.40" data-duration="1.01" data-track-index="9"><span id="w23_0" class="w k">clientes.</span></div>
+      <div id="cap24" class="clip cap" data-start="27.41" data-duration="0.55" data-track-index="9"><span id="w24_0" class="w">Dos:</span></div>
+      <div id="cap25" class="clip cap" data-start="27.96" data-duration="0.97" data-track-index="9"><span id="w25_0" class="w">Un</span> <span id="w25_1" class="w k">plazo.</span></div>
+      <div id="cap26" class="clip cap" data-start="28.93" data-duration="1.47" data-track-index="9"><span id="w26_0" class="w">En</span> <span id="w26_1" class="w k">90</span> <span id="w26_2" class="w k">días.</span></div>
+      <div id="cap27" class="clip cap" data-start="30.40" data-duration="0.77" data-track-index="9"><span id="w27_0" class="w">Tres:</span></div>
+      <div id="cap28" class="clip cap" data-start="31.17" data-duration="1.38" data-track-index="9"><span id="w28_0" class="w">Quitarle</span> <span id="w28_1" class="w">el</span> <span id="w28_2" class="w k">riesgo.</span></div>
+      <div id="cap29" class="clip cap" data-start="32.55" data-duration="1.18" data-track-index="9"><span id="w29_0" class="w">Y si</span> <span id="w29_1" class="w">no</span> <span id="w29_2" class="w">lo</span> <span id="w29_3" class="w">consigo,</span></div>
+      <div id="cap30" class="clip cap" data-start="33.73" data-duration="1.23" data-track-index="9"><span id="w30_0" class="w">sigo</span> <span id="w30_1" class="w">trabajando</span> <span id="w30_2" class="w k">gratis</span> <span id="w30_3" class="w">hasta</span></div>
+      <div id="cap31" class="clip cap" data-start="34.96" data-duration="0.79" data-track-index="9"><span id="w31_0" class="w">que</span> <span id="w31_1" class="w">lo</span> <span id="w31_2" class="w">consiga.</span></div>
+      <div id="cap32" class="clip cap" data-start="35.75" data-duration="1.48" data-track-index="9"><span id="w32_0" class="w">Compara.</span></div>
+      <div id="cap33" class="clip cap" data-start="37.23" data-duration="1.60" data-track-index="9"><span id="w33_0" class="w">Hacemos</span> <span id="w33_1" class="w">clases</span> <span id="w33_2" class="w">de</span> <span id="w33_3" class="w">inglés</span></div>
+      <div id="cap34" class="clip cap" data-start="38.83" data-duration="1.44" data-track-index="9"><span id="w34_0" class="w">o</span> <span id="w34_1" class="w">habla</span> <span id="w34_2" class="w">inglés</span> <span id="w34_3" class="w">en</span></div>
+      <div id="cap35" class="clip cap" data-start="40.27" data-duration="1.21" data-track-index="9"><span id="w35_0" class="w">una</span> <span id="w35_1" class="w">entrevista</span> <span id="w35_2" class="w">de</span> <span id="w35_3" class="w">trabajo</span></div>
+      <div id="cap36" class="clip cap" data-start="41.48" data-duration="0.65" data-track-index="9"><span id="w36_0" class="w">en</span> <span id="w36_1" class="w">tres</span> <span id="w36_2" class="w">meses</span> <span id="w36_3" class="w">o</span></div>
+      <div id="cap37" class="clip cap" data-start="42.13" data-duration="1.34" data-track-index="9"><span id="w37_0" class="w">te</span> <span id="w37_1" class="w">devolvemos</span> <span id="w37_2" class="w">el</span> <span id="w37_3" class="w k">dinero.</span></div>
+      <div id="cap38" class="clip cap" data-start="43.47" data-duration="1.97" data-track-index="9"><span id="w38_0" class="w">Es</span> <span id="w38_1" class="w">el</span> <span id="w38_2" class="w">mismo</span> <span id="w38_3" class="w">servicio,</span></div>
+      <div id="cap39" class="clip cap" data-start="45.44" data-duration="2.08" data-track-index="9"><span id="w39_0" class="w">Pero ¿cuál</span> <span id="w39_1" class="w">compras?</span></div>
+      <div id="cap40" class="clip cap" data-start="47.52" data-duration="1.10" data-track-index="9"><span id="w40_0" class="w">Escríbeme</span> <span id="w40_1" class="w">en</span> <span id="w40_2" class="w k">comentarios</span> <span id="w40_3" class="w">a</span></div>
+      <div id="cap41" class="clip cap" data-start="48.62" data-duration="0.97" data-track-index="9"><span id="w41_0" class="w">qué</span> <span id="w41_1" class="w">te</span> <span id="w41_2" class="w k">dedicas</span> <span id="w41_3" class="w">y</span></div>
+      <div id="cap42" class="clip cap" data-start="49.59" data-duration="1.40" data-track-index="9"><span id="w42_0" class="w">te</span> <span id="w42_1" class="w">digo</span> <span id="w42_2" class="w">cómo</span> <span id="w42_3" class="w">reformularía</span></div>
+      <div id="cap43" class="clip cap" data-start="50.99" data-duration="1.31" data-track-index="9"><span id="w43_0" class="w">tu</span> <span id="w43_1" class="w k">oferta.</span></div>
+      </div>
+
+      <audio id="vo" class="clip" src="assets/voz.mp3" data-start="0" data-duration="52.03" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const seen = new Set();
+      const F = (sel, a, b, t) => { const first = !sel.split(",").map(x=>x.trim()).some(x=>seen.has(x)); sel.split(",").forEach(x=>seen.add(x.trim()));
+        return tl.fromTo(sel, a, Object.assign({ immediateRender: first }, b), t); };
+      const E = "power3.out", B = "back.out(1.7)";
+      // ambiente: deriva lenta del glow y la rejilla (cámara continua)
+      F("#glow", { x: -120, y: 0, scale: 0.9 }, { x: 120, y: 300, scale: 1.2, duration: 54.6, ease: "sine.inOut" }, 0);
+      F("#grid", { y: 0 }, { y: 180, duration: 54.6, ease: "none" }, 0);
+
+      // S1 (abs = local)
+      F("#s1-t1", { y: -80, opacity: 0, scale: 1.3 }, { y: 0, opacity: 1, scale: 1, duration: 0.35, ease: E }, 0.0);
+      F("#s1-t2", { y: 120, opacity: 0, scale: 1.6 }, { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)" }, 0.55);
+      ["#lead1", "#lead2", "#lead3", "#lead4"].forEach((s, i) =>
+        F(s, { scale: 0.2, opacity: 0, y: -500, filter: "blur(12px)" }, { scale: 1, opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, ease: E }, 0.25 + i * 0.12));
+      F("#offer", { y: -700, rotation: -6, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.6, ease: "bounce.out" }, 1.4);
+      ["#q1", "#q2", "#q3"].forEach((s, i) => F(s, { scale: 0, y: 30 }, { scale: 1, y: 0, duration: 0.35, ease: B }, 3.3 + i * 0.12));
+      F("#offer", { x: 0 }, { x: 10, duration: 0.06, repeat: 5, yoyo: true, ease: "none" }, 3.75);
+      F("#s1-t1, #s1-t2, #offer, .lead, .q", { opacity: 1 }, { opacity: 0, y: "-=60", duration: 0.3, ease: "power2.in" }, 4.15);
+
+      // S2 (abs 4.5)
+      const s2 = 4.5;
+      F("#dash", { x: 500, rotationY: -30, opacity: 0 }, { x: 0, rotationY: 0, opacity: 1, duration: 0.7, ease: E }, s2 + 0.4);
+      [["#ui1", 6.25], ["#ui2", 7.2], ["#ui3", 8.3]].forEach(([s, t]) =>
+        F(s, { y: -900, rotation: -8, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.55, ease: "back.out(1.4)" }, t - 0.3));
+      F("#dm", { y: -400, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: B }, 10.4);
+      F("#dash", { x: 0 }, { x: 14, duration: 0.05, repeat: 7, yoyo: true, ease: "none" }, 11.6);
+      F("#ui1, #ui2, #ui3, #dash, #dm", { opacity: 1, scale: 1 }, { opacity: 0, scale: 0.85, y: "+=80", duration: 0.4, ease: "power2.in" }, 12.4);
+      F("#eq", { scale: 0.6, opacity: 0, rotationX: 60 }, { scale: 1, opacity: 1, rotationX: 0, duration: 0.6, ease: B }, 12.8);
+      F("#eq", { y: 0 }, { y: -260, scale: 0.75, duration: 0.6, ease: "power2.inOut" }, 15.2);
+      F("#ofreces", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: E }, 15.5);
+      F("#eq, #ofreces", { opacity: 1 }, { opacity: 0, y: "-=80", duration: 0.35, ease: "power2.in" }, 16.8);
+
+      // S3 (abs 17.2)
+      F("#s3-title", { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: E }, 17.35);
+      F("#base", { y: 400, rotationX: 50, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, duration: 0.8, ease: E }, 17.6);
+      F("#base-clear", { opacity: 0 }, { opacity: 0, duration: 0.01 }, 0);
+      F("#p1, #p2, #p3", { opacity: 0 }, { opacity: 0, duration: 0.01 }, 0);
+      // pieza 1
+      F("#l1", { x: -900 }, { x: 0, duration: 0.5, ease: E }, 20.1);
+      F("#bad", { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: E }, 22.5);
+      F("#bad", { scale: 1, rotation: 0, filter: "blur(0px)" }, { scale: 0.4, rotation: 18, opacity: 0, filter: "blur(10px)", y: 200, duration: 0.45, ease: "power2.in" }, 24.7);
+      F("#big30", { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: B }, 25.85);
+      F("#big30", { y: 0 }, { y: -400, x: -260, scale: 0.3, opacity: 0, duration: 0.45, ease: "power2.in" }, 26.9);
+      F("#p1", { opacity: 0, y: -120, scale: 1.3 }, { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "back.out(2.5)" }, 27.2);
+      F("#l1", { x: 0 }, { x: 1300, duration: 0.35, ease: "power2.in" }, 27.2);
+      // pieza 2
+      F("#l2", { x: -900 }, { x: 0, duration: 0.45, ease: E }, 27.55);
+      F("#big90", { rotationX: -90, opacity: 0 }, { rotationX: 0, opacity: 1, duration: 0.45, ease: B }, 29.05);
+      F("#big90", { y: 0 }, { y: -400, scale: 0.3, opacity: 0, duration: 0.45, ease: "power2.in" }, 29.9);
+      F("#p2", { opacity: 0, y: -120, scale: 1.3 }, { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "back.out(2.5)" }, 30.2);
+      F("#l2", { x: 0 }, { x: 1300, duration: 0.35, ease: "power2.in" }, 30.2);
+      // pieza 3
+      F("#l3", { x: -900 }, { x: 0, duration: 0.45, ease: E }, 30.5);
+      F("#seal", { scale: 2.5, opacity: 0, rotation: -25 }, { scale: 1, opacity: 1, rotation: -8, duration: 0.4, ease: "power4.in" }, 33.6);
+      F("#seal", { y: 0 }, { y: -500, x: 260, scale: 0.3, opacity: 0, duration: 0.45, ease: "power2.in" }, 35.0);
+      F("#l3", { x: 0 }, { x: 1300, duration: 0.3, ease: "power2.in" }, 35.0);
+      F("#p3", { opacity: 0, y: -120, scale: 1.3 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(2.5)" }, 35.25);
+      F("#base-clear", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" }, 35.35);
+      F("#base", { scale: 1 }, { scale: 1.06, duration: 0.15, yoyo: true, repeat: 1, ease: "power2.out" }, 35.35);
+      F("#s3-title, #base", { opacity: 1 }, { opacity: 0, y: "-=100", duration: 0.25, ease: "power2.in" }, 35.6);
+      
+
+      // S4 (abs 35.7)
+      F("#cx", { x: -1100, rotationY: 30 }, { x: 0, rotationY: 0, duration: 0.55, ease: E }, 37.1);
+      F("#mx", { scale: 3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "power4.in" }, 38.3);
+      F("#cv", { x: 1100, rotationY: -30 }, { x: 0, rotationY: 0, duration: 0.6, ease: E }, 39.4);
+      F("#cv .hl", { opacity: 0.35 }, { opacity: 1, duration: 0.2, stagger: 1.0 }, 40.5);
+      F("#mv", { scale: 3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "power4.in" }, 42.95);
+      F("#same", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.4, ease: B }, 44.3);
+      F("#which", { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: B }, 45.45);
+      F("#cursor", { x: 200, y: 300, opacity: 0 }, { x: -200, y: -800, opacity: 1, duration: 0.6, ease: "power2.inOut" }, 45.8);
+      F("#cursor", { x: -200, y: -800 }, { x: -150, y: -330, duration: 0.5, ease: "power2.inOut" }, 46.6);
+      F("#cv", { scale: 1 }, { scale: 0.96, duration: 0.1, yoyo: true, repeat: 1 }, 47.1);
+      F("#cx", { opacity: 1 }, { opacity: 0.25, duration: 0.3 }, 47.1);
+
+      // S5 (abs 47.4)
+      F("#cta-title", { y: -80, opacity: 0, scale: 1.2 }, { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: E }, 47.45);
+      F("#bubble", { y: 300, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: B }, 47.7);
+      F("#ex1", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.25 }, 48.1);
+      F("#ex1", { opacity: 1 }, { opacity: 0, x: -40, duration: 0.2 }, 49.4);
+      F("#ex2", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.25 }, 49.55);
+      F("#ex2", { opacity: 1 }, { opacity: 0, x: -40, duration: 0.2 }, 50.8);
+      F("#ex3", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.25 }, 50.95);
+      F("#arrow", { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "bounce.out" }, 48.0);
+      F("#arrow", { y: 0 }, { y: 40, duration: 0.35, yoyo: true, repeat: 5, ease: "sine.inOut" }, 48.5);
+
+      // S6
+      F("#handle", { scale: 0.85, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 0.7, ease: E }, 52.4);
+
+      // subtítulos karaoke
+      F("#w0_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},0.02);
+      F("#w0_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},0.14);
+      F("#w0_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},0.35);
+      F("#w0_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},0.70);
+      F("#w1_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},1.54);
+      F("#w1_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},1.63);
+      F("#w1_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},1.86);
+      F("#w1_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},2.32);
+      F("#w2_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},2.47);
+      F("#w2_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},2.70);
+      F("#w2_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},3.15);
+      F("#w2_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},3.38);
+      F("#w3_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},3.75);
+      F("#w4_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},4.64);
+      F("#w4_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},4.72);
+      F("#w4_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},5.03);
+      F("#w4_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},5.30);
+      F("#w5_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},5.50);
+      F("#w5_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},6.09);
+      F("#w5_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},6.31);
+      F("#w6_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},7.03);
+      F("#w6_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},7.25);
+      F("#w7_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},8.14);
+      F("#w7_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},8.34);
+      F("#w8_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},9.27);
+      F("#w8_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},9.48);
+      F("#w8_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},9.58);
+      F("#w8_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},9.79);
+      F("#w9_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},9.93);
+      F("#w9_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},10.08);
+      F("#w9_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},10.46);
+      F("#w9_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},10.56);
+      F("#w10_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},11.05);
+      F("#w10_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},11.12);
+      F("#w10_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},11.49);
+      F("#w10_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},11.97);
+      F("#w11_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},12.04);
+      F("#w12_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},12.83);
+      F("#w12_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},12.95);
+      F("#w12_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},13.45);
+      F("#w12_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},13.57);
+      F("#w13_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},13.69);
+      F("#w13_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},14.12);
+      F("#w13_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},14.62);
+      F("#w13_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},14.95);
+      F("#w14_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},15.50);
+      F("#w14_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},15.69);
+      F("#w14_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},15.84);
+      F("#w14_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},16.14);
+      F("#w15_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},16.39);
+      F("#w16_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},17.36);
+      F("#w16_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},17.58);
+      F("#w16_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},18.01);
+      F("#w16_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},18.23);
+      F("#w17_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},18.59);
+      F("#w17_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},18.88);
+      F("#w17_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},19.23);
+      F("#w17_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},19.75);
+      F("#w18_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},20.18);
+      F("#w19_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},20.68);
+      F("#w19_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},20.85);
+      F("#w19_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},21.70);
+      F("#w20_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},22.59);
+      F("#w20_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},22.74);
+      F("#w20_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},22.91);
+      F("#w20_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},23.34);
+      F("#w21_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},23.60);
+      F("#w21_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},23.80);
+      F("#w22_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},24.72);
+      F("#w22_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},25.06);
+      F("#w22_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},25.23);
+      F("#w22_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},25.92);
+      F("#w23_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},26.45);
+      F("#w24_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},27.46);
+      F("#w25_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},28.01);
+      F("#w25_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},28.20);
+      F("#w26_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},28.98);
+      F("#w26_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},29.16);
+      F("#w26_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},29.73);
+      F("#w27_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},30.45);
+      F("#w28_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},31.22);
+      F("#w28_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},31.69);
+      F("#w28_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},31.95);
+      F("#w29_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},32.60);
+      F("#w29_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},32.88);
+      F("#w29_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},33.05);
+      F("#w29_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},33.08);
+      F("#w30_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},33.78);
+      F("#w30_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},33.97);
+      F("#w30_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},34.46);
+      F("#w30_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},34.76);
+      F("#w31_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},35.01);
+      F("#w31_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},35.07);
+      F("#w31_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},35.30);
+      F("#w32_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},35.80);
+      F("#w33_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},37.28);
+      F("#w33_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},37.83);
+      F("#w33_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},38.27);
+      F("#w33_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},38.31);
+      F("#w34_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},38.88);
+      F("#w34_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},39.52);
+      F("#w34_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},39.90);
+      F("#w34_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},40.23);
+      F("#w35_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},40.32);
+      F("#w35_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},40.48);
+      F("#w35_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},41.03);
+      F("#w35_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},41.41);
+      F("#w36_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},41.53);
+      F("#w36_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},41.64);
+      F("#w36_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},41.86);
+      F("#w36_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},42.17);
+      F("#w37_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},42.18);
+      F("#w37_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},42.31);
+      F("#w37_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},42.88);
+      F("#w37_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},42.94);
+      F("#w38_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},43.52);
+      F("#w38_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},44.15);
+      F("#w38_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},44.39);
+      F("#w38_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},44.58);
+      F("#w39_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},45.49);
+      F("#w39_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},46.59);
+      F("#w40_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},47.57);
+      F("#w40_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},47.98);
+      F("#w40_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},48.08);
+      F("#w40_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},48.62);
+      F("#w41_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},48.67);
+      F("#w41_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},48.83);
+      F("#w41_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},49.07);
+      F("#w41_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},49.59);
+      F("#w42_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},49.64);
+      F("#w42_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},49.82);
+      F("#w42_2",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},50.06);
+      F("#w42_3",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},50.29);
+      F("#w43_0",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},51.04);
+      F("#w43_1",{opacity:.45,y:8},{opacity:1,y:0,duration:.12,ease:"power2.out"},51.16);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
