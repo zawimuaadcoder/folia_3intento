@@ -1,0 +1,395 @@
+{
+  "ok": false,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "filesScanned": 1
+  },
+  "runtime": {
+    "ok": false,
+    "errorCount": 1,
+    "warningCount": 4,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "console_warning",
+        "severity": "warning",
+        "message": "[.WebGL-0x3bb4001c1600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-var-scope": "1",
+          "data-composition-id": "main",
+          "data-width": "1080",
+          "data-height": "1920",
+          "data-duration": "54.4",
+          "data-start": "0",
+          "data-composition-variables": "[{\"id\":\"subs\",\"type\":\"boolean\",\"label\":\"Subtítulos\",\"default\":true},{\"id\":\"orient\",\"type\":\"string\",\"label\":\"Orientación (v/h)\",\"default\":\"v\"}]"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:35517/"
+      },
+      {
+        "code": "console_warning",
+        "severity": "warning",
+        "message": "[.WebGL-0x3bb4001c1600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-var-scope": "1",
+          "data-composition-id": "main",
+          "data-width": "1080",
+          "data-height": "1920",
+          "data-duration": "54.4",
+          "data-start": "0",
+          "data-composition-variables": "[{\"id\":\"subs\",\"type\":\"boolean\",\"label\":\"Subtítulos\",\"default\":true},{\"id\":\"orient\",\"type\":\"string\",\"label\":\"Orientación (v/h)\",\"default\":\"v\"}]"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 3.022,
+        "url": "http://127.0.0.1:35517/"
+      },
+      {
+        "code": "console_warning",
+        "severity": "warning",
+        "message": "[.WebGL-0x3bb4001c1600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-var-scope": "1",
+          "data-composition-id": "main",
+          "data-width": "1080",
+          "data-height": "1920",
+          "data-duration": "54.4",
+          "data-start": "0",
+          "data-composition-variables": "[{\"id\":\"subs\",\"type\":\"boolean\",\"label\":\"Subtítulos\",\"default\":true},{\"id\":\"orient\",\"type\":\"string\",\"label\":\"Orientación (v/h)\",\"default\":\"v\"}]"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 3.022,
+        "url": "http://127.0.0.1:35517/"
+      },
+      {
+        "code": "console_warning",
+        "severity": "warning",
+        "message": "[.WebGL-0x3bb4001c1600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-var-scope": "1",
+          "data-composition-id": "main",
+          "data-width": "1080",
+          "data-height": "1920",
+          "data-duration": "54.4",
+          "data-start": "0",
+          "data-composition-variables": "[{\"id\":\"subs\",\"type\":\"boolean\",\"label\":\"Subtítulos\",\"default\":true},{\"id\":\"orient\",\"type\":\"string\",\"label\":\"Orientación (v/h)\",\"default\":\"v\"}]"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 15.111,
+        "url": "http://127.0.0.1:35517/"
+      },
+      {
+        "code": "check_runtime_failure",
+        "severity": "error",
+        "message": "Check stopped before finishing (SIGTERM).",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0
+      }
+    ]
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 1,
+    "infoCount": 2,
+    "findings": [
+      {
+        "code": "canvas_content_at_edge",
+        "severity": "warning",
+        "time": 15.111,
+        "selector": "#gl",
+        "message": "Canvas content touches the frame edge (left, right).",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 1080,
+          "bottom": 1920,
+          "width": 1080,
+          "height": 1920
+        },
+        "containerSelector": "#root",
+        "fixHint": "Keep drawn text inside the visible part of the canvas, or mark intentional full-bleed art with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1080,
+          "bottom": 1920,
+          "width": 1080,
+          "height": 1920
+        },
+        "dataAttributes": {
+          "data-engine": "three.js r170"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "firstSeen": 15.111,
+        "lastSeen": 51.378,
+        "occurrences": 5,
+        "heldMs": 0,
+        "times": [
+          15.111,
+          21.156,
+          27.2,
+          33.244,
+          51.378
+        ]
+      },
+      {
+        "code": "canvas_overflow",
+        "severity": "info",
+        "time": 21.156,
+        "selector": "#labels > div:nth-of-type(1) > span:nth-of-type(1)",
+        "message": "Text extends outside the composition canvas.",
+        "rect": {
+          "left": -757.37,
+          "top": 273,
+          "right": -317.08,
+          "bottom": 329,
+          "width": 440.29,
+          "height": 56
+        },
+        "containerSelector": "#root",
+        "text": "Resultado concreto",
+        "fixHint": "Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1080,
+          "bottom": 1920,
+          "width": 1080,
+          "height": 1920
+        },
+        "overflow": {
+          "left": 757.37
+        },
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -757.37,
+          "y": 273,
+          "width": 440.29,
+          "height": 56
+        },
+        "firstSeen": 21.156,
+        "lastSeen": 21.156,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          21.156
+        ]
+      },
+      {
+        "code": "canvas_overflow",
+        "severity": "info",
+        "time": 21.156,
+        "selector": "#labels > div:nth-of-type(1) > span:nth-of-type(1) > b:nth-of-type(1)",
+        "message": "Text extends outside the composition canvas.",
+        "rect": {
+          "left": -798,
+          "top": 273,
+          "right": -757.37,
+          "bottom": 329,
+          "width": 40.63,
+          "height": 56
+        },
+        "containerSelector": "#root",
+        "text": "1.",
+        "fixHint": "Move the text inward, reduce its size, or mark intentional off-canvas animation with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1080,
+          "bottom": 1920,
+          "width": 1080,
+          "height": 1920
+        },
+        "overflow": {
+          "left": 798
+        },
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -798,
+          "y": 273,
+          "width": 40.63,
+          "height": 56
+        },
+        "firstSeen": 21.156,
+        "lastSeen": 21.156,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          21.156
+        ]
+      }
+    ],
+    "duration": 0,
+    "samples": [],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 3,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 2,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "contrast_aa_failure",
+        "severity": "warning",
+        "message": "Contrast is 2.97:1; WCAG AA requires 3:1.",
+        "text": "+ clientes",
+        "fg": "rgb(31,94,255)",
+        "bg": "rgb(13,33,90)",
+        "ratio": 2.97,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(34,96,255)",
+        "large": true,
+        "selector": "div > div > div:nth-of-type(2) > span:nth-of-type(3)",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 283.078125,
+          "y": 376,
+          "width": 453.828125,
+          "height": 96
+        },
+        "time": 15.111,
+        "times": [
+          15.111
+        ]
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "warning",
+        "message": "Contrast is 1.95:1; WCAG AA requires 3:1.",
+        "text": "DEDICAS",
+        "fg": "rgb(31,94,255)",
+        "bg": "rgb(22,57,156)",
+        "ratio": 1.95,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(88,135,255)",
+        "large": true,
+        "selector": "div > div > div:nth-of-type(6) > span:nth-of-type(5)",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 270.453125,
+          "y": 490,
+          "width": 479.078125,
+          "height": 110
+        },
+        "time": 51.378,
+        "times": [
+          51.378
+        ]
+      }
+    ],
+    "enabled": true,
+    "samples": [],
+    "checked": 23,
+    "passed": 21
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "step": 0,
+    "samples": 0
+  },
+  "audio": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 1,
+    "findings": [
+      {
+        "code": "audio_none",
+        "severity": "info",
+        "message": "The film has no sound: no clip in it plays audio.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0
+      }
+    ]
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}

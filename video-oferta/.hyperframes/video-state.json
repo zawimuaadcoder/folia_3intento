@@ -1,0 +1,179 @@
+{
+  "version": 1,
+  "historyId": "cdfdc37b-d640-4a2a-a099-5a339cd0f096",
+  "currentRevision": "31492956-f72c-4171-b8fa-9235486d2d64",
+  "pendingChanges": false,
+  "files": {
+    "assets/audio/voz.mp3": {
+      "hash": "103f06f6855882766859cca1053ae623f3788e464417c300f2c6853dcc14caaf",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/10/103f06f6855882766859cca1053ae623f3788e464417c300f2c6853dcc14caaf"
+    },
+    "assets/audio/words.json": {
+      "hash": "2dbd85f3967d22cc6da35452d3295281a618c2bdb631c90bb41cebd7cc006e94",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/2d/2dbd85f3967d22cc6da35452d3295281a618c2bdb631c90bb41cebd7cc006e94"
+    },
+    "assets/fonts/Inter-Black.otf": {
+      "hash": "1dc81aa64047bfb4246ece435105ec85944f575744d6d850ab7a287fe6b640e7",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/1d/1dc81aa64047bfb4246ece435105ec85944f575744d6d850ab7a287fe6b640e7"
+    },
+    "assets/fonts/Inter-Bold.otf": {
+      "hash": "00fd6f4691ee8884a33b46bf45851b341927c37c30064f558e1befb242971c49",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/00/00fd6f4691ee8884a33b46bf45851b341927c37c30064f558e1befb242971c49"
+    },
+    "assets/fonts/Inter-ExtraBold.otf": {
+      "hash": "2012ceaf1470372c415f95c00495a1ad1ebdcd1cd6a6225808f011d459a9b12a",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/20/2012ceaf1470372c415f95c00495a1ad1ebdcd1cd6a6225808f011d459a9b12a"
+    },
+    "assets/fonts/Inter-Medium.otf": {
+      "hash": "1e65171fccd6f445b7742728454620ec2867356c849af78e71bf2c4f0e3d97ba",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/1e/1e65171fccd6f445b7742728454620ec2867356c849af78e71bf2c4f0e3d97ba"
+    },
+    "assets/fonts/Inter-SemiBold.otf": {
+      "hash": "bd68706b7bf8b3c580ae57685a2116bb1704b3a9998309ccfec7cd486f8a593e",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/bd/bd68706b7bf8b3c580ae57685a2116bb1704b3a9998309ccfec7cd486f8a593e"
+    },
+    "assets/lib/RoomEnvironment.js": {
+      "hash": "625d0d8ac8690a73799ea0e2c577d6260162e0da97698c4fe9b03715909ac214",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/62/625d0d8ac8690a73799ea0e2c577d6260162e0da97698c4fe9b03715909ac214"
+    },
+    "assets/lib/RoundedBoxGeometry.js": {
+      "hash": "f0cb82abfa308703be4e757129cc6a101c6ab6abacd9dd8678a8f8b10809f87b",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/f0/f0cb82abfa308703be4e757129cc6a101c6ab6abacd9dd8678a8f8b10809f87b"
+    },
+    "assets/lib/gsap.min.js": {
+      "hash": "28033e449a31ebcc396e5be8b13b63152bf03094288fb5867034321927bce087",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/28/28033e449a31ebcc396e5be8b13b63152bf03094288fb5867034321927bce087"
+    },
+    "assets/lib/three.module.min.js": {
+      "hash": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/08/08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7"
+    },
+    "assets/main.js": {
+      "hash": "7f4a50592c7a4361e5bb06687f610326cf8c917064579ac4de472d300fdad008",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/7f/7f4a50592c7a4361e5bb06687f610326cf8c917064579ac4de472d300fdad008"
+    },
+    "assets/words.js": {
+      "hash": "c87f19e3147c650b772783b1d33a0385293120020468f8a4be2504226ea9fc6d",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/c8/c87f19e3147c650b772783b1d33a0385293120020468f8a4be2504226ea9fc6d"
+    },
+    "index.html": {
+      "hash": "476009c11457eaf537f54358f0e22da8ec03d58165884463c12371ed8256521e",
+      "content": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/47/476009c11457eaf537f54358f0e22da8ec03d58165884463c12371ed8256521e"
+    }
+  },
+  "revisions": {
+    "31492956-f72c-4171-b8fa-9235486d2d64": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1793717285586,
+      "endedAt": 1793717285587,
+      "files": {
+        "index.html": {
+          "before": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/3e/3e131800a7f7bdb883c8f6a2298dcfa400231f0bfc4e50437bf4d86c1aa6c160",
+          "after": "/root/.cache/hyperframes/history/cdfdc37b-d640-4a2a-a099-5a339cd0f096/blobs/47/476009c11457eaf537f54358f0e22da8ec03d58165884463c12371ed8256521e"
+        }
+      }
+    }
+  },
+  "checks": {
+    "latest": {
+      "revision": "31492956-f72c-4171-b8fa-9235486d2d64",
+      "id": "a3f7bc0a-da6a-44a3-a32e-eeb7d782fa3e"
+    },
+    "revisions": {
+      "31492956-f72c-4171-b8fa-9235486d2d64": [
+        {
+          "id": "e986dd3a-96d5-4e74-a59c-a82f4398959d",
+          "scope": "project",
+          "report": "/home/user/folia_3intento/video-oferta/.hyperframes/artifacts/checks/e986dd3a-96d5-4e74-a59c-a82f4398959d.json",
+          "metadata": {
+            "ok": false,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 10000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1793717403502,
+          "contentHash": "d71c1a1478c0a9035d0a78e56248ff91a16aaf01cb5be7b55f2ebf50f34ae206",
+          "revision": "31492956-f72c-4171-b8fa-9235486d2d64",
+          "inputFingerprint": "070577a952bc6b35f972ffd2db92f3b23828e2fd918694e8f57b340272e8dabd",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision"
+        },
+        {
+          "id": "a3f7bc0a-da6a-44a3-a32e-eeb7d782fa3e",
+          "scope": "project",
+          "report": "/home/user/folia_3intento/video-oferta/.hyperframes/artifacts/checks/a3f7bc0a-da6a-44a3-a32e-eeb7d782fa3e.json",
+          "metadata": {
+            "ok": false,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 10000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1793717708385,
+          "contentHash": "b2dff57807506fa4db7af4e5540029f1dd6151ef4b59a2524b8e42fc911e3731",
+          "revision": "31492956-f72c-4171-b8fa-9235486d2d64",
+          "inputFingerprint": "070577a952bc6b35f972ffd2db92f3b23828e2fd918694e8f57b340272e8dabd",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision"
+        }
+      ]
+    },
+    "unversioned": [
+      {
+        "id": "72d15843-23af-43c5-9bdf-1ab9d449a6a0",
+        "scope": "project",
+        "report": "/home/user/folia_3intento/video-oferta/.hyperframes/artifacts/checks/72d15843-23af-43c5-9bdf-1ab9d449a6a0.json",
+        "metadata": {
+          "ok": false,
+          "browserSkipped": true,
+          "options": {
+            "samples": 9,
+            "atTransitions": false,
+            "maxIssues": 80,
+            "collapseStatic": true,
+            "tolerance": 2,
+            "timeout": 10000,
+            "contrast": true,
+            "strict": false,
+            "snapshots": false,
+            "browserGpuMode": "auto"
+          }
+        },
+        "createdAt": 1793717275482,
+        "contentHash": "232f25ac15112b58ea61d7034a76e265109df321e558d248af25a17d71b784fb",
+        "revision": null,
+        "inputFingerprint": "9335c05948585df71b685e4b7a1e73937ca214c3f94d9fe64817c8bb86feed1e",
+        "inputScope": "local-project-files",
+        "attribution": "unversioned"
+      }
+    ]
+  },
+  "snapshots": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  }
+}

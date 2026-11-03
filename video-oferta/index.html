@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Una oferta que vende sola</title>
+<style>
+  @font-face { font-family: "InterX"; src: url("assets/fonts/Inter-Medium.otf"); font-weight: 500; }
+  @font-face { font-family: "InterX"; src: url("assets/fonts/Inter-SemiBold.otf"); font-weight: 600; }
+  @font-face { font-family: "InterX"; src: url("assets/fonts/Inter-Bold.otf"); font-weight: 700; }
+  @font-face { font-family: "InterX"; src: url("assets/fonts/Inter-ExtraBold.otf"); font-weight: 800; }
+  @font-face { font-family: "InterX"; src: url("assets/fonts/Inter-Black.otf"); font-weight: 900; }
+  :root { --blue:#1F5EFF; --blue2:#4F86FF; --blue3:#8FB4FF; --light:#6E9BFF; --deep:#0B2A6F; --night:#06102A; --grey:#A9B4CC; --red:#E5484D; }
+  html, body { margin:0; padding:0; background:#06102A; overflow:hidden; }
+  #root { position:relative; overflow:hidden; background:#06102A; font-family:"InterX", Inter, sans-serif; color:#fff; }
+  #gl { position:absolute; inset:0; width:100%; height:100%; display:block; }
+  #ui { position:absolute; inset:0; pointer-events:none; }
+  .hl { position:absolute; left:80px; right:140px; text-align:center; font-weight:900; letter-spacing:-0.02em; line-height:1.0; text-transform:uppercase; }
+  .w { display:inline-block; white-space:pre; transform-origin:50% 100%; will-change:transform; }
+  .k { color:var(--blue); }
+  .kl { color:var(--light); }
+  #cap { position:absolute; left:90px; right:150px; text-align:center; font-weight:800; font-size:56px; line-height:1.42; letter-spacing:-0.01em; }
+  #cap .cw { display:inline-block; white-space:pre; color:rgba(255,255,255,.42); text-shadow:0 4px 18px rgba(3,8,24,.85), 0 0 2px rgba(3,8,24,.9); }
+  #cap .cbox { display:inline; background:rgba(4,10,30,.62); padding:6px 18px 10px; border-radius:22px; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+  #labels { position:absolute; left:90px; right:150px; }
+  .lab { position:absolute; left:0; height:66px; display:flex; align-items:center; gap:22px; font-weight:800; font-size:46px; letter-spacing:-0.015em; white-space:nowrap; }
+  .lab i { display:block; width:46px; height:46px; border-radius:14px; box-shadow:0 6px 20px rgba(31,94,255,.45), inset 0 -6px 0 rgba(0,0,0,.18); }
+  .lab b { font-weight:900; color:var(--light); font-variant-numeric:tabular-nums; }
+  #quote { position:absolute; left:90px; right:150px; text-align:center; font-weight:800; font-size:64px; line-height:1.15; letter-spacing:-0.02em; }
+  #quote .u { position:relative; color:var(--blue3); }
+  #quote .u::after { content:""; position:absolute; left:-4px; right:-4px; bottom:-6px; height:9px; border-radius:6px; background:var(--blue); box-shadow:0 0 18px rgba(31,94,255,.9); transform-origin:0 50%; transform:scaleX(var(--ul,0)); }
+  #end { position:absolute; inset:0; background:#06102A; display:flex; align-items:center; justify-content:center; }
+  #end span { font-weight:700; font-size:92px; color:#1F5EFF; letter-spacing:-0.02em; }
+  #grain { position:absolute; inset:-50%; width:200%; height:200%; opacity:.07; mix-blend-mode:overlay; }
+  .tag { position:absolute; font-weight:800; font-size:40px; letter-spacing:.06em; text-transform:uppercase; color:var(--grey); text-align:center; left:0; right:0; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-width="1080" data-height="1920" data-duration="54.4" data-start="0"
+     data-composition-variables='[{"id":"subs","type":"boolean","label":"Subtítulos","default":true},{"id":"orient","type":"string","label":"Orientación (v/h)","default":"v"}]'>
+  <canvas id="gl"></canvas>
+  <div id="ui">
+    <div id="h1" class="hl"></div>
+    <div id="h2" class="hl"></div>
+    <div id="h3" class="hl"></div>
+    <div id="h4" class="hl"></div>
+    <div id="h5" class="hl"></div>
+    <div id="h6" class="hl"></div>
+    <div id="labels"></div>
+    <div id="quote"></div>
+    <div id="cap"></div>
+    <div id="end"><span id="handle">@mhfcleads</span></div>
+    <svg id="grain" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+  </div>
+</div>
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/words.js"></script>
+<script type="module" src="assets/main.js"></script>
+<script>
+  // Reloj único: la línea de tiempo de GSAP llama a render(t) (función pura de t).
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  const clock = { v: 0 };
+  tl.to(clock, { v: 1, duration: 54.4, ease: "none", onUpdate: () => { if (window.__render) window.__render(tl.time()); } }, 0);
+  window.__timelines["main"] = tl;
+</script>
+</body>
+</html>
