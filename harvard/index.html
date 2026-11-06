@@ -15,20 +15,20 @@
 </style>
 </head>
 <body>
-<div id="root" data-composition-id="main" data-width="1080" data-height="1920" data-duration="51.94" data-start="0">
+<div id="root" data-composition-id="main" data-width="1080" data-height="1920" data-duration="51.974" data-start="0">
   <canvas id="cv" width="1080" height="1920"></canvas>
   <span class="pre" style="font-weight:500">¿Sabes? á</span><span class="pre" style="font-weight:600">¿Sabes? á</span><span class="pre" style="font-weight:700">TU CLÍNICA €</span>
 </div>
 <script src="assets/gsap.min.js"></script>
 <script src="assets/words.js"></script>
 <script src="assets/cues.js"></script>
-<script src="assets/egg.js"></script>
+
 <script src="assets/main.js"></script>
 <script>
   window.__timelines = window.__timelines || {};
   const tl = gsap.timeline({ paused: true });
   const clock = { v: 0 };
-  tl.to(clock, { v: 1, duration: 51.94, ease: "none", onUpdate: () => window.__render(tl.time()) }, 0);
+  tl.to(clock, { v: 1, duration: 51.974, ease: "none", onUpdate: () => window.__render(tl.time()) }, 0);
   window.__timelines["main"] = tl;
   document.fonts.ready.then(() => window.__render(0));
 </script>

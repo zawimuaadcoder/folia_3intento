@@ -65,9 +65,9 @@ def suction():
     n=int(.33*SR); r=np.linspace(0,1,n)**2
     return add(sweep(80,1800,.33)[:n]*r*.3, bp(noise(.33),400,3000)[:n]*r*.25)
 
-# E0 · huevo
-at(0, rumble(68*FR), .9); at(1.3, riser(68*FR-1.3), .8); at(1.35, boom(.35)); at(1.35+60/70, boom(.35))
-at(72*FR, suction()); at(V0, sine(900,.08,.02)*.4)
+# E0 · huevo: su sonido original, tal cual
+hv=np.frombuffer(subprocess.run(['ffmpeg','-v','error','-i','assets/audio/huevo.wav','-f','f32le','-ac','1','-ar',str(SR),'-'],capture_output=True).stdout,np.float32).astype(float)
+egg=np.zeros(N); egg[:len(hv)]=hv[:N]
 # E1
 h=C['e1_harvard']; [at(h+i*2*FR, tap(), .5) for i in range(7)]
 d=C['e1_dos']; [at(d+k*2*FR, clack(), .25) for k in range(9)]; at(d+20*FR, clack(), .9)
@@ -128,11 +128,11 @@ v=np.zeros(N); i0=int(V0*SR); v[i0:i0+len(voz)]=voz[:N-i0]
 venv=lp(np.abs(v),8); duck=1-(1-10**(-8/20))*np.clip(venv/(venv.max()*.15),0,1)
 bed10=lp(bed,700)*.6; bed=np.where(t>=B[10],bed10,bed)*g*duck
 # silencios de efectos antes de los impactos
-for a_,b_ in [(C['e2_brutal']-4*FR, C['e2_brutal']),(lo-5*FR,lo),(72*FR-4*FR,72*FR)]: fx[(t>=a_)&(t<b_)]=0
+for a_,b_ in [(C['e2_brutal']-4*FR, C['e2_brutal']),(lo-5*FR,lo),]: fx[(t>=a_)&(t<b_)]=0
 rms=lambda x: np.sqrt(np.mean(x[np.abs(x)>1e-4]**2)); vr=rms(v)
 pk=lambda x: np.percentile(np.abs(x[np.abs(x)>1e-4]),99.5)
 bed*=vr/rms(bed)*10**(-19/20); fx*=vr/rms(fx)*10**(-11/20); imp*=pk(v)/pk(imp)*10**(-6/20)
-mix=v+bed+fx+imp
+mix=v+bed+fx+imp+egg*(vr/rms(egg[:len(hv)]))*10**(-3/20)
 st=np.stack([mix,mix],1).astype(np.float32)
 subprocess.run(['ffmpeg','-v','error','-y','-f','f32le','-ar',str(SR),'-ac','2','-i','-','assets/audio/premezcla.wav'],input=st.tobytes())
 o=subprocess.run(['ffmpeg','-i','assets/audio/premezcla.wav','-af','loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json','-f','null','-'],capture_output=True,text=True).stderr

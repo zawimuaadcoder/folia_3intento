@@ -5,7 +5,7 @@
 | Formato | 1080×1920, 30 fps, H.264 High, yuv420p, 52,0 s |
 | Audio | AAC 48 kHz estéreo 256 kbps · −14,0 LUFS · pico real −1,5 dBTP |
 | Voz | ID Qmbz6mRsVBgh5CAPJi7W, ElevenLabs v4, 3 tomas; elegida la 2.ª (la única que pronuncia «Járvard» y «a qué hora» bien). Guion literal verificado por transcripción. Pausas reajustadas a 0,3 / 0,6 / 0,9 s |
-| Huevo | Solo 0–1,95 s; rampa al 35 % desde 1,30 s con interpolación óptica; empuje al 135 % llevando el huevo a y≈700; congelado de 4 fotogramas; zoom-through con círculo oscuro; la voz entra en el primer fotograma de E1 |
+| Huevo | Plano original tal cual (0–2,77 s, hasta el cambio de plano), con su sonido original, sin animación ni etalonaje; corte seco a la escena 1, donde entra la voz |
 | Subtítulos | Palabra a palabra, bloques de 2–4 palabras, ocultos en las pausas y en los protagonistas (brutal, 7×, 60×, 42 h, 1 de cada 4, precio, anuncios, la hora) |
 | Movimiento | Curvas ease-out/in/in-out, pops con resorte, contadores tragaperras, destello de acento, temblor solo en los 4 impactos, desenfoque de movimiento por 6 muestras (180°) |
 | Sonido | Cama 104 BPM sin melodía con ducking; 3 cortes secos; vuelve filtrada en E10 |

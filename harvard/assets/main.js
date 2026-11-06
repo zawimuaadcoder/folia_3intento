@@ -109,28 +109,11 @@ function phone(c, cx, cy, s, screen, a = 1) {
 }
 function shake(t, imps) { let dx = 0, dy = 0; imps.forEach((ti, k) => { const p = (t - ti) / (6 * FR); if (p >= 0 && p < 1) { const a = 6 * (1 - p); dx += a * Math.sin(p * 37 + k); dy += a * Math.cos(p * 29 + k * 2); } }); return [dx, dy]; }
 
-// ---------- huevo ----------
-const EGGF = []; for (let i = 0; i < 69; i++) { const im = new Image(); im.src = `assets/egg/${String(i).padStart(3, '0')}.jpg`; EGGF.push(im); }
-const EGGP = window.EGG, S0 = 1920 / 1274;
-function eggState(n) {          // n = fotograma de salida (0..81)
-  const idx = Math.min(68, n < 68 ? n : 68), e = EGGP[idx];
-  const p = eIO(pr(n, 39, 68)), z = 1 + .35 * p;
-  const base = [e[0] * S0, e[1] * S0], tgt = [lerp(base[0], 540, p), lerp(base[1], 700, p)];
-  return { idx, z, tx: tgt[0] - z * S0 * e[0], ty: tgt[1] - z * S0 * e[1], ex: tgt[0], ey: tgt[1] };
-}
+// ---------- huevo: el plano original tal cual, sin animación ----------
+const EGGF = []; for (let i = 0; i < 83; i++) { const im = new Image(); im.src = `assets/egg/${String(i).padStart(3, '0')}.jpg`; EGGF.push(im); }
 function E0(c, t) {
-  const n = Math.floor(t * FPS + 1e-6), st = eggState(Math.min(n, 71)), im = EGGF[st.idx];
-  if (!im.complete) return;
-  c.fillStyle = BG; c.fillRect(0, 0, W, H);
-  c.save(); c.filter = 'blur(34px) brightness(.55)'; c.drawImage(im, -80, -80, W + 160, H + 160); c.restore();
-  let z = st.z, ox = st.ex, oy = st.ey, q = 0;
-  if (n >= 72) { q = pr(t, 72 * FR, 82 * FR); }
-  c.save();
-  if (q > 0) { const zz = 1 + 7 * eIn(q); ox = lerp(st.ex, 540, eIO(q)); oy = lerp(st.ey, 760, eIO(q)); c.translate(ox, oy); c.scale(zz, zz); c.translate(-st.ex, -st.ey); c.filter = `blur(${(22 * q).toFixed(1)}px)`; }
-  c.translate(st.tx, st.ty); c.scale(z * S0, z * S0); c.drawImage(im, 0, 0); c.restore();
-  if (q > 0) { c.fillStyle = BG; c.beginPath(); c.arc(ox, oy, 1400 * eIn(q) + 4, 0, 7); c.fill(); }
-  // viñeta
-  const g = c.createRadialGradient(540, 960, 500, 540, 960, 1250); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.2)'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  const im = EGGF[Math.min(82, Math.floor(t * FPS + 1e-6))];
+  if (im.complete) c.drawImage(im, 0, 0, W, H);
 }
 
 // ====================== ESCENAS ======================

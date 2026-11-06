@@ -1,6 +1,6 @@
 # Tiempos clave (absolutos, ya sumado el gancho del huevo) a partir de assets/words.js
 import json,re
-V0=82/30   # 68 fotogramas del huevo + 4 congelados + 10 de zoom-through
+V0=83/30   # plano del huevo tal cual, hasta el cambio de plano (2,77 s)
 src=open('assets/words.js',encoding='utf-8').read()
 W=json.loads(src.split('window.WORDS=',1)[1].split(';\n',1)[0])
 for x in W: x['s']=round(x['s']+V0,3); x['e']=round(x['e']+V0,3)
