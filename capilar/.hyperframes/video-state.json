@@ -2215,5 +2215,16 @@
     "latest": null,
     "revisions": {},
     "unversioned": []
-  }
+  },
+  "renders": {
+    "latest": {
+      "id": "dd090554-ff9e-4259-b855-478548263d2e",
+      "completedAt": 1794002633671,
+      "output": "/home/user/folia_3intento/capilar/renders/sinaudio.mp4",
+      "status": "completed",
+      "revision": null
+    },
+    "retainedRevisions": []
+  },
+  "pendingArtifactCleanup": []
 }
