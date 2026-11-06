@@ -375,7 +375,7 @@ function subtitles(c, t) {
   const Wd = C.W;
   BLOCKS.forEach((bk, bi) => {
     const s = Wd[bk[0]].s, last = Wd[bk[bk.length - 1]].e, nxt = BLOCKS[bi + 1] ? Wd[BLOCKS[bi + 1][0]].s : 1e9;
-    const off = Math.min(last + .12, nxt), out = pr(t, off, off + 5 * FR);
+    const off = Math.min(last + .12, nxt - 5 * FR), out = pr(t, off, off + 5 * FR);
     if (t < s || out >= 1) return;
     c.save(); font(c, 54, 600); c.letterSpacing = '-0.54px'; c.textBaseline = 'alphabetic'; c.textAlign = 'left';
     const sp = c.measureText(' ').width, ws = bk.map(k => c.measureText(Wd[k].w).width);

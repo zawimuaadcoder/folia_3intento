@@ -1,7 +1,7 @@
 {
   "version": 1,
   "historyId": "32929644-b353-4a23-903d-8649f91f2024",
-  "currentRevision": null,
+  "currentRevision": "a9499ffc-c3d2-4b89-a41b-14f114af4a6c",
   "pendingChanges": false,
   "files": {
     "assets/audio/tomas/t1.mp3": {
@@ -329,8 +329,8 @@
       "content": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/28/28033e449a31ebcc396e5be8b13b63152bf03094288fb5867034321927bce087"
     },
     "assets/main.js": {
-      "hash": "cd161e2d0e578823a1a7cb225a9cdb99e1284c61e24929da4eb0be423f3caa90",
-      "content": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/cd/cd161e2d0e578823a1a7cb225a9cdb99e1284c61e24929da4eb0be423f3caa90"
+      "hash": "4990e929cf9a19575f01b7b046e75649b4251b1530bfbd2aebaaff4c9596937b",
+      "content": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/49/4990e929cf9a19575f01b7b046e75649b4251b1530bfbd2aebaaff4c9596937b"
     },
     "assets/words.js": {
       "hash": "2c516847c1c3e0dbf3ae5e1a2554a85dbfa2626f159ab8676340f6425fdf0ca3",
@@ -355,9 +355,57 @@
     "assets/audio/voz.wav": {
       "hash": "e9210f331da2d6c191481061a5b7c429d9cf451dfa583fb0f1f4d8df3a2070b3",
       "content": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/e9/e9210f331da2d6c191481061a5b7c429d9cf451dfa583fb0f1f4d8df3a2070b3"
+    },
+    "__pycache__/cues.cpython-313.pyc": {
+      "hash": "b72d042147a11217beba15d877391469a92f5f5ec0cec8ab1e68b503d57b612d",
+      "content": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/b7/b72d042147a11217beba15d877391469a92f5f5ec0cec8ab1e68b503d57b612d"
+    },
+    "audio_build.py": {
+      "hash": "af8788289ebdddacaae272778ea92186d34c4d78108c0678dd6bca9c2733c6bb",
+      "content": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/af/af8788289ebdddacaae272778ea92186d34c4d78108c0678dd6bca9c2733c6bb"
+    },
+    "assets/audio/premezcla.wav": {
+      "hash": "52889031404ff8c616d7800c5597b5519d2a3f2c75cd424feb792780963a7aad",
+      "content": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/52/52889031404ff8c616d7800c5597b5519d2a3f2c75cd424feb792780963a7aad"
+    },
+    "assets/audio/mezcla.wav": {
+      "hash": "aab6a51b5f5f6ed9481e4d9da5dc77ee75c64e7897e31c5c276aa2a095db330e",
+      "content": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/aa/aab6a51b5f5f6ed9481e4d9da5dc77ee75c64e7897e31c5c276aa2a095db330e"
     }
   },
-  "revisions": {},
+  "revisions": {
+    "a9499ffc-c3d2-4b89-a41b-14f114af4a6c": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1794006072509,
+      "endedAt": 1794006072544,
+      "files": {
+        "__pycache__/cues.cpython-313.pyc": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/b7/b72d042147a11217beba15d877391469a92f5f5ec0cec8ab1e68b503d57b612d"
+        },
+        "assets/audio/mezcla.wav": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/aa/aab6a51b5f5f6ed9481e4d9da5dc77ee75c64e7897e31c5c276aa2a095db330e"
+        },
+        "assets/audio/premezcla.wav": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/52/52889031404ff8c616d7800c5597b5519d2a3f2c75cd424feb792780963a7aad"
+        },
+        "assets/main.js": {
+          "before": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/cd/cd161e2d0e578823a1a7cb225a9cdb99e1284c61e24929da4eb0be423f3caa90",
+          "after": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/49/4990e929cf9a19575f01b7b046e75649b4251b1530bfbd2aebaaff4c9596937b"
+        },
+        "audio_build.py": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/32929644-b353-4a23-903d-8649f91f2024/blobs/af/af8788289ebdddacaae272778ea92186d34c4d78108c0678dd6bca9c2733c6bb"
+        }
+      }
+    }
+  },
   "checks": {
     "latest": null,
     "revisions": {},
@@ -367,5 +415,16 @@
     "latest": null,
     "revisions": {},
     "unversioned": []
-  }
+  },
+  "renders": {
+    "latest": {
+      "id": "258aedb8-bfc8-413c-9ce9-4db6d459874b",
+      "completedAt": 1794006038184,
+      "output": "/home/user/folia_3intento/harvard/renders/sinaudio.mp4",
+      "status": "completed",
+      "revision": null
+    },
+    "retainedRevisions": []
+  },
+  "pendingArtifactCleanup": []
 }
