@@ -179,6 +179,100 @@ export function calculate(a) {
   };
 }
 
+// /velocidad: calculadora de lo que se pierde por tardar en responder.
+// Mismo modelo que assets/app.js (calculateSpeed); los dos deben coincidir.
+export const speedQuestions = [
+  {
+    key: 'leads',
+    options: [['1-10'], ['11-30'], ['31-60'], ['60+']],
+  },
+  {
+    key: 'speed',
+    options: [['5min'], ['1h'], ['4h'], ['day'], ['nextday']],
+  },
+  questions[1],
+  questions[2],
+  questions[3],
+];
+
+export const leadsValues = { '1-10': 6, '11-30': 20, '31-60': 45 };
+export const speedBaseConversion = 0.1;
+export const speedRetention = {
+  '5min': 1,
+  '1h': 0.6,
+  '4h': 0.4,
+  day: 0.25,
+  nextday: 0.15,
+};
+export const speedLabels = {
+  '5min': 'Menos de 5 minutos',
+  '1h': 'Entre 5 minutos y 1 hora',
+  '4h': 'Entre 1 y 4 horas',
+  day: 'Más de 4 horas, el mismo día',
+  nextday: 'Al día siguiente o más tarde',
+};
+
+export function validateSpeedStep(index, a) {
+  const q = speedQuestions[index];
+  if (!q) return '';
+  if (q.key === 'zone' || q.key === 'ticket' || q.key === 'team') {
+    return validateStep(questions.indexOf(q), a);
+  }
+  if (!q.options.some((o) => o[0] === a[q.key])) {
+    return 'Selecciona una opción para continuar.';
+  }
+  if (
+    q.key === 'leads' &&
+    a.leads === '60+' &&
+    (!Number.isInteger(Number(a.leadsExact)) ||
+      Number(a.leadsExact) <= 60 ||
+      Number(a.leadsExact) > 100000)
+  ) {
+    return 'Indica tus consultas al mes: un número entero mayor de 60.';
+  }
+  return '';
+}
+
+export function calculateSpeed(a) {
+  for (let i = 0; i < speedQuestions.length; i++) {
+    const error = validateSpeedStep(i, a);
+    if (error) throw new Error(error);
+  }
+  const leads =
+    a.leads === '60+' ? Number(a.leadsExact) : leadsValues[a.leads];
+  const ticket =
+    a.ticket === 'under1000' || a.ticket === '7500+'
+      ? Number(a.ticketExact)
+      : ticketValues[a.ticket];
+  const round1 = (n) => Math.round(n * 10) / 10;
+  const retention = speedRetention[a.speed];
+  const targetPatients = round1(leads * speedBaseConversion);
+  const currentPatients = round1(
+    leads * speedBaseConversion * retention
+  );
+  const extraPatients = round1(targetPatients - currentPatients);
+  const currentRevenue = Math.round(currentPatients * ticket);
+  const targetRevenue = Math.round(targetPatients * ticket);
+  return {
+    modelVersion: 'mhfc-speed-v1',
+    calculator: 'velocidad',
+    leads,
+    speed: a.speed,
+    ticket,
+    retention,
+    baseConversion: speedBaseConversion,
+    currentPatients,
+    targetPatients,
+    extraPatients,
+    currentRevenue,
+    targetRevenue,
+    additionalRevenue: targetRevenue - currentRevenue,
+    yearlyLoss: (targetRevenue - currentRevenue) * 12,
+    lostLeads: Math.round(leads * (1 - retention)),
+    illustrative: true,
+  };
+}
+
 export function validateContact(c) {
   if (
     typeof c?.name !== 'string' ||
@@ -496,6 +590,7 @@ async function notifyMake(
             : '',
         calc_zone: payload.zone || '',
         vertical: payload.vertical || 'capilar',
+        calculator: payload.calculator || 'potencial',
         hubspot_contact_id:
           hubspot?.id || '',
         submission_id:
@@ -669,9 +764,10 @@ export async function handleLead(
     if (
       body.eventType !== 'contact'
     ) {
-      result = calculate(
-        body.answers ?? {}
-      );
+      result =
+        body.calculator === 'velocidad'
+          ? calculateSpeed(body.answers ?? {})
+          : calculate(body.answers ?? {});
     }
   } catch (err) {
     return response(400, {
@@ -761,12 +857,17 @@ export async function handleLead(
     note:
       body.note || '',
 
+    calculator:
+      body.calculator === 'velocidad'
+        ? 'velocidad'
+        : 'potencial',
+
     volume_range:
-      a.volume || '',
+      a.volume || a.leads || '',
 
     volume_exact:
-      a.volumeExact
-        ? Number(a.volumeExact)
+      a.volumeExact || a.leadsExact
+        ? Number(a.volumeExact || a.leadsExact)
         : null,
 
     ticket_range:
@@ -786,7 +887,9 @@ export async function handleLead(
         : '',
 
     goal:
-      a.goal || '',
+      body.calculator === 'velocidad'
+        ? `Velocidad de respuesta: ${speedLabels[a.speed] || ''}`
+        : a.goal || '',
 
     projection:
       result,

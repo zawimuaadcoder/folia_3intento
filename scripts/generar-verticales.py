@@ -1,4 +1,4 @@
-"""Genera /capilares/ y /dentales/ a partir de index.html.
+"""Genera /capilares/, /dentales/ y /velocidad/ a partir de index.html.
 
 Uso: python3 scripts/generar-verticales.py
 Vuelve a ejecutarlo cada vez que cambies index.html.
@@ -151,3 +151,30 @@ d = pinkify(d)
 (ROOT / 'dentales').mkdir(exist_ok=True)
 (ROOT / 'dentales' / 'index.html').write_text(d)
 print('OK: capilares/index.html, dentales/index.html, assets/styles-dental.css')
+
+# ---------- /velocidad/ : la landing capilar con la calculadora de velocidad de respuesta ----------
+v = absolutize(BASE)
+v = must_replace(v, '<html lang="es">', '<html lang="es" data-calc-mode="velocidad">')
+V = [
+    ('Calcula el potencial de tu clínica <span class="arrow"', 'Calcula cuántos pacientes se te escapan <span class="arrow"'),
+    ('<h2 id="calculator-title">Tu clínica tiene potencial.<br><span class="tone-muted">Pongámosle números.</span></h2>',
+     '<h2 id="calculator-title">Cada minuto cuenta.<br><span class="tone-muted">Pongámosle números.</span></h2>'),
+    ('Responde 5 preguntas sobre tu clínica y descubre cuántas valoraciones y pacientes podrías sumar cada mes, y qué supondrían en facturación.',
+     'Responde 5 preguntas sobre tu clínica y descubre cuántos pacientes podrías estar perdiendo cada mes por tardar en responder, y cuánto supone en facturación.'),
+    ('Calcula tu potencial <span class="arrow"', 'Calcula lo que se te escapa <span class="arrow"'),
+    ('<h3>De la inversión<br>a nuevos pacientes.</h3>', '<h3>De la consulta<br>al paciente.</h3>'),
+    ('<p>Volumen, ticket y equipo de seguimiento</p>', '<p>Consultas, tiempo de respuesta y ticket</p>'),
+    ('<h4><span>02</span>Tu escenario de captación</h4><p>Contactos → valoraciones → pacientes</p>',
+     '<h4><span>02</span>Lo que se escapa</h4><p>Consultas → pacientes según tu velocidad</p>'),
+    ('<h3>Oportunidades reales</h3><p>Las oportunidades necesarias para tu escenario.</p>',
+     '<h3>Pacientes perdidos</h3><p>Los que se van a la clínica que contesta antes.</p>'),
+    ('<h3>Impacto en tu clínica</h3><p>Pacientes e ingresos brutos potenciales.</p>',
+     '<h3>Impacto en tu clínica</h3><p>Facturación que se escapa al mes y al año.</p>'),
+    ('<h3>Un plan para avanzar</h3><p>Qué revisar para convertir potencial en crecimiento.</p>',
+     '<h3>Un plan para avanzar</h3><p>Cómo contestar en minutos, a cualquier hora.</p>'),
+]
+for old, new in V:
+    v = must_replace(v, old, new, 0)
+(ROOT / 'velocidad').mkdir(exist_ok=True)
+(ROOT / 'velocidad' / 'index.html').write_text(v)
+print('OK: velocidad/index.html')
