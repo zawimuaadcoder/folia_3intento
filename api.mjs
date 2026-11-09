@@ -445,6 +445,9 @@ async function createOrUpdateHubSpotContact(
     calc_goal:
       payload.goal || '',
 
+    message:
+      payload.speed_summary || '',
+
     calc_target_patients:
       payload.projection?.targetPatients != null
         ? String(
@@ -887,9 +890,14 @@ export async function handleLead(
         : '',
 
     goal:
-      body.calculator === 'velocidad'
-        ? `Velocidad de respuesta: ${speedLabels[a.speed] || ''}`
-        : a.goal || '',
+      a.goal || '',
+
+    // calc_goal en HubSpot solo admite las opciones de la calculadora de potencial;
+    // el resumen de la calculadora de velocidad va en el campo de mensaje.
+    speed_summary:
+      body.calculator === 'velocidad' && result
+        ? `Calculadora de velocidad · Tiempo de respuesta: ${speedLabels[a.speed] || ''} · Consultas al mes: ${result.leads} · Pacientes perdidos al mes: ${String(result.extraPatients).replace('.', ',')} · Facturación perdida: ${result.additionalRevenue} €/mes (${result.yearlyLoss} €/año)`
+        : '',
 
     projection:
       result,
