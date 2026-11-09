@@ -73,11 +73,15 @@ function submissionKey(type){const signature=JSON.stringify({answers,contact,typ
 // without it nothing is loaded and track() is a no-op.
 // Píxel de OpenAI (anuncios de ChatGPT). Igual que el de Meta, solo se carga si el visitante acepta las cookies.
 const OPENAI_PIXEL_ID='HkZGCDswv4UAcaBCMzpGUE';
+// Conversiones que llegan antes de que el visitante responda al banner esperan aquí (como las de Meta).
+const pendingOpenAI=[];
+function measureOpenAI(...args){if(window.oaiq)window.oaiq(...args);else if(readConsent()!=='denied')pendingOpenAI.push(args);}
 function loadOpenAIPixel(){
  if(window.oaiq)return;
  const q=window.oaiq=function(){q.q.push(arguments);};q.q=[];
  const s=document.createElement('script');s.async=true;s.src='https://bzrcdn.openai.com/sdk/oaiq.min.js';document.head.appendChild(s);
  q('init',{pixelId:OPENAI_PIXEL_ID,debug:true});
+ pendingOpenAI.forEach(a=>q(...a));pendingOpenAI.length=0;
 }
 function loadPixel(id){
  if(!/^\d{5,20}$/.test(String(id||''))||window.fbq)return;
@@ -105,7 +109,7 @@ function showCookieBanner(){
  document.body.insertAdjacentHTML('beforeend','<div class="cookie-banner" role="region" aria-label="Preferencias de cookies" popover="manual"><p>Usamos cookies de Meta y OpenAI para medir nuestras campañas. Solo se activan si las aceptas. <button type="button" data-legal-cookies>Más información</button></p><div><button type="button" class="button cookie-choice" data-consent="denied">Rechazar</button><button type="button" class="button cookie-choice" data-consent="granted">Aceptar</button></div></div>');
  const banner=$('.cookie-banner');
  $('[data-legal-cookies]',banner).addEventListener('click',()=>openLegal('cookies'));
- $$('[data-consent]',banner).forEach(b=>b.addEventListener('click',()=>{saveConsent(b.dataset.consent);closeCookieBanner();if(b.dataset.consent==='granted'){loadPixel(config.metaPixelId);loadOpenAIPixel();flushEvents();}else pendingEvents.length=0;}));
+ $$('[data-consent]',banner).forEach(b=>b.addEventListener('click',()=>{saveConsent(b.dataset.consent);closeCookieBanner();if(b.dataset.consent==='granted'){loadPixel(config.metaPixelId);loadOpenAIPixel();flushEvents();}else{pendingEvents.length=0;pendingOpenAI.length=0;}}));
  raiseCookieBanner();
 }
 configReady.then(()=>{
@@ -172,7 +176,7 @@ function bookingBlock(){
 window.addEventListener('message',e=>{
  let origin;try{origin=new URL(e.origin);}catch{return;}
  if(!isCalendly(origin)||e.data?.event!=='calendly.event_scheduled'||booked)return;
- booked=true;track('Schedule',{content_name:'Auditoría gratuita'});
+ booked=true;track('Schedule',{content_name:'Auditoría gratuita'});measureOpenAI('measure','appointment_scheduled',{type:'customer_action'});
  const box=$('#booking');if(box&&!$('.booking-done',box))$('.booking-frame',box).insertAdjacentHTML('beforebegin','<p class="booking-done" role="status">¡Llamada reservada! Te hemos enviado la confirmación por email.</p>');
 });
 
