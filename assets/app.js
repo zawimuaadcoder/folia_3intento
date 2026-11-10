@@ -106,7 +106,7 @@ $$('dialog').forEach(d=>d.addEventListener('close',raiseCookieBanner));
 function closeCookieBanner(){$('.cookie-banner')?.remove();document.body.style.paddingBottom='';}
 function showCookieBanner(){
  if($('.cookie-banner'))return;
- document.body.insertAdjacentHTML('beforeend','<div class="cookie-banner" role="region" aria-label="Preferencias de cookies" popover="manual"><p>Usamos cookies de Meta y OpenAI para medir nuestras campañas. Solo se activan si las aceptas. <button type="button" data-legal-cookies>Más información</button></p><div><button type="button" class="button cookie-choice" data-consent="denied">Rechazar</button><button type="button" class="button cookie-choice" data-consent="granted">Aceptar</button></div></div>');
+ document.body.insertAdjacentHTML('beforeend','<div class="cookie-banner" role="region" aria-label="Preferencias de cookies" popover="manual"><button type="button" class="cookie-info" data-legal-cookies>Cookies</button><div><button type="button" class="cookie-choice cookie-deny" data-consent="denied">Rechazar</button><button type="button" class="cookie-choice" data-consent="granted">Aceptar</button></div></div>');
  const banner=$('.cookie-banner');
  $('[data-legal-cookies]',banner).addEventListener('click',()=>openLegal('cookies'));
  $$('[data-consent]',banner).forEach(b=>b.addEventListener('click',()=>{saveConsent(b.dataset.consent);closeCookieBanner();if(b.dataset.consent==='granted'){loadPixel(config.metaPixelId);loadOpenAIPixel();flushEvents();}else{pendingEvents.length=0;pendingOpenAI.length=0;}}));
